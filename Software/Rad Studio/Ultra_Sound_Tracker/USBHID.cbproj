@@ -1,0 +1,426 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{9266A404-5366-4D2F-9E86-F108C5D700E8}</ProjectGuid>
+        <ProjectType>CppVCLApplication</ProjectType>
+        <MainSource>USBHID.cpp</MainSource>
+        <Base>True</Base>
+        <Config Condition="'$(Config)'==''">Debug</Config>
+        <ProjectVersion>17.2</ProjectVersion>
+        <AppType>Application</AppType>
+        <FrameworkType>VCL</FrameworkType>
+        <TargetedPlatforms>1</TargetedPlatforms>
+        <Platform Condition="'$(Platform)'==''">Win32</Platform>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Config)'=='Base' or '$(Base)'!=''">
+        <Base>true</Base>
+    </PropertyGroup>
+    <PropertyGroup Condition="('$(Platform)'=='Win32' and '$(Base)'=='true') or '$(Base_Win32)'!=''">
+        <Base_Win32>true</Base_Win32>
+        <CfgParent>Base</CfgParent>
+        <Base>true</Base>
+    </PropertyGroup>
+    <PropertyGroup Condition="('$(Platform)'=='Win64' and '$(Base)'=='true') or '$(Base_Win64)'!=''">
+        <Base_Win64>true</Base_Win64>
+        <CfgParent>Base</CfgParent>
+        <Base>true</Base>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Config)'=='Debug' or '$(Cfg_1)'!=''">
+        <Cfg_1>true</Cfg_1>
+        <CfgParent>Base</CfgParent>
+        <Base>true</Base>
+    </PropertyGroup>
+    <PropertyGroup Condition="('$(Platform)'=='Win32' and '$(Cfg_1)'=='true') or '$(Cfg_1_Win32)'!=''">
+        <Cfg_1_Win32>true</Cfg_1_Win32>
+        <CfgParent>Cfg_1</CfgParent>
+        <Cfg_1>true</Cfg_1>
+        <Base>true</Base>
+    </PropertyGroup>
+    <PropertyGroup Condition="('$(Platform)'=='Win64' and '$(Cfg_1)'=='true') or '$(Cfg_1_Win64)'!=''">
+        <Cfg_1_Win64>true</Cfg_1_Win64>
+        <CfgParent>Cfg_1</CfgParent>
+        <Cfg_1>true</Cfg_1>
+        <Base>true</Base>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Config)'=='Release' or '$(Cfg_2)'!=''">
+        <Cfg_2>true</Cfg_2>
+        <CfgParent>Base</CfgParent>
+        <Base>true</Base>
+    </PropertyGroup>
+    <PropertyGroup Condition="('$(Platform)'=='Win32' and '$(Cfg_2)'=='true') or '$(Cfg_2_Win32)'!=''">
+        <Cfg_2_Win32>true</Cfg_2_Win32>
+        <CfgParent>Cfg_2</CfgParent>
+        <Cfg_2>true</Cfg_2>
+        <Base>true</Base>
+    </PropertyGroup>
+    <PropertyGroup Condition="('$(Platform)'=='Win64' and '$(Cfg_2)'=='true') or '$(Cfg_2_Win64)'!=''">
+        <Cfg_2_Win64>true</Cfg_2_Win64>
+        <CfgParent>Cfg_2</CfgParent>
+        <Cfg_2>true</Cfg_2>
+        <Base>true</Base>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Base)'!=''">
+        <SanitizedProjectName>USBHID</SanitizedProjectName>
+        <DCC_Namespace>Vcl;Vcl.Imaging;Vcl.Touch;Vcl.Samples;Vcl.Shell;System;Xml;Data;Datasnap;Web;Soap;$(DCC_Namespace)</DCC_Namespace>
+        <VerInfo_Keys>CompanyName=;FileDescription=;FileVersion=1.0.0.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProductName=;ProductVersion=1.0.0.0;Comments=</VerInfo_Keys>
+        <VerInfo_Locale>2057</VerInfo_Locale>
+        <LinkPackageStatics>vcl.lib;rtl.lib</LinkPackageStatics>
+        <DCC_UnitSearchPath>.\;$(BDS)\lib;$(BDS)\lib\obj;$(DCC_UnitSearchPath)</DCC_UnitSearchPath>
+        <ILINK_AppType>Windows</ILINK_AppType>
+        <PackageImports>vcl.bpi;rtl.bpi;dbrtl.bpi;adortl.bpi;vcldb.bpi;vclx.bpi;bdertl.bpi;vcldbx.bpi;ibxpress.bpi;dsnap.bpi;dsnap.bpi;dsnapcon.bpi;teeui.bpi;teedb.bpi;tee.bpi;dss.bpi;dsnapcon.bpi;bcbsmp.bpi;vclie.bpi;xmlrtl.bpi;inet.bpi;inetdbbde.bpi;inetdbxpress.bpi;inetdb.bpi;webdsnap.bpi;bcbie.bpi;websnap.bpi;soaprtl.bpi;dbexpress.bpi;dbxcds.bpi;indycore.bpi;indysystem.bpi;bcboffice2k.bpi;$(PackageImports)</PackageImports>
+        <BCC_PCHCache>true</BCC_PCHCache>
+        <BCC_IncludePath>C:\Program Files\Borland\CBuilder6\Projects;D:\Documents and Settings\Vaidas\My Documents\Programavimas\usbhid\PC App;$(BDS)\include;$(BDS)\include\vcl;$(BCC_IncludePath)</BCC_IncludePath>
+        <BRCC_IncludePath>C:\Program Files\Borland\CBuilder6\Projects;D:\Documents and Settings\Vaidas\My Documents\Programavimas\usbhid\PC App;$(BDS)\include;$(BDS)\include\vcl;$(BRCC_IncludePath)</BRCC_IncludePath>
+        <BCC_SourceDebuggingOn>true</BCC_SourceDebuggingOn>
+        <DCC_IncludePath>.\;$(BDS)\lib;$(BDS)\lib\obj;$(DCC_IncludePath)</DCC_IncludePath>
+        <TASM_IncludePath>C:\Program Files\Borland\CBuilder6\Projects;D:\Documents and Settings\Vaidas\My Documents\Programavimas\usbhid\PC App;$(BDS)\include;$(BDS)\include\vcl;$(TASM_IncludePath)</TASM_IncludePath>
+        <DCC_CBuilderOutput>JPHNE</DCC_CBuilderOutput>
+        <FinalOutputDir>.</FinalOutputDir>
+        <BCC_GenerateWindowsApp>true</BCC_GenerateWindowsApp>
+        <TASM_AdditionalSwitches> /w2</TASM_AdditionalSwitches>
+        <AllPackageLibs>vcl.lib;rtl.lib</AllPackageLibs>
+        <BCC_DisableOptimizations>true</BCC_DisableOptimizations>
+        <DynamicRTL>true</DynamicRTL>
+        <ILINK_LibraryPath>C:\Program Files\Borland\CBuilder6\Projects;D:\Documents and Settings\Vaidas\My Documents\Programavimas\usbhid\PC App;$(BDS)\lib\obj;$(BDS)\lib;$(BDS)\lib\psdk;$(ILINK_LibraryPath)</ILINK_LibraryPath>
+        <DCC_AdditionalSwitches> -M</DCC_AdditionalSwitches>
+        <BCC_InlineFunctionExpansion>false</BCC_InlineFunctionExpansion>
+        <BCC_DebugLineNumbers>true</BCC_DebugLineNumbers>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Base_Win32)'!=''">
+        <DCC_Namespace>Winapi;System.Win;Data.Win;Datasnap.Win;Web.Win;Soap.Win;Xml.Win;Bde;$(DCC_Namespace)</DCC_Namespace>
+        <Manifest_File>$(BDS)\bin\default_app.manifest</Manifest_File>
+        <Icon_MainIcon>USBHID_Icon.ico</Icon_MainIcon>
+        <OutputExt>exe</OutputExt>
+        <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
+        <BCC_UserSuppliedOptions> -tWM -Vx -r- -k -Ve</BCC_UserSuppliedOptions>
+        <VerInfo_Locale>1033</VerInfo_Locale>
+        <TASM_Defines>_DEBUG;$(TASM_Defines)</TASM_Defines>
+        <IncludePath>$(BDSINCLUDE)\windows\vcl;$(IncludePath)</IncludePath>
+        <BRCC_Defines>_DEBUG;$(BRCC_Defines)</BRCC_Defines>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Base_Win64)'!=''">
+        <IncludePath>$(BDSINCLUDE)\windows\vcl;$(IncludePath)</IncludePath>
+        <Icon_MainIcon>USBHID_Icon.ico</Icon_MainIcon>
+        <TASM_Defines>_DEBUG;$(TASM_Defines)</TASM_Defines>
+        <BRCC_Defines>_DEBUG;$(BRCC_Defines)</BRCC_Defines>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Cfg_1)'!=''">
+        <ILINK_LibraryPath>$(BDS)\lib\debug;$(ILINK_LibraryPath);$(ILINK_LibraryPath)</ILINK_LibraryPath>
+        <IntermediateOutputDir>Debug_Build</IntermediateOutputDir>
+        <DCC_Define>DEBUG;$(DCC_Define);$(DCC_Define)</DCC_Define>
+        <ILINK_DisableIncrementalLinking>true</ILINK_DisableIncrementalLinking>
+        <TASM_Debugging>Full</TASM_Debugging>
+        <DCC_AdditionalSwitches> -M -V</DCC_AdditionalSwitches>
+        <TASM_DisplaySourceLines>true</TASM_DisplaySourceLines>
+        <DCC_DebugInfoInExe>true</DCC_DebugInfoInExe>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Cfg_1_Win32)'!=''">
+        <BCC_UserSuppliedOptions> -tWM -Vx -r- -k -Ve -k</BCC_UserSuppliedOptions>
+        <BCC_Defines>_DEBUG;$(BCC_Defines);$(BCC_Defines)</BCC_Defines>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Cfg_1_Win64)'!=''">
+        <BCC_Defines>_DEBUG;$(BCC_Defines);$(BCC_Defines)</BCC_Defines>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Cfg_2)'!=''">
+        <BCC_PushThisFirst>true</BCC_PushThisFirst>
+        <BCC_SlowVirtualBasePtrs>true</BCC_SlowVirtualBasePtrs>
+        <BCC_ZeroLengthEmptyBaseClass>true</BCC_ZeroLengthEmptyBaseClass>
+        <BCC_BackwardCompatibility>true</BCC_BackwardCompatibility>
+        <BCC_VTablePtrAtFront>true</BCC_VTablePtrAtFront>
+        <BCC_ZeroLengthEmptyMemberFuncs>true</BCC_ZeroLengthEmptyMemberFuncs>
+        <BCC_OldStyleClassArgs>true</BCC_OldStyleClassArgs>
+        <BCC_AllCompatibilityFlags>true</BCC_AllCompatibilityFlags>
+        <BCC_OldStyleTemplateSpec>true</BCC_OldStyleTemplateSpec>
+        <ILINK_KeepOutputFiles>true</ILINK_KeepOutputFiles>
+        <BCC_OldBorlandClassLayout>true</BCC_OldBorlandClassLayout>
+        <BCC_VCCompatibility>true</BCC_VCCompatibility>
+        <BCC_DisableDigraphScanner>true</BCC_DisableDigraphScanner>
+        <BCC_ConstructorDisplacements>true</BCC_ConstructorDisplacements>
+        <BCC_ExplicitSpecializationAsMemberFunc>true</BCC_ExplicitSpecializationAsMemberFunc>
+        <BCC_OldStyleVirdef>true</BCC_OldStyleVirdef>
+        <BPILibOutputDir>..</BPILibOutputDir>
+        <FinalOutputDir>..</FinalOutputDir>
+        <BCC_OptimizeForSpeed>true</BCC_OptimizeForSpeed>
+        <IntermediateOutputDir>Release_Build\</IntermediateOutputDir>
+        <DCC_AdditionalSwitches> -M -$O+</DCC_AdditionalSwitches>
+        <TASM_Debugging>None</TASM_Debugging>
+        <ILINK_LibraryPath>$(BDS)\lib\release;$(ILINK_LibraryPath);$(ILINK_LibraryPath)</ILINK_LibraryPath>
+        <BCC_InlineFunctionExpansion>true</BCC_InlineFunctionExpansion>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Cfg_2_Win32)'!=''">
+        <BCC_UserSuppliedOptions> -tWM -Vx -r- -k -Ve -r</BCC_UserSuppliedOptions>
+        <BCC_Defines>NDEBUG;$(BCC_Defines);$(BCC_Defines)</BCC_Defines>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Cfg_2_Win64)'!=''">
+        <BCC_Defines>NDEBUG;$(BCC_Defines);$(BCC_Defines)</BCC_Defines>
+    </PropertyGroup>
+    <ItemGroup>
+        <None Include="AtUsbHid.dll">
+            <BuildOrder>-1</BuildOrder>
+            <BuildOrder>14</BuildOrder>
+        </None>
+        <LibFiles Include="AtUsbHid.lib">
+            <BuildOrder>11</BuildOrder>
+            <BuildOrder>0</BuildOrder>
+        </LibFiles>
+        <CppCompile Include="Main.cpp">
+            <BuildOrder>8</BuildOrder>
+            <Form>Form1</Form>
+            <DependentOn>Main.h</DependentOn>
+            <BuildOrder>2</BuildOrder>
+        </CppCompile>
+        <None Include="ModelSupport_USBHID\default.txaPackage"/>
+        <None Include="ModelSupport_USBHID\default.txvpck"/>
+        <CppCompile Include="Unit2.cpp">
+            <Form>Form2</Form>
+            <DependentOn>Unit2.h</DependentOn>
+            <BuildOrder>5</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="USBHID.cpp">
+            <BuildOrder>5</BuildOrder>
+            <BuildOrder>4</BuildOrder>
+        </CppCompile>
+        <ResFiles Include="USBHID.res">
+            <BuildOrder>3</BuildOrder>
+            <BuildOrder>2</BuildOrder>
+        </ResFiles>
+        <CppCompile Include="XY.cpp">
+            <Form>Form3</Form>
+            <DependentOn>XY.h</DependentOn>
+            <BuildOrder>7</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="XZ.cpp">
+            <Form>Form5</Form>
+            <DependentOn>XZ.h</DependentOn>
+            <BuildOrder>8</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="YZ.cpp">
+            <Form>Form4</Form>
+            <DependentOn>YZ.h</DependentOn>
+            <BuildOrder>6</BuildOrder>
+        </CppCompile>
+        <FormResources Include="Main.dfm"/>
+        <FormResources Include="Unit2.dfm"/>
+        <FormResources Include="YZ.dfm"/>
+        <FormResources Include="XZ.dfm"/>
+        <FormResources Include="XY.dfm"/>
+        <BuildConfiguration Include="Release">
+            <Key>Cfg_2</Key>
+            <CfgParent>Base</CfgParent>
+        </BuildConfiguration>
+        <BuildConfiguration Include="Base">
+            <Key>Base</Key>
+        </BuildConfiguration>
+        <BuildConfiguration Include="Debug">
+            <Key>Cfg_1</Key>
+            <CfgParent>Base</CfgParent>
+        </BuildConfiguration>
+    </ItemGroup>
+    <Import Project="$(BDS)\Bin\CodeGear.Cpp.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Cpp.Targets')"/>
+    <ProjectExtensions>
+        <Borland.Personality>CPlusPlusBuilder.Personality.12</Borland.Personality>
+        <Borland.ProjectType>CppVCLApplication</Borland.ProjectType>
+        <BorlandProject>
+            <CPlusPlusBuilder.Personality>
+                <VersionInfo>
+                    <VersionInfo Name="IncludeVerInfo">False</VersionInfo>
+                    <VersionInfo Name="AutoIncBuild">False</VersionInfo>
+                    <VersionInfo Name="MajorVer">1</VersionInfo>
+                    <VersionInfo Name="MinorVer">0</VersionInfo>
+                    <VersionInfo Name="Release">0</VersionInfo>
+                    <VersionInfo Name="Build">0</VersionInfo>
+                    <VersionInfo Name="Debug">False</VersionInfo>
+                    <VersionInfo Name="PreRelease">False</VersionInfo>
+                    <VersionInfo Name="Special">False</VersionInfo>
+                    <VersionInfo Name="Private">False</VersionInfo>
+                    <VersionInfo Name="DLL">False</VersionInfo>
+                    <VersionInfo Name="Locale">2057</VersionInfo>
+                    <VersionInfo Name="CodePage">1252</VersionInfo>
+                </VersionInfo>
+                <VersionInfoKeys>
+                    <VersionInfoKeys Name="CompanyName"/>
+                    <VersionInfoKeys Name="FileDescription"/>
+                    <VersionInfoKeys Name="FileVersion">1.0.0.0</VersionInfoKeys>
+                    <VersionInfoKeys Name="InternalName"/>
+                    <VersionInfoKeys Name="LegalCopyright"/>
+                    <VersionInfoKeys Name="LegalTrademarks"/>
+                    <VersionInfoKeys Name="OriginalFilename"/>
+                    <VersionInfoKeys Name="ProductName"/>
+                    <VersionInfoKeys Name="ProductVersion">1.0.0.0</VersionInfoKeys>
+                    <VersionInfoKeys Name="Comments"/>
+                </VersionInfoKeys>
+                <Debugging>
+                    <Debugging Name="DebugSourceDirs">$(BCB)\source\vcl</Debugging>
+                </Debugging>
+                <Parameters>
+                    <Parameters Name="RemoteHost"/>
+                    <Parameters Name="RemotePath"/>
+                    <Parameters Name="RemoteLauncher"/>
+                    <Parameters Name="RemoteCWD"/>
+                    <Parameters Name="RemoteDebug">False</Parameters>
+                    <Parameters Name="RunParams"/>
+                    <Parameters Name="Launcher"/>
+                    <Parameters Name="UseLauncher">False</Parameters>
+                    <Parameters Name="DebugCWD"/>
+                    <Parameters Name="HostApplication"/>
+                    <Parameters Name="RemoteParams"/>
+                    <Parameters Name="UseRemoteLauncher">False</Parameters>
+                    <Parameters Name="Debug Symbols Search Path"/>
+                    <Parameters Name="LoadAllSymbols">True</Parameters>
+                    <Parameters Name="LoadUnspecifiedSymbols">False</Parameters>
+                </Parameters>
+                <Compiler>
+                    <Compiler Name="ShowInfoMsgs">0</Compiler>
+                    <Compiler Name="LinkDebugVcl">0</Compiler>
+                    <Compiler Name="LinkCGLIB">0</Compiler>
+                </Compiler>
+                <CORBA>
+                    <CORBA Name="AddServerUnit">1</CORBA>
+                    <CORBA Name="AddClientUnit">1</CORBA>
+                    <CORBA Name="PrecompiledHeaders">1</CORBA>
+                </CORBA>
+                <ProjectProperties>
+                    <ProjectProperties Name="AutoShowDeps">False</ProjectProperties>
+                    <ProjectProperties Name="ManagePaths">True</ProjectProperties>
+                    <ProjectProperties Name="VerifyPackages">True</ProjectProperties>
+                    <ProjectProperties Name="IndexFiles">False</ProjectProperties>
+                </ProjectProperties>
+                <Source>
+                    <Source Name="MainSource">USBHID.cpp</Source>
+                </Source>
+                <Excluded_Packages>
+                    <Excluded_Packages Name="$(BDSBIN)\bcboffice2k120.bpl">CodeGear C++Builder Office 2000 Servers Package</Excluded_Packages>
+                    <Excluded_Packages Name="$(BDSBIN)\bcbofficexp120.bpl">CodeGear C++Builder Office XP Servers Package</Excluded_Packages>
+                    <Excluded_Packages Name="$(BDSBIN)\dcloffice2k120.bpl">Microsoft Office 2000 Sample Automation Server Wrapper Components</Excluded_Packages>
+                    <Excluded_Packages Name="$(BDSBIN)\dclofficexp120.bpl">Microsoft Office XP Sample Automation Server Wrapper Components</Excluded_Packages>
+                </Excluded_Packages>
+                <DebugEnvironmentVariables>
+                    <DebugEnvironmentVariables Name="XDCROOT">C:/Program Files (x86)/Texas Instruments/xdctools_3_20_03_63</DebugEnvironmentVariables>
+                    <DebugEnvironmentVariables Name="ALLUSERSPROFILE">C:\ProgramData</DebugEnvironmentVariables>
+                    <DebugEnvironmentVariables Name="APPDATA">C:\Users\Alenas\AppData\Roaming</DebugEnvironmentVariables>
+                    <DebugEnvironmentVariables Name="BCB">c:\program files (x86)\codegear\rad studio\6.0</DebugEnvironmentVariables>
+                    <DebugEnvironmentVariables Name="BCC_ERRORS_DURING_BROWSING">1</DebugEnvironmentVariables>
+                    <DebugEnvironmentVariables Name="BDS">c:\program files (x86)\codegear\rad studio\6.0</DebugEnvironmentVariables>
+                    <DebugEnvironmentVariables Name="BDSAppDataBaseDir">BDS</DebugEnvironmentVariables>
+                    <DebugEnvironmentVariables Name="BDSCOMMONDIR">C:\Users\Public\Documents\RAD Studio\6.0</DebugEnvironmentVariables>
+                    <DebugEnvironmentVariables Name="BDSPROJECTSDIR">C:\Users\Alenas\Documents\RAD Studio\Projects</DebugEnvironmentVariables>
+                    <DebugEnvironmentVariables Name="BDSUSERDIR">C:\Users\Alenas\Documents\RAD Studio\6.0</DebugEnvironmentVariables>
+                    <DebugEnvironmentVariables Name="CG_BOOST_ROOT">C:\Program Files (x86)\CodeGear\RAD Studio\6.0\include\boost_1_35</DebugEnvironmentVariables>
+                    <DebugEnvironmentVariables Name="CommonProgramFiles(x86)">C:\Program Files (x86)\Common Files</DebugEnvironmentVariables>
+                    <DebugEnvironmentVariables Name="CommonProgramFiles">C:\Program Files (x86)\Common Files</DebugEnvironmentVariables>
+                    <DebugEnvironmentVariables Name="CommonProgramW6432">C:\Program Files\Common Files</DebugEnvironmentVariables>
+                    <DebugEnvironmentVariables Name="COMPUTERNAME">ASAI</DebugEnvironmentVariables>
+                    <DebugEnvironmentVariables Name="ComSpec">C:\Windows\system32\cmd.exe</DebugEnvironmentVariables>
+                    <DebugEnvironmentVariables Name="DELPHI">c:\program files (x86)\codegear\rad studio\6.0</DebugEnvironmentVariables>
+                    <DebugEnvironmentVariables Name="FP_NO_HOST_CHECK">NO</DebugEnvironmentVariables>
+                    <DebugEnvironmentVariables Name="HOMEDRIVE">C:</DebugEnvironmentVariables>
+                    <DebugEnvironmentVariables Name="HOMEPATH">\Users\Alenas</DebugEnvironmentVariables>
+                    <DebugEnvironmentVariables Name="IVIROOTDIR32">C:\Program Files (x86)\IVI Foundation\IVI\</DebugEnvironmentVariables>
+                    <DebugEnvironmentVariables Name="IVIROOTDIR64">C:\Program Files\IVI Foundation\IVI\</DebugEnvironmentVariables>
+                    <DebugEnvironmentVariables Name="KMP_DUPLICATE_LIB_OK">TRUE</DebugEnvironmentVariables>
+                    <DebugEnvironmentVariables Name="LOCALAPPDATA">C:\Users\Alenas\AppData\Local</DebugEnvironmentVariables>
+                    <DebugEnvironmentVariables Name="LOGONSERVER">\\ASAI</DebugEnvironmentVariables>
+                    <DebugEnvironmentVariables Name="MCC_INCLUDE">C:\Program Files (x86)\Microchip\mplabc18\v3.40\h</DebugEnvironmentVariables>
+                    <DebugEnvironmentVariables Name="MKL_SERIAL">YES</DebugEnvironmentVariables>
+                    <DebugEnvironmentVariables Name="NIIVIPATH">C:\Program Files (x86)\IVI Foundation\IVI\</DebugEnvironmentVariables>
+                    <DebugEnvironmentVariables Name="NUMBER_OF_PROCESSORS">2</DebugEnvironmentVariables>
+                    <DebugEnvironmentVariables Name="OS">Windows_NT</DebugEnvironmentVariables>
+                    <DebugEnvironmentVariables Name="Path">C:/Program Files (x86)/Texas Instruments/xdctools_3_20_03_63;C:\Program Files (x86)\Microchip\mplabc18\v3.40\mpasm;C:\Program Files (x86)\Microchip\mplabc18\v3.40\bin;C:\Program Files (x86)\CodeGear\RAD Studio\6.0\bin;C:\Users\Public\Documents\RAD Studio\6.0\Bpl;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Program Files\Intel\WiFi\bin\;C:\Program Files\Common Files\Intel\WirelessCommon\;C:\Program Files\MATLAB\R2009a\bin;C:\Program Files\MATLAB\R2009a\bin\win64;C:\Program Files (x86)\Microchip\MPLAB C32 Suite\bin;C:\PROGRA~2\Aldec\ACTIVE~1.2SE\BIN;C:\Program Files (x86)\IVI Foundation\IVI\bin;C:\Program Files\IVI Foundation\IVI\bin;C:\Program Files (x86)\IVI Foundation\VISA\WinNT\Bin;C:/Program Files (x86)/Texas Instruments/xdctools_3_20_03_63;C:\Program Files (x86)\Microchip\mplabc18\v3.40\mpasm;C:\Program Files (x86)\Microchip\mplabc18\v3.40\bin;C:\Users\Public\Documents\RAD Studio\6.0\Bpl;C:\Program Files\Intel\WiFi\bin\;C:\Program Files\Common Files\Intel\WirelessCommon\</DebugEnvironmentVariables>
+                    <DebugEnvironmentVariables Name="PATHEXT">.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC</DebugEnvironmentVariables>
+                    <DebugEnvironmentVariables Name="PROCESSOR_ARCHITECTURE">x86</DebugEnvironmentVariables>
+                    <DebugEnvironmentVariables Name="PROCESSOR_ARCHITEW6432">AMD64</DebugEnvironmentVariables>
+                    <DebugEnvironmentVariables Name="PROCESSOR_IDENTIFIER">Intel64 Family 6 Model 42 Stepping 7, GenuineIntel</DebugEnvironmentVariables>
+                    <DebugEnvironmentVariables Name="PROCESSOR_LEVEL">6</DebugEnvironmentVariables>
+                    <DebugEnvironmentVariables Name="PROCESSOR_REVISION">2a07</DebugEnvironmentVariables>
+                    <DebugEnvironmentVariables Name="ProgramData">C:\ProgramData</DebugEnvironmentVariables>
+                    <DebugEnvironmentVariables Name="ProgramFiles(x86)">C:\Program Files (x86)</DebugEnvironmentVariables>
+                    <DebugEnvironmentVariables Name="ProgramFiles">C:\Program Files (x86)</DebugEnvironmentVariables>
+                    <DebugEnvironmentVariables Name="ProgramW6432">C:\Program Files</DebugEnvironmentVariables>
+                    <DebugEnvironmentVariables Name="PSModulePath">C:\Windows\system32\WindowsPowerShell\v1.0\Modules\</DebugEnvironmentVariables>
+                    <DebugEnvironmentVariables Name="PUBLIC">C:\Users\Public</DebugEnvironmentVariables>
+                    <DebugEnvironmentVariables Name="QUARTUS_ROOTDIR">c:\altera\11.1\quartus</DebugEnvironmentVariables>
+                    <DebugEnvironmentVariables Name="SESSIONNAME">Console</DebugEnvironmentVariables>
+                    <DebugEnvironmentVariables Name="SOPC_KIT_NIOS2">c:\altera\11.1\nios2eds</DebugEnvironmentVariables>
+                    <DebugEnvironmentVariables Name="SystemDrive">C:</DebugEnvironmentVariables>
+                    <DebugEnvironmentVariables Name="SystemRoot">C:\Windows</DebugEnvironmentVariables>
+                    <DebugEnvironmentVariables Name="TEMP">C:\Users\Alenas\AppData\Local\Temp</DebugEnvironmentVariables>
+                    <DebugEnvironmentVariables Name="TMP">C:\Users\Alenas\AppData\Local\Temp</DebugEnvironmentVariables>
+                    <DebugEnvironmentVariables Name="USERDOMAIN">ASAI</DebugEnvironmentVariables>
+                    <DebugEnvironmentVariables Name="USERNAME">Alenas</DebugEnvironmentVariables>
+                    <DebugEnvironmentVariables Name="USERPROFILE">C:\Users\Alenas</DebugEnvironmentVariables>
+                    <DebugEnvironmentVariables Name="VXIPNPPATH">C:\Program Files (x86)\IVI Foundation\VISA\</DebugEnvironmentVariables>
+                    <DebugEnvironmentVariables Name="windir">C:\Windows</DebugEnvironmentVariables>
+                    <DebugEnvironmentVariables Name="windows_tracing_flags">3</DebugEnvironmentVariables>
+                    <DebugEnvironmentVariables Name="windows_tracing_logfile">C:\BVTBin\Tests\installpackage\csilogfile.log</DebugEnvironmentVariables>
+                    <DebugEnvironmentVariables Name="XILINX_FOR_ALTIUM_OVERRIDE"/>
+                </DebugEnvironmentVariables>
+                <DebugSysEnvironmentVariables>
+                    <DebugSysEnvironmentVariables Name="ALLUSERSPROFILE">C:\ProgramData</DebugSysEnvironmentVariables>
+                    <DebugSysEnvironmentVariables Name="APPDATA">C:\Users\Alenas\AppData\Roaming</DebugSysEnvironmentVariables>
+                    <DebugSysEnvironmentVariables Name="BCB">c:\program files (x86)\codegear\rad studio\6.0</DebugSysEnvironmentVariables>
+                    <DebugSysEnvironmentVariables Name="BCC_ERRORS_DURING_BROWSING">1</DebugSysEnvironmentVariables>
+                    <DebugSysEnvironmentVariables Name="BDS">c:\program files (x86)\codegear\rad studio\6.0</DebugSysEnvironmentVariables>
+                    <DebugSysEnvironmentVariables Name="BDSAppDataBaseDir">BDS</DebugSysEnvironmentVariables>
+                    <DebugSysEnvironmentVariables Name="BDSCOMMONDIR">C:\Users\Public\Documents\RAD Studio\6.0</DebugSysEnvironmentVariables>
+                    <DebugSysEnvironmentVariables Name="BDSPROJECTSDIR">C:\Users\Alenas\Documents\RAD Studio\Projects</DebugSysEnvironmentVariables>
+                    <DebugSysEnvironmentVariables Name="BDSUSERDIR">C:\Users\Alenas\Documents\RAD Studio\6.0</DebugSysEnvironmentVariables>
+                    <DebugSysEnvironmentVariables Name="CG_BOOST_ROOT">C:\Program Files (x86)\CodeGear\RAD Studio\6.0\include\boost_1_35</DebugSysEnvironmentVariables>
+                    <DebugSysEnvironmentVariables Name="CommonProgramFiles(x86)">C:\Program Files (x86)\Common Files</DebugSysEnvironmentVariables>
+                    <DebugSysEnvironmentVariables Name="CommonProgramFiles">C:\Program Files (x86)\Common Files</DebugSysEnvironmentVariables>
+                    <DebugSysEnvironmentVariables Name="CommonProgramW6432">C:\Program Files\Common Files</DebugSysEnvironmentVariables>
+                    <DebugSysEnvironmentVariables Name="COMPUTERNAME">ASAI</DebugSysEnvironmentVariables>
+                    <DebugSysEnvironmentVariables Name="ComSpec">C:\Windows\system32\cmd.exe</DebugSysEnvironmentVariables>
+                    <DebugSysEnvironmentVariables Name="DELPHI">c:\program files (x86)\codegear\rad studio\6.0</DebugSysEnvironmentVariables>
+                    <DebugSysEnvironmentVariables Name="FP_NO_HOST_CHECK">NO</DebugSysEnvironmentVariables>
+                    <DebugSysEnvironmentVariables Name="HOMEDRIVE">C:</DebugSysEnvironmentVariables>
+                    <DebugSysEnvironmentVariables Name="HOMEPATH">\Users\Alenas</DebugSysEnvironmentVariables>
+                    <DebugSysEnvironmentVariables Name="IVIROOTDIR32">C:\Program Files (x86)\IVI Foundation\IVI\</DebugSysEnvironmentVariables>
+                    <DebugSysEnvironmentVariables Name="IVIROOTDIR64">C:\Program Files\IVI Foundation\IVI\</DebugSysEnvironmentVariables>
+                    <DebugSysEnvironmentVariables Name="KMP_DUPLICATE_LIB_OK">TRUE</DebugSysEnvironmentVariables>
+                    <DebugSysEnvironmentVariables Name="LOCALAPPDATA">C:\Users\Alenas\AppData\Local</DebugSysEnvironmentVariables>
+                    <DebugSysEnvironmentVariables Name="LOGONSERVER">\\ASAI</DebugSysEnvironmentVariables>
+                    <DebugSysEnvironmentVariables Name="MCC_INCLUDE">C:\Program Files (x86)\Microchip\mplabc18\v3.40\h</DebugSysEnvironmentVariables>
+                    <DebugSysEnvironmentVariables Name="MKL_SERIAL">YES</DebugSysEnvironmentVariables>
+                    <DebugSysEnvironmentVariables Name="NIIVIPATH">C:\Program Files (x86)\IVI Foundation\IVI\</DebugSysEnvironmentVariables>
+                    <DebugSysEnvironmentVariables Name="NUMBER_OF_PROCESSORS">2</DebugSysEnvironmentVariables>
+                    <DebugSysEnvironmentVariables Name="OS">Windows_NT</DebugSysEnvironmentVariables>
+                    <DebugSysEnvironmentVariables Name="Path">C:/Program Files (x86)/Texas Instruments/xdctools_3_20_03_63;C:\Program Files (x86)\Microchip\mplabc18\v3.40\mpasm;C:\Program Files (x86)\Microchip\mplabc18\v3.40\bin;C:\Program Files (x86)\CodeGear\RAD Studio\6.0\bin;C:\Users\Public\Documents\RAD Studio\6.0\Bpl;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Program Files\Intel\WiFi\bin\;C:\Program Files\Common Files\Intel\WirelessCommon\;C:\Program Files\MATLAB\R2009a\bin;C:\Program Files\MATLAB\R2009a\bin\win64;C:\Program Files (x86)\Microchip\MPLAB C32 Suite\bin;C:\PROGRA~2\Aldec\ACTIVE~1.2SE\BIN;C:\Program Files (x86)\IVI Foundation\IVI\bin;C:\Program Files\IVI Foundation\IVI\bin;C:\Program Files (x86)\IVI Foundation\VISA\WinNT\Bin;C:/Program Files (x86)/Texas Instruments/xdctools_3_20_03_63;C:\Program Files (x86)\Microchip\mplabc18\v3.40\mpasm;C:\Program Files (x86)\Microchip\mplabc18\v3.40\bin;C:\Users\Public\Documents\RAD Studio\6.0\Bpl;C:\Program Files\Intel\WiFi\bin\;C:\Program Files\Common Files\Intel\WirelessCommon\</DebugSysEnvironmentVariables>
+                    <DebugSysEnvironmentVariables Name="PATHEXT">.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC</DebugSysEnvironmentVariables>
+                    <DebugSysEnvironmentVariables Name="PROCESSOR_ARCHITECTURE">x86</DebugSysEnvironmentVariables>
+                    <DebugSysEnvironmentVariables Name="PROCESSOR_ARCHITEW6432">AMD64</DebugSysEnvironmentVariables>
+                    <DebugSysEnvironmentVariables Name="PROCESSOR_IDENTIFIER">Intel64 Family 6 Model 42 Stepping 7, GenuineIntel</DebugSysEnvironmentVariables>
+                    <DebugSysEnvironmentVariables Name="PROCESSOR_LEVEL">6</DebugSysEnvironmentVariables>
+                    <DebugSysEnvironmentVariables Name="PROCESSOR_REVISION">2a07</DebugSysEnvironmentVariables>
+                    <DebugSysEnvironmentVariables Name="ProgramData">C:\ProgramData</DebugSysEnvironmentVariables>
+                    <DebugSysEnvironmentVariables Name="ProgramFiles(x86)">C:\Program Files (x86)</DebugSysEnvironmentVariables>
+                    <DebugSysEnvironmentVariables Name="ProgramFiles">C:\Program Files (x86)</DebugSysEnvironmentVariables>
+                    <DebugSysEnvironmentVariables Name="ProgramW6432">C:\Program Files</DebugSysEnvironmentVariables>
+                    <DebugSysEnvironmentVariables Name="PSModulePath">C:\Windows\system32\WindowsPowerShell\v1.0\Modules\</DebugSysEnvironmentVariables>
+                    <DebugSysEnvironmentVariables Name="PUBLIC">C:\Users\Public</DebugSysEnvironmentVariables>
+                    <DebugSysEnvironmentVariables Name="QUARTUS_ROOTDIR">c:\altera\11.1\quartus</DebugSysEnvironmentVariables>
+                    <DebugSysEnvironmentVariables Name="SESSIONNAME">Console</DebugSysEnvironmentVariables>
+                    <DebugSysEnvironmentVariables Name="SOPC_KIT_NIOS2">c:\altera\11.1\nios2eds</DebugSysEnvironmentVariables>
+                    <DebugSysEnvironmentVariables Name="SystemDrive">C:</DebugSysEnvironmentVariables>
+                    <DebugSysEnvironmentVariables Name="SystemRoot">C:\Windows</DebugSysEnvironmentVariables>
+                    <DebugSysEnvironmentVariables Name="TEMP">C:\Users\Alenas\AppData\Local\Temp</DebugSysEnvironmentVariables>
+                    <DebugSysEnvironmentVariables Name="TMP">C:\Users\Alenas\AppData\Local\Temp</DebugSysEnvironmentVariables>
+                    <DebugSysEnvironmentVariables Name="USERDOMAIN">ASAI</DebugSysEnvironmentVariables>
+                    <DebugSysEnvironmentVariables Name="USERNAME">Alenas</DebugSysEnvironmentVariables>
+                    <DebugSysEnvironmentVariables Name="USERPROFILE">C:\Users\Alenas</DebugSysEnvironmentVariables>
+                    <DebugSysEnvironmentVariables Name="VXIPNPPATH">C:\Program Files (x86)\IVI Foundation\VISA\</DebugSysEnvironmentVariables>
+                    <DebugSysEnvironmentVariables Name="windir">C:\Windows</DebugSysEnvironmentVariables>
+                    <DebugSysEnvironmentVariables Name="windows_tracing_flags">3</DebugSysEnvironmentVariables>
+                    <DebugSysEnvironmentVariables Name="windows_tracing_logfile">C:\BVTBin\Tests\installpackage\csilogfile.log</DebugSysEnvironmentVariables>
+                    <DebugSysEnvironmentVariables Name="XILINX_FOR_ALTIUM_OVERRIDE"/>
+                    <DebugSysEnvironmentVariables Name="XDCROOT">C:/Program Files (x86)/Texas Instruments/xdctools_3_20_03_63</DebugSysEnvironmentVariables>
+                </DebugSysEnvironmentVariables>
+            </CPlusPlusBuilder.Personality>
+            <Platforms>
+                <Platform value="Win32">True</Platform>
+                <Platform value="Win64">False</Platform>
+            </Platforms>
+            <ModelSupport>True</ModelSupport>
+        </BorlandProject>
+        <ProjectFileVersion>12</ProjectFileVersion>
+    </ProjectExtensions>
+    <Import Project="$(APPDATA)\Embarcadero\$(BDSAPPDATABASEDIR)\$(PRODUCTVERSION)\UserTools.proj" Condition="Exists('$(APPDATA)\Embarcadero\$(BDSAPPDATABASEDIR)\$(PRODUCTVERSION)\UserTools.proj')"/>
+</Project>

@@ -1,0 +1,1212 @@
+
+Transceiver.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .text         00000550  00000000  00000000  00000074  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  1 .bss          00000004  00800060  00800060  000005c4  2**0
+                  ALLOC
+  2 .debug_aranges 00000020  00000000  00000000  000005c4  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  3 .debug_pubnames 000000de  00000000  00000000  000005e4  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  4 .debug_info   00000594  00000000  00000000  000006c2  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  5 .debug_abbrev 00000203  00000000  00000000  00000c56  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  6 .debug_line   0000067a  00000000  00000000  00000e59  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  7 .debug_frame  000000c0  00000000  00000000  000014d4  2**2
+                  CONTENTS, READONLY, DEBUGGING
+  8 .debug_str    000001ea  00000000  00000000  00001594  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  9 .debug_loc    00000356  00000000  00000000  0000177e  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 10 .debug_ranges 00000108  00000000  00000000  00001ad4  2**0
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+00000000 <__vectors>:
+   0:	10 c0       	rjmp	.+32     	; 0x22 <__ctors_end>
+   2:	1d c0       	rjmp	.+58     	; 0x3e <__bad_interrupt>
+   4:	1c c0       	rjmp	.+56     	; 0x3e <__bad_interrupt>
+   6:	1b c0       	rjmp	.+54     	; 0x3e <__bad_interrupt>
+   8:	1a c0       	rjmp	.+52     	; 0x3e <__bad_interrupt>
+   a:	19 c0       	rjmp	.+50     	; 0x3e <__bad_interrupt>
+   c:	18 c0       	rjmp	.+48     	; 0x3e <__bad_interrupt>
+   e:	17 c0       	rjmp	.+46     	; 0x3e <__bad_interrupt>
+  10:	16 c0       	rjmp	.+44     	; 0x3e <__bad_interrupt>
+  12:	15 c0       	rjmp	.+42     	; 0x3e <__bad_interrupt>
+  14:	14 c0       	rjmp	.+40     	; 0x3e <__bad_interrupt>
+  16:	13 c0       	rjmp	.+38     	; 0x3e <__bad_interrupt>
+  18:	12 c0       	rjmp	.+36     	; 0x3e <__bad_interrupt>
+  1a:	11 c0       	rjmp	.+34     	; 0x3e <__bad_interrupt>
+  1c:	10 c0       	rjmp	.+32     	; 0x3e <__bad_interrupt>
+  1e:	0f c0       	rjmp	.+30     	; 0x3e <__bad_interrupt>
+  20:	0e c0       	rjmp	.+28     	; 0x3e <__bad_interrupt>
+
+00000022 <__ctors_end>:
+  22:	11 24       	eor	r1, r1
+  24:	1f be       	out	0x3f, r1	; 63
+  26:	cf ed       	ldi	r28, 0xDF	; 223
+  28:	cd bf       	out	0x3d, r28	; 61
+
+0000002a <__do_clear_bss>:
+  2a:	10 e0       	ldi	r17, 0x00	; 0
+  2c:	a0 e6       	ldi	r26, 0x60	; 96
+  2e:	b0 e0       	ldi	r27, 0x00	; 0
+  30:	01 c0       	rjmp	.+2      	; 0x34 <.do_clear_bss_start>
+
+00000032 <.do_clear_bss_loop>:
+  32:	1d 92       	st	X+, r1
+
+00000034 <.do_clear_bss_start>:
+  34:	a4 36       	cpi	r26, 0x64	; 100
+  36:	b1 07       	cpc	r27, r17
+  38:	e1 f7       	brne	.-8      	; 0x32 <.do_clear_bss_loop>
+  3a:	7b d1       	rcall	.+758    	; 0x332 <main>
+  3c:	87 c2       	rjmp	.+1294   	; 0x54c <_exit>
+
+0000003e <__bad_interrupt>:
+  3e:	e0 cf       	rjmp	.-64     	; 0x0 <__vectors>
+
+00000040 <PORTS_int>:
+/************************************
+PORTS initialise
+*************************************/
+void PORTS_int(void)
+{
+	DDRA |= (1<<PA1) | (1<<PA2) | (1<<PA3) | (1<<PA4) | (1<<PA6);
+  40:	ea e3       	ldi	r30, 0x3A	; 58
+  42:	f0 e0       	ldi	r31, 0x00	; 0
+  44:	80 81       	ld	r24, Z
+  46:	8e 65       	ori	r24, 0x5E	; 94
+  48:	80 83       	st	Z, r24
+	PORTA |= (1<<SDO);
+  4a:	eb e3       	ldi	r30, 0x3B	; 59
+  4c:	f0 e0       	ldi	r31, 0x00	; 0
+  4e:	80 81       	ld	r24, Z
+  50:	80 62       	ori	r24, 0x20	; 32
+  52:	80 83       	st	Z, r24
+}
+  54:	08 95       	ret
+
+00000056 <WriteCMD>:
+
+/************************************
+Write command
+*************************************/
+void WriteCMD(unsigned int CMD)
+{
+  56:	9c 01       	movw	r18, r24
+	unsigned char n = 16;
+
+	SCK_LOW;
+  58:	eb e3       	ldi	r30, 0x3B	; 59
+  5a:	f0 e0       	ldi	r31, 0x00	; 0
+  5c:	80 81       	ld	r24, Z
+  5e:	8f 7e       	andi	r24, 0xEF	; 239
+  60:	80 83       	st	Z, r24
+	nSEL_LOW;
+  62:	80 81       	ld	r24, Z
+  64:	87 7f       	andi	r24, 0xF7	; 247
+  66:	80 83       	st	Z, r24
+  68:	9f e0       	ldi	r25, 0x0F	; 15
+	
+	while(n--)
+		{
+		SCK_LOW;
+  6a:	80 81       	ld	r24, Z
+  6c:	8f 7e       	andi	r24, 0xEF	; 239
+  6e:	80 83       	st	Z, r24
+
+		if(CMD&0x8000)
+  70:	33 23       	and	r19, r19
+  72:	24 f4       	brge	.+8      	; 0x7c <WriteCMD+0x26>
+			SDI_HI;
+  74:	80 81       	ld	r24, Z
+  76:	80 64       	ori	r24, 0x40	; 64
+  78:	80 83       	st	Z, r24
+  7a:	03 c0       	rjmp	.+6      	; 0x82 <WriteCMD+0x2c>
+
+		else
+			SDI_LOW;
+  7c:	80 81       	ld	r24, Z
+  7e:	8f 7b       	andi	r24, 0xBF	; 191
+  80:	80 83       	st	Z, r24
+
+		SCK_HI;	
+  82:	80 81       	ld	r24, Z
+  84:	80 61       	ori	r24, 0x10	; 16
+  86:	80 83       	st	Z, r24
+	unsigned char n = 16;
+
+	SCK_LOW;
+	nSEL_LOW;
+	
+	while(n--)
+  88:	99 23       	and	r25, r25
+  8a:	21 f0       	breq	.+8      	; 0x94 <WriteCMD+0x3e>
+		else
+			SDI_LOW;
+
+		SCK_HI;	
+			
+		CMD=CMD<<1;
+  8c:	22 0f       	add	r18, r18
+  8e:	33 1f       	adc	r19, r19
+	unsigned char n = 16;
+
+	SCK_LOW;
+	nSEL_LOW;
+	
+	while(n--)
+  90:	91 50       	subi	r25, 0x01	; 1
+  92:	eb cf       	rjmp	.-42     	; 0x6a <WriteCMD+0x14>
+		SCK_HI;	
+			
+		CMD=CMD<<1;
+		}
+
+	SCK_LOW;
+  94:	eb e3       	ldi	r30, 0x3B	; 59
+  96:	f0 e0       	ldi	r31, 0x00	; 0
+  98:	80 81       	ld	r24, Z
+  9a:	8f 7e       	andi	r24, 0xEF	; 239
+  9c:	80 83       	st	Z, r24
+	nSEL_HI;
+  9e:	80 81       	ld	r24, Z
+  a0:	88 60       	ori	r24, 0x08	; 8
+  a2:	80 83       	st	Z, r24
+}
+  a4:	08 95       	ret
+
+000000a6 <ADC_int>:
+/************************************
+ADC	 initialise
+*************************************/
+void ADC_int(void)
+{
+	ADMUX = (1<<REFS1) | (1<<MUX5) | (1<<MUX1);	// 8 ch; Internal 1.1V 
+  a6:	82 ea       	ldi	r24, 0xA2	; 162
+  a8:	87 b9       	out	0x07, r24	; 7
+	ADCSRB = 0;
+  aa:	13 b8       	out	0x03, r1	; 3
+	ADCSRA = (1<<ADEN) | (1<<ADPS2) | (1<<ADPS1) | (1<<ADPS0);	// ADC on, start ADC conversion (measure temperature)	
+  ac:	87 e8       	ldi	r24, 0x87	; 135
+  ae:	86 b9       	out	0x06, r24	; 6
+}
+  b0:	08 95       	ret
+
+000000b2 <Write_FSK_byte>:
+
+/**************************************
+Write FSK data
+**************************************/
+void Write_FSK_byte(unsigned char data)
+{
+  b2:	98 2f       	mov	r25, r24
+	unsigned int CMD = 0xB800;
+	unsigned char RGIT = 0;
+	
+	do{
+		SCK_LOW;
+  b4:	eb e3       	ldi	r30, 0x3B	; 59
+  b6:	f0 e0       	ldi	r31, 0x00	; 0
+  b8:	80 81       	ld	r24, Z
+  ba:	8f 7e       	andi	r24, 0xEF	; 239
+  bc:	80 83       	st	Z, r24
+		nSEL_LOW;
+  be:	80 81       	ld	r24, Z
+  c0:	87 7f       	andi	r24, 0xF7	; 247
+  c2:	80 83       	st	Z, r24
+		SDI_LOW;
+  c4:	80 81       	ld	r24, Z
+  c6:	8f 7b       	andi	r24, 0xBF	; 191
+  c8:	80 83       	st	Z, r24
+
+		SCK_HI;
+  ca:	80 81       	ld	r24, Z
+  cc:	80 61       	ori	r24, 0x10	; 16
+  ce:	80 83       	st	Z, r24
+		
+		if(SDO_PIN)		//Polling SDO
+  d0:	cd 99       	sbic	0x19, 5	; 25
+  d2:	1a c0       	rjmp	.+52     	; 0x108 <__stack+0x29>
+  d4:	a9 e3       	ldi	r26, 0x39	; 57
+  d6:	b0 e0       	ldi	r27, 0x00	; 0
+			RGIT=1;		
+
+		SCK_LOW;
+  d8:	80 81       	ld	r24, Z
+  da:	8f 7e       	andi	r24, 0xEF	; 239
+  dc:	80 83       	st	Z, r24
+		SDI_HI;
+  de:	80 81       	ld	r24, Z
+  e0:	80 64       	ori	r24, 0x40	; 64
+  e2:	80 83       	st	Z, r24
+		nSEL_HI;
+  e4:	80 81       	ld	r24, Z
+  e6:	88 60       	ori	r24, 0x08	; 8
+  e8:	80 83       	st	Z, r24
+{
+	unsigned int CMD = 0xB800;
+	unsigned char RGIT = 0;
+	
+	do{
+		SCK_LOW;
+  ea:	80 81       	ld	r24, Z
+  ec:	8f 7e       	andi	r24, 0xEF	; 239
+  ee:	80 83       	st	Z, r24
+		nSEL_LOW;
+  f0:	80 81       	ld	r24, Z
+  f2:	87 7f       	andi	r24, 0xF7	; 247
+  f4:	80 83       	st	Z, r24
+		SDI_LOW;
+  f6:	80 81       	ld	r24, Z
+  f8:	8f 7b       	andi	r24, 0xBF	; 191
+  fa:	80 83       	st	Z, r24
+
+		SCK_HI;
+  fc:	80 81       	ld	r24, Z
+  fe:	80 61       	ori	r24, 0x10	; 16
+ 100:	80 83       	st	Z, r24
+		
+		if(SDO_PIN)		//Polling SDO
+ 102:	8c 91       	ld	r24, X
+ 104:	85 ff       	sbrs	r24, 5
+ 106:	e8 cf       	rjmp	.-48     	; 0xd8 <Write_FSK_byte+0x26>
+			RGIT=1;		
+
+		SCK_LOW;
+ 108:	eb e3       	ldi	r30, 0x3B	; 59
+ 10a:	f0 e0       	ldi	r31, 0x00	; 0
+ 10c:	80 81       	ld	r24, Z
+ 10e:	8f 7e       	andi	r24, 0xEF	; 239
+ 110:	80 83       	st	Z, r24
+		SDI_HI;
+ 112:	80 81       	ld	r24, Z
+ 114:	80 64       	ori	r24, 0x40	; 64
+ 116:	80 83       	st	Z, r24
+		nSEL_HI;
+ 118:	80 81       	ld	r24, Z
+ 11a:	88 60       	ori	r24, 0x08	; 8
+ 11c:	80 83       	st	Z, r24
+
+		}while(!RGIT);
+
+	WriteCMD(CMD|data);
+ 11e:	89 2f       	mov	r24, r25
+ 120:	90 e0       	ldi	r25, 0x00	; 0
+ 122:	98 6b       	ori	r25, 0xB8	; 184
+ 124:	98 df       	rcall	.-208    	; 0x56 <WriteCMD>
+}
+ 126:	08 95       	ret
+
+00000128 <Write_FSK_word>:
+
+/**************************************
+Write FSK data
+**************************************/
+void Write_FSK_word(unsigned short data)
+{
+ 128:	9c 01       	movw	r18, r24
+ 12a:	4e e0       	ldi	r20, 0x0E	; 14
+	unsigned char n = 15;
+
+	while(n--)
+		{
+		while(nIRQ_PIN);	
+ 12c:	e9 e3       	ldi	r30, 0x39	; 57
+ 12e:	f0 e0       	ldi	r31, 0x00	; 0
+
+		if(data&0x8000)
+			SDI_HI;
+
+		else
+			SDI_LOW;
+ 130:	ab e3       	ldi	r26, 0x3B	; 59
+ 132:	b0 e0       	ldi	r27, 0x00	; 0
+{
+	unsigned char n = 15;
+
+	while(n--)
+		{
+		while(nIRQ_PIN);	
+ 134:	80 81       	ld	r24, Z
+ 136:	88 23       	and	r24, r24
+ 138:	ec f3       	brlt	.-6      	; 0x134 <Write_FSK_word+0xc>
+		while(!nIRQ_PIN);
+ 13a:	80 81       	ld	r24, Z
+ 13c:	88 23       	and	r24, r24
+ 13e:	ec f7       	brge	.-6      	; 0x13a <Write_FSK_word+0x12>
+
+		if(data&0x8000)
+ 140:	33 23       	and	r19, r19
+ 142:	24 f4       	brge	.+8      	; 0x14c <Write_FSK_word+0x24>
+			SDI_HI;
+ 144:	8c 91       	ld	r24, X
+ 146:	80 64       	ori	r24, 0x40	; 64
+ 148:	8c 93       	st	X, r24
+ 14a:	03 c0       	rjmp	.+6      	; 0x152 <Write_FSK_word+0x2a>
+
+		else
+			SDI_LOW;
+ 14c:	8c 91       	ld	r24, X
+ 14e:	8f 7b       	andi	r24, 0xBF	; 191
+ 150:	8c 93       	st	X, r24
+**************************************/
+void Write_FSK_word(unsigned short data)
+{
+	unsigned char n = 15;
+
+	while(n--)
+ 152:	44 23       	and	r20, r20
+ 154:	21 f0       	breq	.+8      	; 0x15e <Write_FSK_word+0x36>
+			SDI_HI;
+
+		else
+			SDI_LOW;
+
+		data = data<<1;
+ 156:	22 0f       	add	r18, r18
+ 158:	33 1f       	adc	r19, r19
+**************************************/
+void Write_FSK_word(unsigned short data)
+{
+	unsigned char n = 15;
+
+	while(n--)
+ 15a:	41 50       	subi	r20, 0x01	; 1
+ 15c:	eb cf       	rjmp	.-42     	; 0x134 <Write_FSK_word+0xc>
+ 15e:	08 95       	ret
+
+00000160 <RMFM12_send>:
+
+/**************************************
+Send FSK data
+**************************************/
+void RMFM12_send(unsigned short data)
+{
+ 160:	0f 93       	push	r16
+ 162:	1f 93       	push	r17
+ 164:	08 2f       	mov	r16, r24
+ 166:	19 2f       	mov	r17, r25
+	Write_FSK_byte(0xAA);	// Send Preamble
+ 168:	8a ea       	ldi	r24, 0xAA	; 170
+ 16a:	a3 df       	rcall	.-186    	; 0xb2 <Write_FSK_byte>
+	Write_FSK_byte(0xAA);	// Send Preamble
+ 16c:	8a ea       	ldi	r24, 0xAA	; 170
+ 16e:	a1 df       	rcall	.-190    	; 0xb2 <Write_FSK_byte>
+	Write_FSK_byte(0xAA);	// Send Preamble
+ 170:	8a ea       	ldi	r24, 0xAA	; 170
+ 172:	9f df       	rcall	.-194    	; 0xb2 <Write_FSK_byte>
+	Write_FSK_byte(0x2D);	// Send sync word
+ 174:	8d e2       	ldi	r24, 0x2D	; 45
+ 176:	9d df       	rcall	.-198    	; 0xb2 <Write_FSK_byte>
+	Write_FSK_byte(0xD4);	// Send sync word
+ 178:	84 ed       	ldi	r24, 0xD4	; 212
+ 17a:	9b df       	rcall	.-202    	; 0xb2 <Write_FSK_byte>
+	Write_FSK_byte(data>>8);
+ 17c:	81 2f       	mov	r24, r17
+ 17e:	99 df       	rcall	.-206    	; 0xb2 <Write_FSK_byte>
+	Write_FSK_byte(data&0xff);
+ 180:	80 2f       	mov	r24, r16
+ 182:	97 df       	rcall	.-210    	; 0xb2 <Write_FSK_byte>
+	
+
+}
+ 184:	1f 91       	pop	r17
+ 186:	0f 91       	pop	r16
+ 188:	08 95       	ret
+
+0000018a <RFM12_init>:
+RFM12 initialise
+*************************************/
+void RFM12_init(void)
+{
+	unsigned int F;
+	WriteCMD(0x80DF);		// 433MHz Band; Enable TX registere; Enable RX FIFO buffer, 16pF
+ 18a:	8f ed       	ldi	r24, 0xDF	; 223
+ 18c:	90 e8       	ldi	r25, 0x80	; 128
+ 18e:	63 df       	rcall	.-314    	; 0x56 <WriteCMD>
+	WriteCMD(0xC0E0);		// 10MHz output  
+ 190:	80 ee       	ldi	r24, 0xE0	; 224
+ 192:	90 ec       	ldi	r25, 0xC0	; 192
+ 194:	60 df       	rcall	.-320    	; 0x56 <WriteCMD>
+	...
+	asm("nop");
+	asm("nop");
+	asm("nop");
+	asm("nop");
+	WriteCMD(0x82D8);		// Enable receiver; er, ebb, es, ex - set to "1"
+ 19e:	88 ed       	ldi	r24, 0xD8	; 216
+ 1a0:	92 e8       	ldi	r25, 0x82	; 130
+ 1a2:	59 df       	rcall	.-334    	; 0x56 <WriteCMD>
+	F = Fc(439.00);
+	WriteCMD(0xA000|F);		// Fcarrier = 433.00MHz
+ 1a4:	80 e1       	ldi	r24, 0x10	; 16
+ 1a6:	9e ea       	ldi	r25, 0xAE	; 174
+ 1a8:	56 df       	rcall	.-340    	; 0x56 <WriteCMD>
+	WriteCMD(0xC629);		// 114.94Kbps
+ 1aa:	89 e2       	ldi	r24, 0x29	; 41
+ 1ac:	96 ec       	ldi	r25, 0xC6	; 198
+ 1ae:	53 df       	rcall	.-346    	; 0x56 <WriteCMD>
+	WriteCMD(0x9420);		// VDI, FAST, Bandwidth 400kHz, LNA gain 0dBm, -103dBm
+ 1b0:	80 e2       	ldi	r24, 0x20	; 32
+ 1b2:	94 e9       	ldi	r25, 0x94	; 148
+ 1b4:	50 df       	rcall	.-352    	; 0x56 <WriteCMD>
+	WriteCMD(0xC2AC);		// Auto-lock; Digital filter;	
+ 1b6:	8c ea       	ldi	r24, 0xAC	; 172
+ 1b8:	92 ec       	ldi	r25, 0xC2	; 194
+ 1ba:	4d df       	rcall	.-358    	; 0x56 <WriteCMD>
+	WriteCMD(0xCAF3);		// FIFO interrupt level: 16bits; FIFO fill start condition: Sync-word; Enable FIFO fill; dr - set to "1"
+ 1bc:	83 ef       	ldi	r24, 0xF3	; 243
+ 1be:	9a ec       	ldi	r25, 0xCA	; 202
+ 1c0:	4a df       	rcall	.-364    	; 0x56 <WriteCMD>
+	WriteCMD(0xC49B);		// AFC setting: Keep offset when VDI hi; select range limit +15/-16; Enable AFC funcition; st,oe - set to "1"
+ 1c2:	8b e9       	ldi	r24, 0x9B	; 155
+ 1c4:	94 ec       	ldi	r25, 0xC4	; 196
+ 1c6:	47 df       	rcall	.-370    	; 0x56 <WriteCMD>
+	WriteCMD(0x98D0);		// 210kHz deviation,MAX OUT
+ 1c8:	80 ed       	ldi	r24, 0xD0	; 208
+ 1ca:	98 e9       	ldi	r25, 0x98	; 152
+ 1cc:	44 df       	rcall	.-376    	; 0x56 <WriteCMD>
+}
+ 1ce:	08 95       	ret
+
+000001d0 <RMFM12_readFIFO>:
+
+/************************************
+Read FIFO
+*************************************/
+unsigned short RMFM12_readFIFO(void)
+{
+ 1d0:	cf 93       	push	r28
+ 1d2:	df 93       	push	r29
+	unsigned int i=0;
+	unsigned short Result=0;
+
+	SCK_LOW;
+ 1d4:	eb e3       	ldi	r30, 0x3B	; 59
+ 1d6:	f0 e0       	ldi	r31, 0x00	; 0
+ 1d8:	80 81       	ld	r24, Z
+ 1da:	8f 7e       	andi	r24, 0xEF	; 239
+ 1dc:	80 83       	st	Z, r24
+	SDI_LOW;
+ 1de:	80 81       	ld	r24, Z
+ 1e0:	8f 7b       	andi	r24, 0xBF	; 191
+ 1e2:	80 83       	st	Z, r24
+	nSEL_LOW;
+ 1e4:	80 81       	ld	r24, Z
+ 1e6:	87 7f       	andi	r24, 0xF7	; 247
+ 1e8:	80 83       	st	Z, r24
+ 1ea:	20 e0       	ldi	r18, 0x00	; 0
+ 1ec:	30 e0       	ldi	r19, 0x00	; 0
+
+	for(i=0;i<16;i++)	// skip status bits
+		{ 
+		SCK_HI;
+ 1ee:	80 81       	ld	r24, Z
+ 1f0:	80 61       	ori	r24, 0x10	; 16
+ 1f2:	80 83       	st	Z, r24
+		SCK_LOW;
+ 1f4:	80 81       	ld	r24, Z
+ 1f6:	8f 7e       	andi	r24, 0xEF	; 239
+ 1f8:	80 83       	st	Z, r24
+
+	SCK_LOW;
+	SDI_LOW;
+	nSEL_LOW;
+
+	for(i=0;i<16;i++)	// skip status bits
+ 1fa:	2f 5f       	subi	r18, 0xFF	; 255
+ 1fc:	3f 4f       	sbci	r19, 0xFF	; 255
+ 1fe:	20 31       	cpi	r18, 0x10	; 16
+ 200:	31 05       	cpc	r19, r1
+ 202:	a9 f7       	brne	.-22     	; 0x1ee <RMFM12_readFIFO+0x1e>
+ 204:	20 e0       	ldi	r18, 0x00	; 0
+ 206:	30 e0       	ldi	r19, 0x00	; 0
+ 208:	c0 e0       	ldi	r28, 0x00	; 0
+ 20a:	d0 e0       	ldi	r29, 0x00	; 0
+
+	for(i=0;i<16;i++)	// read fifo data byte
+		{ 
+		Result = Result<<1;
+		
+		if(SDO_PIN)
+ 20c:	a9 e3       	ldi	r26, 0x39	; 57
+ 20e:	b0 e0       	ldi	r27, 0x00	; 0
+			Result|=1;
+
+		SCK_HI;
+ 210:	eb e3       	ldi	r30, 0x3B	; 59
+ 212:	f0 e0       	ldi	r31, 0x00	; 0
+		SCK_LOW;
+		}
+
+	for(i=0;i<16;i++)	// read fifo data byte
+		{ 
+		Result = Result<<1;
+ 214:	cc 0f       	add	r28, r28
+ 216:	dd 1f       	adc	r29, r29
+		
+		if(SDO_PIN)
+ 218:	8c 91       	ld	r24, X
+ 21a:	85 fd       	sbrc	r24, 5
+			Result|=1;
+ 21c:	c1 60       	ori	r28, 0x01	; 1
+
+		SCK_HI;
+ 21e:	80 81       	ld	r24, Z
+ 220:	80 61       	ori	r24, 0x10	; 16
+ 222:	80 83       	st	Z, r24
+		SCK_LOW;
+ 224:	80 81       	ld	r24, Z
+ 226:	8f 7e       	andi	r24, 0xEF	; 239
+ 228:	80 83       	st	Z, r24
+		{ 
+		SCK_HI;
+		SCK_LOW;
+		}
+
+	for(i=0;i<16;i++)	// read fifo data byte
+ 22a:	2f 5f       	subi	r18, 0xFF	; 255
+ 22c:	3f 4f       	sbci	r19, 0xFF	; 255
+ 22e:	20 31       	cpi	r18, 0x10	; 16
+ 230:	31 05       	cpc	r19, r1
+ 232:	81 f7       	brne	.-32     	; 0x214 <RMFM12_readFIFO+0x44>
+
+		SCK_HI;
+		SCK_LOW;
+		}
+
+	nSEL_HI;
+ 234:	eb e3       	ldi	r30, 0x3B	; 59
+ 236:	f0 e0       	ldi	r31, 0x00	; 0
+ 238:	80 81       	ld	r24, Z
+ 23a:	88 60       	ori	r24, 0x08	; 8
+ 23c:	80 83       	st	Z, r24
+	
+	WriteCMD(0xCA80);	// reset FIFO
+ 23e:	80 e8       	ldi	r24, 0x80	; 128
+ 240:	9a ec       	ldi	r25, 0xCA	; 202
+ 242:	09 df       	rcall	.-494    	; 0x56 <WriteCMD>
+	WriteCMD(0xCAF3);
+ 244:	83 ef       	ldi	r24, 0xF3	; 243
+ 246:	9a ec       	ldi	r25, 0xCA	; 202
+ 248:	06 df       	rcall	.-500    	; 0x56 <WriteCMD>
+
+	return(Result);
+}
+ 24a:	8c 2f       	mov	r24, r28
+ 24c:	9d 2f       	mov	r25, r29
+ 24e:	df 91       	pop	r29
+ 250:	cf 91       	pop	r28
+ 252:	08 95       	ret
+
+00000254 <transmit_packet>:
+
+void transmit_packet(unsigned char nr,unsigned char tl, unsigned short value)
+{
+ 254:	cf 92       	push	r12
+ 256:	df 92       	push	r13
+ 258:	ef 92       	push	r14
+ 25a:	ff 92       	push	r15
+ 25c:	0f 93       	push	r16
+ 25e:	1f 93       	push	r17
+ 260:	e6 2e       	mov	r14, r22
+	unsigned short packet;
+	packet|=1<<15;
+	packet|=(nr&0x03)<<13;
+ 262:	08 2f       	mov	r16, r24
+ 264:	10 e0       	ldi	r17, 0x00	; 0
+ 266:	03 70       	andi	r16, 0x03	; 3
+ 268:	10 70       	andi	r17, 0x00	; 0
+ 26a:	10 2f       	mov	r17, r16
+ 26c:	00 27       	eor	r16, r16
+ 26e:	12 95       	swap	r17
+ 270:	11 0f       	add	r17, r17
+ 272:	10 7e       	andi	r17, 0xE0	; 224
+ 274:	10 68       	ori	r17, 0x80	; 128
+	packet|=(tl&0x01)<<12;
+ 276:	57 70       	andi	r21, 0x07	; 7
+ 278:	44 0f       	add	r20, r20
+ 27a:	55 1f       	adc	r21, r21
+ 27c:	04 2b       	or	r16, r20
+ 27e:	15 2b       	or	r17, r21
+	packet|=(value&2047)<<1;
+	Transmitter_ON;
+ 280:	88 e3       	ldi	r24, 0x38	; 56
+ 282:	92 e8       	ldi	r25, 0x82	; 130
+ 284:	e8 de       	rcall	.-560    	; 0x56 <WriteCMD>
+    milliseconds can be achieved.
+ */
+void
+_delay_loop_2(uint16_t __count)
+{
+	__asm__ volatile (
+ 286:	0f 2e       	mov	r0, r31
+ 288:	f0 e2       	ldi	r31, 0x20	; 32
+ 28a:	cf 2e       	mov	r12, r31
+ 28c:	fe e4       	ldi	r31, 0x4E	; 78
+ 28e:	df 2e       	mov	r13, r31
+ 290:	f0 2d       	mov	r31, r0
+ 292:	c6 01       	movw	r24, r12
+ 294:	01 97       	sbiw	r24, 0x01	; 1
+ 296:	f1 f7       	brne	.-4      	; 0x294 <transmit_packet+0x40>
+	_delay_ms(10);
+	RMFM12_send(packet);
+ 298:	ff 24       	eor	r15, r15
+ 29a:	81 e0       	ldi	r24, 0x01	; 1
+ 29c:	e8 22       	and	r14, r24
+ 29e:	ff 24       	eor	r15, r15
+ 2a0:	fe 2c       	mov	r15, r14
+ 2a2:	ee 24       	eor	r14, r14
+ 2a4:	ff 0c       	add	r15, r15
+ 2a6:	ff 0c       	add	r15, r15
+ 2a8:	ff 0c       	add	r15, r15
+ 2aa:	ff 0c       	add	r15, r15
+ 2ac:	c8 01       	movw	r24, r16
+ 2ae:	8e 29       	or	r24, r14
+ 2b0:	9f 29       	or	r25, r15
+ 2b2:	56 df       	rcall	.-340    	; 0x160 <RMFM12_send>
+ 2b4:	c6 01       	movw	r24, r12
+ 2b6:	01 97       	sbiw	r24, 0x01	; 1
+ 2b8:	f1 f7       	brne	.-4      	; 0x2b6 <transmit_packet+0x62>
+	_delay_ms(10);
+	Receiver_ON;
+ 2ba:	88 ed       	ldi	r24, 0xD8	; 216
+ 2bc:	92 e8       	ldi	r25, 0x82	; 130
+ 2be:	cb de       	rcall	.-618    	; 0x56 <WriteCMD>
+}
+ 2c0:	1f 91       	pop	r17
+ 2c2:	0f 91       	pop	r16
+ 2c4:	ff 90       	pop	r15
+ 2c6:	ef 90       	pop	r14
+ 2c8:	df 90       	pop	r13
+ 2ca:	cf 90       	pop	r12
+ 2cc:	08 95       	ret
+
+000002ce <Temp_measure>:
+	short temp;
+	unsigned short k;
+	long T;
+
+
+	ADCSRA |= (1<<ADSC);	
+ 2ce:	e6 e2       	ldi	r30, 0x26	; 38
+ 2d0:	f0 e0       	ldi	r31, 0x00	; 0
+ 2d2:	80 81       	ld	r24, Z
+ 2d4:	80 64       	ori	r24, 0x40	; 64
+ 2d6:	80 83       	st	Z, r24
+	while(ADCSRA&(1<<ADSC));
+ 2d8:	80 81       	ld	r24, Z
+ 2da:	86 fd       	sbrc	r24, 6
+ 2dc:	fd cf       	rjmp	.-6      	; 0x2d8 <Temp_measure+0xa>
+	k = ADC;
+ 2de:	64 b1       	in	r22, 0x04	; 4
+ 2e0:	75 b1       	in	r23, 0x05	; 5
+//	k=278;
+//	return k;
+
+	if(k<300)
+ 2e2:	81 e0       	ldi	r24, 0x01	; 1
+ 2e4:	6c 32       	cpi	r22, 0x2C	; 44
+ 2e6:	78 07       	cpc	r23, r24
+ 2e8:	88 f4       	brcc	.+34     	; 0x30c <Temp_measure+0x3e>
+		T = (130*(unsigned long)k - 35500 + 7)/14;
+ 2ea:	80 e0       	ldi	r24, 0x00	; 0
+ 2ec:	90 e0       	ldi	r25, 0x00	; 0
+ 2ee:	22 e8       	ldi	r18, 0x82	; 130
+ 2f0:	30 e0       	ldi	r19, 0x00	; 0
+ 2f2:	40 e0       	ldi	r20, 0x00	; 0
+ 2f4:	50 e0       	ldi	r21, 0x00	; 0
+ 2f6:	e3 d0       	rcall	.+454    	; 0x4be <__mulsi3>
+ 2f8:	65 5a       	subi	r22, 0xA5	; 165
+ 2fa:	7a 48       	sbci	r23, 0x8A	; 138
+ 2fc:	80 40       	sbci	r24, 0x00	; 0
+ 2fe:	90 40       	sbci	r25, 0x00	; 0
+ 300:	2e e0       	ldi	r18, 0x0E	; 14
+ 302:	30 e0       	ldi	r19, 0x00	; 0
+ 304:	40 e0       	ldi	r20, 0x00	; 0
+ 306:	50 e0       	ldi	r21, 0x00	; 0
+ 308:	ff d0       	rcall	.+510    	; 0x508 <__udivmodsi4>
+ 30a:	10 c0       	rjmp	.+32     	; 0x32c <Temp_measure+0x5e>
+	else
+		T = (600*(unsigned long)k - 162500 + 35)/70;
+ 30c:	80 e0       	ldi	r24, 0x00	; 0
+ 30e:	90 e0       	ldi	r25, 0x00	; 0
+ 310:	28 e5       	ldi	r18, 0x58	; 88
+ 312:	32 e0       	ldi	r19, 0x02	; 2
+ 314:	40 e0       	ldi	r20, 0x00	; 0
+ 316:	50 e0       	ldi	r21, 0x00	; 0
+ 318:	d2 d0       	rcall	.+420    	; 0x4be <__mulsi3>
+ 31a:	61 5a       	subi	r22, 0xA1	; 161
+ 31c:	7a 47       	sbci	r23, 0x7A	; 122
+ 31e:	82 40       	sbci	r24, 0x02	; 2
+ 320:	90 40       	sbci	r25, 0x00	; 0
+ 322:	26 e4       	ldi	r18, 0x46	; 70
+ 324:	30 e0       	ldi	r19, 0x00	; 0
+ 326:	40 e0       	ldi	r20, 0x00	; 0
+ 328:	50 e0       	ldi	r21, 0x00	; 0
+ 32a:	ee d0       	rcall	.+476    	; 0x508 <__udivmodsi4>
+ 32c:	82 2f       	mov	r24, r18
+	temp = (signed short)T;
+	return(temp);
+}
+ 32e:	93 2f       	mov	r25, r19
+ 330:	08 95       	ret
+
+00000332 <main>:
+#define _time 			0
+#define _temperature 	1
+#define _number 		3
+
+int main(void)
+{
+ 332:	2f 92       	push	r2
+ 334:	3f 92       	push	r3
+ 336:	4f 92       	push	r4
+ 338:	5f 92       	push	r5
+ 33a:	6f 92       	push	r6
+ 33c:	7f 92       	push	r7
+ 33e:	8f 92       	push	r8
+ 340:	9f 92       	push	r9
+ 342:	af 92       	push	r10
+ 344:	bf 92       	push	r11
+ 346:	cf 92       	push	r12
+ 348:	df 92       	push	r13
+ 34a:	ef 92       	push	r14
+ 34c:	ff 92       	push	r15
+ 34e:	0f 93       	push	r16
+ 350:	1f 93       	push	r17
+ 352:	cf 93       	push	r28
+ 354:	df 93       	push	r29
+	unsigned short temp;
+	unsigned short packet=0;
+	unsigned char nr=0;
+	unsigned short temperatura=0;
+	PORTS_int();
+ 356:	74 de       	rcall	.-792    	; 0x40 <PORTS_int>
+	RFM12_init();
+ 358:	18 df       	rcall	.-464    	; 0x18a <RFM12_init>
+	ADC_int();
+ 35a:	a5 de       	rcall	.-694    	; 0xa6 <ADC_int>
+	Receiver_ON;
+ 35c:	88 ed       	ldi	r24, 0xD8	; 216
+ 35e:	92 e8       	ldi	r25, 0x82	; 130
+ 360:	7a de       	rcall	.-780    	; 0x56 <WriteCMD>
+ 362:	20 e0       	ldi	r18, 0x00	; 0
+ 364:	30 e0       	ldi	r19, 0x00	; 0
+	for (int i=0;i<_number;i++)
+	{
+		LED1_ON;
+ 366:	ab e3       	ldi	r26, 0x3B	; 59
+ 368:	b0 e0       	ldi	r27, 0x00	; 0
+ 36a:	40 ed       	ldi	r20, 0xD0	; 208
+ 36c:	57 e0       	ldi	r21, 0x07	; 7
+ 36e:	68 ec       	ldi	r22, 0xC8	; 200
+ 370:	70 e0       	ldi	r23, 0x00	; 0
+ 372:	8c 91       	ld	r24, X
+ 374:	8d 7f       	andi	r24, 0xFD	; 253
+ 376:	8c 93       	st	X, r24
+ 378:	ca 01       	movw	r24, r20
+ 37a:	fb 01       	movw	r30, r22
+ 37c:	31 97       	sbiw	r30, 0x01	; 1
+ 37e:	f1 f7       	brne	.-4      	; 0x37c <main+0x4a>
+		__ticks = (uint16_t) (__ms * 10.0);
+		while(__ticks)
+		{
+			// wait 1/10 ms
+			_delay_loop_2(((F_CPU) / 4e3) / 10);
+			__ticks --;
+ 380:	01 97       	sbiw	r24, 0x01	; 1
+		__ticks = 1;
+	else if (__tmp > 65535)
+	{
+		//	__ticks = requested delay in 1/10 ms
+		__ticks = (uint16_t) (__ms * 10.0);
+		while(__ticks)
+ 382:	d9 f7       	brne	.-10     	; 0x37a <main+0x48>
+		_delay_ms(200);
+		LED1_OFF;
+ 384:	8c 91       	ld	r24, X
+ 386:	82 60       	ori	r24, 0x02	; 2
+ 388:	8c 93       	st	X, r24
+ 38a:	ca 01       	movw	r24, r20
+ 38c:	fb 01       	movw	r30, r22
+ 38e:	31 97       	sbiw	r30, 0x01	; 1
+ 390:	f1 f7       	brne	.-4      	; 0x38e <main+0x5c>
+		{
+			// wait 1/10 ms
+			_delay_loop_2(((F_CPU) / 4e3) / 10);
+			__ticks --;
+ 392:	01 97       	sbiw	r24, 0x01	; 1
+		__ticks = 1;
+	else if (__tmp > 65535)
+	{
+		//	__ticks = requested delay in 1/10 ms
+		__ticks = (uint16_t) (__ms * 10.0);
+		while(__ticks)
+ 394:	d9 f7       	brne	.-10     	; 0x38c <main+0x5a>
+	unsigned short temperatura=0;
+	PORTS_int();
+	RFM12_init();
+	ADC_int();
+	Receiver_ON;
+	for (int i=0;i<_number;i++)
+ 396:	2f 5f       	subi	r18, 0xFF	; 255
+ 398:	3f 4f       	sbci	r19, 0xFF	; 255
+ 39a:	23 30       	cpi	r18, 0x03	; 3
+ 39c:	31 05       	cpc	r19, r1
+ 39e:	49 f7       	brne	.-46     	; 0x372 <main+0x40>
+ 3a0:	bb 24       	eor	r11, r11
+		LED1_OFF;
+		_delay_ms(200);
+	}
+	while(1)
+	{ 
+		if(!nIRQ_PIN)	// Wait for interupt from RFM12
+ 3a2:	0f 2e       	mov	r0, r31
+ 3a4:	f9 e3       	ldi	r31, 0x39	; 57
+ 3a6:	ef 2e       	mov	r14, r31
+ 3a8:	ff 24       	eor	r15, r15
+ 3aa:	f0 2d       	mov	r31, r0
+			temp = RMFM12_readFIFO();
+       
+			if(temp == 0x1454)
+			{
+	    			// Indicate start signal		   	   		    
+			    DDRA |= (1<<PA0);
+ 3ac:	0f 2e       	mov	r0, r31
+ 3ae:	fa e3       	ldi	r31, 0x3A	; 58
+ 3b0:	cf 2e       	mov	r12, r31
+ 3b2:	dd 24       	eor	r13, r13
+ 3b4:	f0 2d       	mov	r31, r0
+				PORTA &= ~(1<<PA0);
+ 3b6:	0b e3       	ldi	r16, 0x3B	; 59
+ 3b8:	10 e0       	ldi	r17, 0x00	; 0
+ 3ba:	c8 ec       	ldi	r28, 0xC8	; 200
+ 3bc:	d0 e0       	ldi	r29, 0x00	; 0
+				_delay_us(100);
+				PORTA |= (1<<PA0);
+				DDRA &= ~(1<<PA0);
+			
+				LED1_ON;
+			    TCNT1 = 0;			// Reset Timer/Counter1
+ 3be:	0f 2e       	mov	r0, r31
+ 3c0:	fc e4       	ldi	r31, 0x4C	; 76
+ 3c2:	8f 2e       	mov	r8, r31
+ 3c4:	99 24       	eor	r9, r9
+ 3c6:	f0 2d       	mov	r31, r0
+				TCCR1A=0; 
+ 3c8:	0f 2e       	mov	r0, r31
+ 3ca:	ff e4       	ldi	r31, 0x4F	; 79
+ 3cc:	4f 2e       	mov	r4, r31
+ 3ce:	55 24       	eor	r5, r5
+ 3d0:	f0 2d       	mov	r31, r0
+				TCCR1B=1<<CS11;		// div 8, start
+ 3d2:	0f 2e       	mov	r0, r31
+ 3d4:	fe e4       	ldi	r31, 0x4E	; 78
+ 3d6:	6f 2e       	mov	r6, r31
+ 3d8:	77 24       	eor	r7, r7
+ 3da:	f0 2d       	mov	r31, r0
+				while(PINA&(1<<PA0));
+		
+				LED2_ON;		// Indicate start of UG
+				
+				TCCR1B=0;			//stop
+				laikas=TCNT1/16;
+ 3dc:	0f 2e       	mov	r0, r31
+ 3de:	f4 e8       	ldi	r31, 0x84	; 132
+ 3e0:	2f 2e       	mov	r2, r31
+ 3e2:	f3 e0       	ldi	r31, 0x03	; 3
+ 3e4:	3f 2e       	mov	r3, r31
+ 3e6:	f0 2d       	mov	r31, r0
+    can be achieved.
+*/
+void
+_delay_loop_1(uint8_t __count)
+{
+	__asm__ volatile (
+ 3e8:	0f 2e       	mov	r0, r31
+ 3ea:	f5 e8       	ldi	r31, 0x85	; 133
+ 3ec:	af 2e       	mov	r10, r31
+ 3ee:	f0 2d       	mov	r31, r0
+		LED1_OFF;
+		_delay_ms(200);
+	}
+	while(1)
+	{ 
+		if(!nIRQ_PIN)	// Wait for interupt from RFM12
+ 3f0:	f7 01       	movw	r30, r14
+ 3f2:	80 81       	ld	r24, Z
+ 3f4:	88 23       	and	r24, r24
+ 3f6:	0c f4       	brge	.+2      	; 0x3fa <main+0xc8>
+ 3f8:	57 c0       	rjmp	.+174    	; 0x4a8 <main+0x176>
+		{		
+			temp = RMFM12_readFIFO();
+ 3fa:	ea de       	rcall	.-556    	; 0x1d0 <RMFM12_readFIFO>
+       
+			if(temp == 0x1454)
+ 3fc:	84 55       	subi	r24, 0x54	; 84
+ 3fe:	94 41       	sbci	r25, 0x14	; 20
+ 400:	09 f0       	breq	.+2      	; 0x404 <main+0xd2>
+ 402:	52 c0       	rjmp	.+164    	; 0x4a8 <main+0x176>
+			{
+	    			// Indicate start signal		   	   		    
+			    DDRA |= (1<<PA0);
+ 404:	f6 01       	movw	r30, r12
+ 406:	80 81       	ld	r24, Z
+ 408:	81 60       	ori	r24, 0x01	; 1
+ 40a:	80 83       	st	Z, r24
+				PORTA &= ~(1<<PA0);
+ 40c:	f8 01       	movw	r30, r16
+ 40e:	80 81       	ld	r24, Z
+ 410:	8e 7f       	andi	r24, 0xFE	; 254
+ 412:	80 83       	st	Z, r24
+    milliseconds can be achieved.
+ */
+void
+_delay_loop_2(uint16_t __count)
+{
+	__asm__ volatile (
+ 414:	ce 01       	movw	r24, r28
+ 416:	01 97       	sbiw	r24, 0x01	; 1
+ 418:	f1 f7       	brne	.-4      	; 0x416 <main+0xe4>
+				_delay_us(100);
+				PORTA |= (1<<PA0);
+ 41a:	80 81       	ld	r24, Z
+ 41c:	81 60       	ori	r24, 0x01	; 1
+ 41e:	80 83       	st	Z, r24
+				DDRA &= ~(1<<PA0);
+ 420:	f6 01       	movw	r30, r12
+ 422:	80 81       	ld	r24, Z
+ 424:	8e 7f       	andi	r24, 0xFE	; 254
+ 426:	80 83       	st	Z, r24
+			
+				LED1_ON;
+ 428:	f8 01       	movw	r30, r16
+ 42a:	80 81       	ld	r24, Z
+ 42c:	8d 7f       	andi	r24, 0xFD	; 253
+ 42e:	80 83       	st	Z, r24
+			    TCNT1 = 0;			// Reset Timer/Counter1
+ 430:	f4 01       	movw	r30, r8
+ 432:	11 82       	std	Z+1, r1	; 0x01
+ 434:	10 82       	st	Z, r1
+				TCCR1A=0; 
+ 436:	f2 01       	movw	r30, r4
+ 438:	10 82       	st	Z, r1
+				TCCR1B=1<<CS11;		// div 8, start
+ 43a:	22 e0       	ldi	r18, 0x02	; 2
+ 43c:	f3 01       	movw	r30, r6
+ 43e:	20 83       	st	Z, r18
+				while(PINA&(1<<PA0));
+ 440:	f7 01       	movw	r30, r14
+ 442:	80 81       	ld	r24, Z
+ 444:	80 fd       	sbrc	r24, 0
+ 446:	fc cf       	rjmp	.-8      	; 0x440 <main+0x10e>
+		
+				LED2_ON;		// Indicate start of UG
+ 448:	f8 01       	movw	r30, r16
+ 44a:	80 81       	ld	r24, Z
+ 44c:	8b 7f       	andi	r24, 0xFB	; 251
+ 44e:	80 83       	st	Z, r24
+				
+				TCCR1B=0;			//stop
+ 450:	f3 01       	movw	r30, r6
+ 452:	10 82       	st	Z, r1
+				laikas=TCNT1/16;
+ 454:	f4 01       	movw	r30, r8
+ 456:	80 81       	ld	r24, Z
+ 458:	91 81       	ldd	r25, Z+1	; 0x01
+ 45a:	92 95       	swap	r25
+ 45c:	82 95       	swap	r24
+ 45e:	8f 70       	andi	r24, 0x0F	; 15
+ 460:	89 27       	eor	r24, r25
+ 462:	9f 70       	andi	r25, 0x0F	; 15
+ 464:	89 27       	eor	r24, r25
+ 466:	90 93 61 00 	sts	0x0061, r25
+ 46a:	80 93 60 00 	sts	0x0060, r24
+ 46e:	91 01       	movw	r18, r2
+ 470:	ce 01       	movw	r24, r28
+ 472:	01 97       	sbiw	r24, 0x01	; 1
+ 474:	f1 f7       	brne	.-4      	; 0x472 <main+0x140>
+		{
+			// wait 1/10 ms
+			_delay_loop_2(((F_CPU) / 4e3) / 10);
+			__ticks --;
+ 476:	21 50       	subi	r18, 0x01	; 1
+ 478:	30 40       	sbci	r19, 0x00	; 0
+		__ticks = 1;
+	else if (__tmp > 65535)
+	{
+		//	__ticks = requested delay in 1/10 ms
+		__ticks = (uint16_t) (__ms * 10.0);
+		while(__ticks)
+ 47a:	d1 f7       	brne	.-12     	; 0x470 <main+0x13e>
+				//temp=123;
+				//laikas=600;
+				//if (((nr++)%2)==0)
+				_delay_ms(30*_number);
+				temperatura = Temp_measure();
+ 47c:	28 df       	rcall	.-432    	; 0x2ce <Temp_measure>
+ 47e:	ac 01       	movw	r20, r24
+				if (((nr++)%20)==0)
+ 480:	8b 2d       	mov	r24, r11
+ 482:	64 e1       	ldi	r22, 0x14	; 20
+ 484:	35 d0       	rcall	.+106    	; 0x4f0 <__udivmodqi4>
+ 486:	99 23       	and	r25, r25
+ 488:	19 f4       	brne	.+6      	; 0x490 <main+0x15e>
+				{
+				//	temperatura/=20;
+					transmit_packet(_number,_temperature,temperatura);
+ 48a:	83 e0       	ldi	r24, 0x03	; 3
+ 48c:	61 e0       	ldi	r22, 0x01	; 1
+ 48e:	e2 de       	rcall	.-572    	; 0x254 <transmit_packet>
+				//temp=123;
+				//laikas=600;
+				//if (((nr++)%2)==0)
+				_delay_ms(30*_number);
+				temperatura = Temp_measure();
+				if (((nr++)%20)==0)
+ 490:	b3 94       	inc	r11
+				{
+				//	temperatura/=20;
+					transmit_packet(_number,_temperature,temperatura);
+					temperatura=0;
+				}
+				transmit_packet(_number,_time,laikas);
+ 492:	40 91 60 00 	lds	r20, 0x0060
+ 496:	50 91 61 00 	lds	r21, 0x0061
+ 49a:	83 e0       	ldi	r24, 0x03	; 3
+ 49c:	60 e0       	ldi	r22, 0x00	; 0
+ 49e:	da de       	rcall	.-588    	; 0x254 <transmit_packet>
+ 4a0:	80 e1       	ldi	r24, 0x10	; 16
+ 4a2:	97 e2       	ldi	r25, 0x27	; 39
+ 4a4:	01 97       	sbiw	r24, 0x01	; 1
+ 4a6:	f1 f7       	brne	.-4      	; 0x4a4 <main+0x172>
+    can be achieved.
+*/
+void
+_delay_loop_1(uint8_t __count)
+{
+	__asm__ volatile (
+ 4a8:	8a 2d       	mov	r24, r10
+ 4aa:	8a 95       	dec	r24
+ 4ac:	f1 f7       	brne	.-4      	; 0x4aa <main+0x178>
+				_delay_ms(5);
+				//temperatura=1023;
+			}
+	     }
+		_delay_us(50);
+	  	LED1_OFF;
+ 4ae:	f8 01       	movw	r30, r16
+ 4b0:	80 81       	ld	r24, Z
+ 4b2:	82 60       	ori	r24, 0x02	; 2
+ 4b4:	80 83       	st	Z, r24
+	 	LED2_OFF;
+ 4b6:	80 81       	ld	r24, Z
+ 4b8:	84 60       	ori	r24, 0x04	; 4
+ 4ba:	80 83       	st	Z, r24
+ 4bc:	99 cf       	rjmp	.-206    	; 0x3f0 <main+0xbe>
+
+000004be <__mulsi3>:
+ 4be:	ff 27       	eor	r31, r31
+ 4c0:	ee 27       	eor	r30, r30
+ 4c2:	bb 27       	eor	r27, r27
+ 4c4:	aa 27       	eor	r26, r26
+
+000004c6 <__mulsi3_loop>:
+ 4c6:	60 ff       	sbrs	r22, 0
+ 4c8:	04 c0       	rjmp	.+8      	; 0x4d2 <__mulsi3_skip1>
+ 4ca:	a2 0f       	add	r26, r18
+ 4cc:	b3 1f       	adc	r27, r19
+ 4ce:	e4 1f       	adc	r30, r20
+ 4d0:	f5 1f       	adc	r31, r21
+
+000004d2 <__mulsi3_skip1>:
+ 4d2:	22 0f       	add	r18, r18
+ 4d4:	33 1f       	adc	r19, r19
+ 4d6:	44 1f       	adc	r20, r20
+ 4d8:	55 1f       	adc	r21, r21
+ 4da:	96 95       	lsr	r25
+ 4dc:	87 95       	ror	r24
+ 4de:	77 95       	ror	r23
+ 4e0:	67 95       	ror	r22
+ 4e2:	89 f7       	brne	.-30     	; 0x4c6 <__mulsi3_loop>
+ 4e4:	00 97       	sbiw	r24, 0x00	; 0
+ 4e6:	76 07       	cpc	r23, r22
+ 4e8:	71 f7       	brne	.-36     	; 0x4c6 <__mulsi3_loop>
+
+000004ea <__mulsi3_exit>:
+ 4ea:	cf 01       	movw	r24, r30
+ 4ec:	bd 01       	movw	r22, r26
+ 4ee:	08 95       	ret
+
+000004f0 <__udivmodqi4>:
+ 4f0:	99 1b       	sub	r25, r25
+ 4f2:	79 e0       	ldi	r23, 0x09	; 9
+ 4f4:	04 c0       	rjmp	.+8      	; 0x4fe <__udivmodqi4_ep>
+
+000004f6 <__udivmodqi4_loop>:
+ 4f6:	99 1f       	adc	r25, r25
+ 4f8:	96 17       	cp	r25, r22
+ 4fa:	08 f0       	brcs	.+2      	; 0x4fe <__udivmodqi4_ep>
+ 4fc:	96 1b       	sub	r25, r22
+
+000004fe <__udivmodqi4_ep>:
+ 4fe:	88 1f       	adc	r24, r24
+ 500:	7a 95       	dec	r23
+ 502:	c9 f7       	brne	.-14     	; 0x4f6 <__udivmodqi4_loop>
+ 504:	80 95       	com	r24
+ 506:	08 95       	ret
+
+00000508 <__udivmodsi4>:
+ 508:	a1 e2       	ldi	r26, 0x21	; 33
+ 50a:	1a 2e       	mov	r1, r26
+ 50c:	aa 1b       	sub	r26, r26
+ 50e:	bb 1b       	sub	r27, r27
+ 510:	fd 01       	movw	r30, r26
+ 512:	0d c0       	rjmp	.+26     	; 0x52e <__udivmodsi4_ep>
+
+00000514 <__udivmodsi4_loop>:
+ 514:	aa 1f       	adc	r26, r26
+ 516:	bb 1f       	adc	r27, r27
+ 518:	ee 1f       	adc	r30, r30
+ 51a:	ff 1f       	adc	r31, r31
+ 51c:	a2 17       	cp	r26, r18
+ 51e:	b3 07       	cpc	r27, r19
+ 520:	e4 07       	cpc	r30, r20
+ 522:	f5 07       	cpc	r31, r21
+ 524:	20 f0       	brcs	.+8      	; 0x52e <__udivmodsi4_ep>
+ 526:	a2 1b       	sub	r26, r18
+ 528:	b3 0b       	sbc	r27, r19
+ 52a:	e4 0b       	sbc	r30, r20
+ 52c:	f5 0b       	sbc	r31, r21
+
+0000052e <__udivmodsi4_ep>:
+ 52e:	66 1f       	adc	r22, r22
+ 530:	77 1f       	adc	r23, r23
+ 532:	88 1f       	adc	r24, r24
+ 534:	99 1f       	adc	r25, r25
+ 536:	1a 94       	dec	r1
+ 538:	69 f7       	brne	.-38     	; 0x514 <__udivmodsi4_loop>
+ 53a:	60 95       	com	r22
+ 53c:	70 95       	com	r23
+ 53e:	80 95       	com	r24
+ 540:	90 95       	com	r25
+ 542:	9b 01       	movw	r18, r22
+ 544:	ac 01       	movw	r20, r24
+ 546:	bd 01       	movw	r22, r26
+ 548:	cf 01       	movw	r24, r30
+ 54a:	08 95       	ret
+
+0000054c <_exit>:
+ 54c:	f8 94       	cli
+
+0000054e <__stop_program>:
+ 54e:	ff cf       	rjmp	.-2      	; 0x54e <__stop_program>

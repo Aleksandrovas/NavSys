@@ -1,0 +1,89 @@
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/NavSist/!svn/ver/10/uCApp/demo/STK526-series2-hidio/gcc/default/dep
+END
+start_boot.o.d
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/NavSist/!svn/ver/10/uCApp/demo/STK526-series2-hidio/gcc/default/dep/start_boot.o.d
+END
+usb_standard_request.o.d
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/NavSist/!svn/ver/10/uCApp/demo/STK526-series2-hidio/gcc/default/dep/usb_standard_request.o.d
+END
+rf_drv.o.d
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/NavSist/!svn/ver/10/uCApp/demo/STK526-series2-hidio/gcc/default/dep/rf_drv.o.d
+END
+main.o.d
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/NavSist/!svn/ver/10/uCApp/demo/STK526-series2-hidio/gcc/default/dep/main.o.d
+END
+usb_drv.o.d
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/NavSist/!svn/ver/10/uCApp/demo/STK526-series2-hidio/gcc/default/dep/usb_drv.o.d
+END
+hid_task.o.d
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/NavSist/!svn/ver/10/uCApp/demo/STK526-series2-hidio/gcc/default/dep/hid_task.o.d
+END
+usb_specific_request.o.d
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/NavSist/!svn/ver/10/uCApp/demo/STK526-series2-hidio/gcc/default/dep/usb_specific_request.o.d
+END
+power_drv.o.d
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/NavSist/!svn/ver/10/uCApp/demo/STK526-series2-hidio/gcc/default/dep/power_drv.o.d
+END
+wdt_drv.o.d
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/NavSist/!svn/ver/10/uCApp/demo/STK526-series2-hidio/gcc/default/dep/wdt_drv.o.d
+END
+usb_descriptors.o.d
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/NavSist/!svn/ver/10/uCApp/demo/STK526-series2-hidio/gcc/default/dep/usb_descriptors.o.d
+END
+usb_device_task.o.d
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/NavSist/!svn/ver/10/uCApp/demo/STK526-series2-hidio/gcc/default/dep/usb_device_task.o.d
+END
+usb_task.o.d
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/NavSist/!svn/ver/10/uCApp/demo/STK526-series2-hidio/gcc/default/dep/usb_task.o.d
+END
+lcd_drv.o.d
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/NavSist/!svn/ver/10/uCApp/demo/STK526-series2-hidio/gcc/default/dep/lcd_drv.o.d
+END
+scheduler.o.d
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/NavSist/!svn/ver/10/uCApp/demo/STK526-series2-hidio/gcc/default/dep/scheduler.o.d
+END

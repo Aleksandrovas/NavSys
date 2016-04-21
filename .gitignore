@@ -1,0 +1,12 @@
+# For Altium
+History/
+__Previews/
+*.SchDocPreview
+*.PcbDocPreview
+*.LOG
+*.PrjPcbStructure
+
+# Build and Release Folders
+bin/
+bin-debug/
+bin-release/
