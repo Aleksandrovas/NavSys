@@ -90,7 +90,7 @@ GenerateClassCluster=0
 DocumentUniqueId=RCQGCXCX
 
 [Document4]
-DocumentPath=ProjReports.OutJob
+DocumentPath=C:\Users\Public\Documents\Altium\CAMtastic1.cam
 AnnotationEnabled=1
 AnnotateStartValue=1
 AnnotationIndexControlEnabled=0
@@ -107,6 +107,23 @@ GenerateClassCluster=0
 DocumentUniqueId=
 
 [Document5]
+DocumentPath=ProjReports.OutJob
+AnnotationEnabled=1
+AnnotateStartValue=1
+AnnotationIndexControlEnabled=0
+AnnotateSuffix=
+AnnotateScope=All
+AnnotateOrder=-1
+DoLibraryUpdate=1
+DoDatabaseUpdate=1
+ClassGenCCAutoEnabled=1
+ClassGenCCAutoRoomEnabled=1
+ClassGenNCAutoScope=None
+DItemRevisionGUID=
+GenerateClassCluster=0
+DocumentUniqueId=
+
+[Document6]
 DocumentPath=RefPoint01-00.PcbDoc
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -123,22 +140,65 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=DJNKHGOJ
 
-[Document6]
-DocumentPath=CAMtastic1.Cam
-AnnotationEnabled=1
-AnnotateStartValue=1
-AnnotationIndexControlEnabled=0
-AnnotateSuffix=
-AnnotateScope=All
-AnnotateOrder=-1
-DoLibraryUpdate=1
-DoDatabaseUpdate=1
-ClassGenCCAutoEnabled=1
-ClassGenCCAutoRoomEnabled=1
-ClassGenNCAutoScope=None
+[GeneratedDocument1]
+DocumentPath=Project Outputs\Generate Files\NC Drill\RefPoint01-00-Plated.TXT
 DItemRevisionGUID=
-GenerateClassCluster=0
-DocumentUniqueId=
+
+[GeneratedDocument2]
+DocumentPath=Project Outputs\Generate Files\NC Drill\RefPoint01-00.DRR
+DItemRevisionGUID=
+
+[GeneratedDocument3]
+DocumentPath=Project Outputs\Generate Files\Gerber\RefPoint01-00.EXTREP
+DItemRevisionGUID=
+
+[GeneratedDocument4]
+DocumentPath=Project Outputs\Generate Files\Gerber\RefPoint01-00.GBL
+DItemRevisionGUID=
+
+[GeneratedDocument5]
+DocumentPath=Project Outputs\Generate Files\Gerber\RefPoint01-00.GBO
+DItemRevisionGUID=
+
+[GeneratedDocument6]
+DocumentPath=Project Outputs\Generate Files\Gerber\RefPoint01-00.GBS
+DItemRevisionGUID=
+
+[GeneratedDocument7]
+DocumentPath=Project Outputs\Generate Files\Gerber\RefPoint01-00.GD1
+DItemRevisionGUID=
+
+[GeneratedDocument8]
+DocumentPath=Project Outputs\Generate Files\Gerber\RefPoint01-00.GKO
+DItemRevisionGUID=
+
+[GeneratedDocument9]
+DocumentPath=Project Outputs\Generate Files\Gerber\RefPoint01-00.GM3
+DItemRevisionGUID=
+
+[GeneratedDocument10]
+DocumentPath=Project Outputs\Generate Files\Gerber\RefPoint01-00.GTL
+DItemRevisionGUID=
+
+[GeneratedDocument11]
+DocumentPath=Project Outputs\Generate Files\Gerber\RefPoint01-00.GTO
+DItemRevisionGUID=
+
+[GeneratedDocument12]
+DocumentPath=Project Outputs\Generate Files\Gerber\RefPoint01-00.GTS
+DItemRevisionGUID=
+
+[GeneratedDocument13]
+DocumentPath=Project Outputs\Generate Files\NC Drill\RefPoint01-00.LDP
+DItemRevisionGUID=
+
+[GeneratedDocument14]
+DocumentPath=Project Outputs\Generate Files\Gerber\RefPoint01-00.REP
+DItemRevisionGUID=
+
+[GeneratedDocument15]
+DocumentPath=Project Outputs\Generate Files\Gerber\RefPoint01-00.RUL
+DItemRevisionGUID=
 
 [Configuration1]
 Name=Default Configuration
