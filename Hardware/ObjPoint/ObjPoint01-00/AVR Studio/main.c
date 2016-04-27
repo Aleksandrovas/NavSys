@@ -80,7 +80,6 @@ void Write_FSK_byte(unsigned char data)
 
 		if(data&0x80)
 			SDI_HI;
-
 		else
 			SDI_LOW;
 
@@ -103,7 +102,6 @@ void Write_FSK_word(unsigned short data)
 
 		if(data&0x8000)
 			SDI_HI;
-
 		else
 			SDI_LOW;
 
@@ -127,7 +125,6 @@ void RMFM02_send(unsigned short data)
 
 		if(CMD&0x80)
 			SDI_HI;
-
 		else
 			SDI_LOW;
 
@@ -268,19 +265,25 @@ while(1)
 //	sleep_cpu();
 
 //	PORTB |= (1<<nSEL);		// Reset Pull up resistors.
+
+
+
+
 	_delay_ms(500);
 
 	WriteCMD(0xC038);
 
 
 	RMFM02_send(0x1454);	// Sends only 15 bits!!!
+	
 	send_Ug(20);
-
+	
 	WriteCMD(0xC000);
 
-	_delay_ms(1);
 	LED1_OFF;
 	LED2_OFF;
+
+
 //	WriteCMD(0xC0E0);		// Clear wake-up timer.
 	}
 }

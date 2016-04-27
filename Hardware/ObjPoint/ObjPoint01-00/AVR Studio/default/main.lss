@@ -3,25 +3,23 @@ main.elf:     file format elf32-avr
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .text         000002ea  00000000  00000000  00000054  2**1
+  0 .text         000001f8  00000000  00000000  00000054  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  1 .debug_aranges 00000020  00000000  00000000  0000033e  2**0
+  1 .debug_aranges 00000020  00000000  00000000  0000024c  2**0
                   CONTENTS, READONLY, DEBUGGING
-  2 .debug_pubnames 000000be  00000000  00000000  0000035e  2**0
+  2 .debug_pubnames 000000ad  00000000  00000000  0000026c  2**0
                   CONTENTS, READONLY, DEBUGGING
-  3 .debug_info   00000388  00000000  00000000  0000041c  2**0
+  3 .debug_info   0000030c  00000000  00000000  00000319  2**0
                   CONTENTS, READONLY, DEBUGGING
-  4 .debug_abbrev 000001ec  00000000  00000000  000007a4  2**0
+  4 .debug_abbrev 000001bc  00000000  00000000  00000625  2**0
                   CONTENTS, READONLY, DEBUGGING
-  5 .debug_line   000004e5  00000000  00000000  00000990  2**0
+  5 .debug_line   00000476  00000000  00000000  000007e1  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_frame  000000d0  00000000  00000000  00000e78  2**2
+  6 .debug_frame  000000c0  00000000  00000000  00000c58  2**2
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_str    00000170  00000000  00000000  00000f48  2**0
+  7 .debug_str    00000159  00000000  00000000  00000d18  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_loc    00000114  00000000  00000000  000010b8  2**0
-                  CONTENTS, READONLY, DEBUGGING
-  9 .debug_ranges 00000048  00000000  00000000  000011cc  2**0
+  8 .debug_loc    000000c4  00000000  00000000  00000e71  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -50,8 +48,8 @@ Disassembly of section .text:
   24:	1f be       	out	0x3f, r1	; 63
   26:	cf ed       	ldi	r28, 0xDF	; 223
   28:	cd bf       	out	0x3d, r28	; 61
-  2a:	e7 d0       	rcall	.+462    	; 0x1fa <main>
-  2c:	5c c1       	rjmp	.+696    	; 0x2e6 <_exit>
+  2a:	b6 d0       	rcall	.+364    	; 0x198 <main>
+  2c:	e3 c0       	rjmp	.+454    	; 0x1f4 <_exit>
 
 0000002e <__bad_interrupt>:
   2e:	e8 cf       	rjmp	.-48     	; 0x0 <__vectors>
@@ -148,7 +146,6 @@ void Write_FSK_byte(unsigned char data)
 			SDI_HI;
   6a:	df 9a       	sbi	0x1b, 7	; 27
   6c:	01 c0       	rjmp	.+2      	; 0x70 <Write_FSK_byte+0x16>
-
 		else
 			SDI_LOW;
   6e:	df 98       	cbi	0x1b, 7	; 27
@@ -197,7 +194,6 @@ void Write_FSK_word(unsigned short data)
 			SDI_HI;
   88:	df 9a       	sbi	0x1b, 7	; 27
   8a:	01 c0       	rjmp	.+2      	; 0x8e <Write_FSK_word+0x16>
-
 		else
 			SDI_LOW;
   8c:	df 98       	cbi	0x1b, 7	; 27
@@ -251,7 +247,6 @@ void RMFM02_send(unsigned short data)
 			SDI_HI;
   ac:	df 9a       	sbi	0x1b, 7	; 27
   ae:	01 c0       	rjmp	.+2      	; 0xb2 <RMFM02_send+0x1a>
-
 		else
 			SDI_LOW;
   b0:	df 98       	cbi	0x1b, 7	; 27
@@ -512,294 +507,120 @@ unsigned char parity(unsigned short word)
  194:	81 70       	andi	r24, 0x01	; 1
  196:	08 95       	ret
 
-00000198 <Temp_measure>:
-short Temp_measure(void)
-{
-	short temp,k;
-	long T;
-
-	ADCSRA |= (1<<ADSC);
- 198:	36 9a       	sbi	0x06, 6	; 6
-	 	
-	while(ADCSRA&(1<<ADSC));
- 19a:	36 99       	sbic	0x06, 6	; 6
- 19c:	fe cf       	rjmp	.-4      	; 0x19a <Temp_measure+0x2>
-
-	k = ADC;
- 19e:	84 b1       	in	r24, 0x04	; 4
- 1a0:	95 b1       	in	r25, 0x05	; 5
- 1a2:	9c 01       	movw	r18, r24
- 1a4:	44 27       	eor	r20, r20
- 1a6:	37 fd       	sbrc	r19, 7
- 1a8:	40 95       	com	r20
- 1aa:	54 2f       	mov	r21, r20
-
-	if(k<300)
- 1ac:	8c 52       	subi	r24, 0x2C	; 44
- 1ae:	91 40       	sbci	r25, 0x01	; 1
- 1b0:	84 f4       	brge	.+32     	; 0x1d2 <Temp_measure+0x3a>
-		{
-		T = (130*(unsigned long)k - 35500 + 7)/14;
-		temp = T;
- 1b2:	ca 01       	movw	r24, r20
- 1b4:	b9 01       	movw	r22, r18
- 1b6:	22 e8       	ldi	r18, 0x82	; 130
- 1b8:	30 e0       	ldi	r19, 0x00	; 0
- 1ba:	40 e0       	ldi	r20, 0x00	; 0
- 1bc:	50 e0       	ldi	r21, 0x00	; 0
- 1be:	58 d0       	rcall	.+176    	; 0x270 <__mulsi3>
- 1c0:	65 5a       	subi	r22, 0xA5	; 165
- 1c2:	7a 48       	sbci	r23, 0x8A	; 138
- 1c4:	80 40       	sbci	r24, 0x00	; 0
- 1c6:	90 40       	sbci	r25, 0x00	; 0
- 1c8:	2e e0       	ldi	r18, 0x0E	; 14
- 1ca:	30 e0       	ldi	r19, 0x00	; 0
- 1cc:	40 e0       	ldi	r20, 0x00	; 0
- 1ce:	50 e0       	ldi	r21, 0x00	; 0
- 1d0:	0f c0       	rjmp	.+30     	; 0x1f0 <Temp_measure+0x58>
-		}
-
-	else
-		{
-		T = (600*(unsigned long)k - 162500 + 35)/70;
-		temp = T;
- 1d2:	ca 01       	movw	r24, r20
- 1d4:	b9 01       	movw	r22, r18
- 1d6:	28 e5       	ldi	r18, 0x58	; 88
- 1d8:	32 e0       	ldi	r19, 0x02	; 2
- 1da:	40 e0       	ldi	r20, 0x00	; 0
- 1dc:	50 e0       	ldi	r21, 0x00	; 0
- 1de:	48 d0       	rcall	.+144    	; 0x270 <__mulsi3>
- 1e0:	61 5a       	subi	r22, 0xA1	; 161
- 1e2:	7a 47       	sbci	r23, 0x7A	; 122
- 1e4:	82 40       	sbci	r24, 0x02	; 2
- 1e6:	90 40       	sbci	r25, 0x00	; 0
- 1e8:	26 e4       	ldi	r18, 0x46	; 70
- 1ea:	30 e0       	ldi	r19, 0x00	; 0
- 1ec:	40 e0       	ldi	r20, 0x00	; 0
- 1ee:	50 e0       	ldi	r21, 0x00	; 0
- 1f0:	58 d0       	rcall	.+176    	; 0x2a2 <__udivmodsi4>
- 1f2:	20 5b       	subi	r18, 0xB0	; 176
- 1f4:	3f 4f       	sbci	r19, 0xFF	; 255
-		//temp = (((26*ADC*3) - (1775*2*2*3))/28)/3;
-		}
-		
-	return(temp+80);
-}
- 1f6:	c9 01       	movw	r24, r18
- 1f8:	08 95       	ret
-
-000001fa <main>:
-
-
+00000198 <main>:
 
 
 int main(void)
 {
- 1fa:	0f 93       	push	r16
- 1fc:	1f 93       	push	r17
- 1fe:	cf 93       	push	r28
- 200:	df 93       	push	r29
+ 198:	cf 93       	push	r28
+ 19a:	df 93       	push	r29
 /***********************************
 PORTS initialise
 ***********************************/
 void PORTS_int(void)
 {
 	DDRA |= (1<<PA0) | (1<<PA1);
- 202:	8a b3       	in	r24, 0x1a	; 26
- 204:	83 60       	ori	r24, 0x03	; 3
- 206:	8a bb       	out	0x1a, r24	; 26
+ 19c:	8a b3       	in	r24, 0x1a	; 26
+ 19e:	83 60       	ori	r24, 0x03	; 3
+ 1a0:	8a bb       	out	0x1a, r24	; 26
 
 int main(void)
 {
 unsigned short n=0;
 PORTS_int();
 RFM02_init();
- 208:	6c df       	rcall	.-296    	; 0xe2 <RFM02_init>
+ 1a2:	9f df       	rcall	.-194    	; 0xe2 <RFM02_init>
 /**************************************
 Initialise Ug 
 **************************************/
 void init_Ug()
 {
 	DDRA |= (1<<PA5) | (1<<PA6);
- 20a:	8a b3       	in	r24, 0x1a	; 26
- 20c:	80 66       	ori	r24, 0x60	; 96
- 20e:	8a bb       	out	0x1a, r24	; 26
+ 1a4:	8a b3       	in	r24, 0x1a	; 26
+ 1a6:	80 66       	ori	r24, 0x60	; 96
+ 1a8:	8a bb       	out	0x1a, r24	; 26
 unsigned short n=0;
 PORTS_int();
 RFM02_init();
 init_Ug();
 
 set_sleep_mode(SLEEP_MODE_PWR_DOWN);						
- 210:	85 b7       	in	r24, 0x35	; 53
- 212:	87 7e       	andi	r24, 0xE7	; 231
- 214:	80 61       	ori	r24, 0x10	; 16
- 216:	85 bf       	out	0x35, r24	; 53
+ 1aa:	85 b7       	in	r24, 0x35	; 53
+ 1ac:	87 7e       	andi	r24, 0xE7	; 231
+ 1ae:	80 61       	ori	r24, 0x10	; 16
+ 1b0:	85 bf       	out	0x35, r24	; 53
 PCMSK0 = (1<<PCINT2);
- 218:	84 e0       	ldi	r24, 0x04	; 4
- 21a:	82 bb       	out	0x12, r24	; 18
+ 1b2:	84 e0       	ldi	r24, 0x04	; 4
+ 1b4:	82 bb       	out	0x12, r24	; 18
 GIMSK = (1<<PCIE0);	// Pin Change on PCINT7..0.
- 21c:	80 e1       	ldi	r24, 0x10	; 16
- 21e:	8b bf       	out	0x3b, r24	; 59
-
-
-	ADMUX = (1<<REFS1) | (1<<MUX5) | (1<<MUX1);	// 8 ch; Internal 1.1V 
- 220:	82 ea       	ldi	r24, 0xA2	; 162
- 222:	87 b9       	out	0x07, r24	; 7
-	ADCSRB = 0;
- 224:	13 b8       	out	0x03, r1	; 3
-	ADCSRA |= (1<<ADEN) | (1<<ADPS2) | (1<<ADPS1) | (1<<ADPS0);	// ADC on, start ADC conversion (measure temperature)	
- 226:	86 b1       	in	r24, 0x06	; 6
- 228:	87 68       	ori	r24, 0x87	; 135
- 22a:	86 b9       	out	0x06, r24	; 6
- 22c:	28 e8       	ldi	r18, 0x88	; 136
- 22e:	33 e1       	ldi	r19, 0x13	; 19
+ 1b6:	80 e1       	ldi	r24, 0x10	; 16
+ 1b8:	8b bf       	out	0x3b, r24	; 59
+ 1ba:	28 e8       	ldi	r18, 0x88	; 136
+ 1bc:	33 e1       	ldi	r19, 0x13	; 19
     milliseconds can be achieved.
  */
 void
 _delay_loop_2(uint16_t __count)
 {
 	__asm__ volatile (
- 230:	04 ec       	ldi	r16, 0xC4	; 196
- 232:	19 e0       	ldi	r17, 0x09	; 9
+ 1be:	ca ef       	ldi	r28, 0xFA	; 250
+ 1c0:	d0 e0       	ldi	r29, 0x00	; 0
+ 1c2:	05 c0       	rjmp	.+10     	; 0x1ce <main+0x36>
+ 1c4:	ce 01       	movw	r24, r28
+ 1c6:	01 97       	sbiw	r24, 0x01	; 1
+ 1c8:	f1 f7       	brne	.-4      	; 0x1c6 <main+0x2e>
 		__ticks = (uint16_t) (__ms * 10.0);
 		while(__ticks)
 		{
 			// wait 1/10 ms
 			_delay_loop_2(((F_CPU) / 4e3) / 10);
 			__ticks --;
- 234:	ca ef       	ldi	r28, 0xFA	; 250
- 236:	d0 e0       	ldi	r29, 0x00	; 0
- 238:	05 c0       	rjmp	.+10     	; 0x244 <main+0x4a>
- 23a:	ce 01       	movw	r24, r28
- 23c:	01 97       	sbiw	r24, 0x01	; 1
- 23e:	f1 f7       	brne	.-4      	; 0x23c <main+0x42>
- 240:	21 50       	subi	r18, 0x01	; 1
- 242:	30 40       	sbci	r19, 0x00	; 0
+ 1ca:	21 50       	subi	r18, 0x01	; 1
+ 1cc:	30 40       	sbci	r19, 0x00	; 0
 		__ticks = 1;
 	else if (__tmp > 65535)
 	{
 		//	__ticks = requested delay in 1/10 ms
 		__ticks = (uint16_t) (__ms * 10.0);
 		while(__ticks)
- 244:	21 15       	cp	r18, r1
- 246:	31 05       	cpc	r19, r1
- 248:	c1 f7       	brne	.-16     	; 0x23a <main+0x40>
-//	sleep_cpu();
+ 1ce:	21 15       	cp	r18, r1
+ 1d0:	31 05       	cpc	r19, r1
+ 1d2:	c1 f7       	brne	.-16     	; 0x1c4 <main+0x2c>
 
-//	PORTB |= (1<<nSEL);		// Reset Pull up resistors.
-_delay_ms(500);
 
-WriteCMD(0xC038);
- 24a:	88 e3       	ldi	r24, 0x38	; 56
- 24c:	90 ec       	ldi	r25, 0xC0	; 192
- 24e:	f4 de       	rcall	.-536    	; 0x38 <WriteCMD>
 
-//n = Temp_measure();
+	_delay_ms(500);
+
+	WriteCMD(0xC038);
+ 1d4:	88 e3       	ldi	r24, 0x38	; 56
+ 1d6:	90 ec       	ldi	r25, 0xC0	; 192
+ 1d8:	2f df       	rcall	.-418    	; 0x38 <WriteCMD>
+
 
 	RMFM02_send(0x1454);	// Sends only 15 bits!!!
- 250:	84 e5       	ldi	r24, 0x54	; 84
- 252:	94 e1       	ldi	r25, 0x14	; 20
- 254:	21 df       	rcall	.-446    	; 0x98 <RMFM02_send>
-//	RMFM02_send(n<<1);
+ 1da:	84 e5       	ldi	r24, 0x54	; 84
+ 1dc:	94 e1       	ldi	r25, 0x14	; 20
+ 1de:	5c df       	rcall	.-328    	; 0x98 <RMFM02_send>
+	
 	send_Ug(20);
- 256:	84 e1       	ldi	r24, 0x14	; 20
- 258:	61 df       	rcall	.-318    	; 0x11c <send_Ug>
+ 1e0:	84 e1       	ldi	r24, 0x14	; 20
+ 1e2:	9c df       	rcall	.-200    	; 0x11c <send_Ug>
+	
+	WriteCMD(0xC000);
+ 1e4:	80 e0       	ldi	r24, 0x00	; 0
+ 1e6:	90 ec       	ldi	r25, 0xC0	; 192
+ 1e8:	27 df       	rcall	.-434    	; 0x38 <WriteCMD>
 
-
-WriteCMD(0xC000);
- 25a:	80 e0       	ldi	r24, 0x00	; 0
- 25c:	90 ec       	ldi	r25, 0xC0	; 192
- 25e:	ec de       	rcall	.-552    	; 0x38 <WriteCMD>
- 260:	c8 01       	movw	r24, r16
- 262:	01 97       	sbiw	r24, 0x01	; 1
- 264:	f1 f7       	brne	.-4      	; 0x262 <main+0x68>
-
-
-_delay_ms(1);
 	LED1_OFF;
- 266:	d8 9a       	sbi	0x1b, 0	; 27
+ 1ea:	d8 9a       	sbi	0x1b, 0	; 27
 	LED2_OFF;
- 268:	d9 9a       	sbi	0x1b, 1	; 27
- 26a:	28 e8       	ldi	r18, 0x88	; 136
- 26c:	33 e1       	ldi	r19, 0x13	; 19
- 26e:	e5 cf       	rjmp	.-54     	; 0x23a <main+0x40>
+ 1ec:	d9 9a       	sbi	0x1b, 1	; 27
+ 1ee:	28 e8       	ldi	r18, 0x88	; 136
+ 1f0:	33 e1       	ldi	r19, 0x13	; 19
+ 1f2:	e8 cf       	rjmp	.-48     	; 0x1c4 <main+0x2c>
 
-00000270 <__mulsi3>:
- 270:	ff 27       	eor	r31, r31
- 272:	ee 27       	eor	r30, r30
- 274:	bb 27       	eor	r27, r27
- 276:	aa 27       	eor	r26, r26
+000001f4 <_exit>:
+ 1f4:	f8 94       	cli
 
-00000278 <__mulsi3_loop>:
- 278:	60 ff       	sbrs	r22, 0
- 27a:	04 c0       	rjmp	.+8      	; 0x284 <__mulsi3_skip1>
- 27c:	a2 0f       	add	r26, r18
- 27e:	b3 1f       	adc	r27, r19
- 280:	e4 1f       	adc	r30, r20
- 282:	f5 1f       	adc	r31, r21
-
-00000284 <__mulsi3_skip1>:
- 284:	22 0f       	add	r18, r18
- 286:	33 1f       	adc	r19, r19
- 288:	44 1f       	adc	r20, r20
- 28a:	55 1f       	adc	r21, r21
- 28c:	96 95       	lsr	r25
- 28e:	87 95       	ror	r24
- 290:	77 95       	ror	r23
- 292:	67 95       	ror	r22
- 294:	89 f7       	brne	.-30     	; 0x278 <__mulsi3_loop>
- 296:	00 97       	sbiw	r24, 0x00	; 0
- 298:	76 07       	cpc	r23, r22
- 29a:	71 f7       	brne	.-36     	; 0x278 <__mulsi3_loop>
-
-0000029c <__mulsi3_exit>:
- 29c:	cf 01       	movw	r24, r30
- 29e:	bd 01       	movw	r22, r26
- 2a0:	08 95       	ret
-
-000002a2 <__udivmodsi4>:
- 2a2:	a1 e2       	ldi	r26, 0x21	; 33
- 2a4:	1a 2e       	mov	r1, r26
- 2a6:	aa 1b       	sub	r26, r26
- 2a8:	bb 1b       	sub	r27, r27
- 2aa:	fd 01       	movw	r30, r26
- 2ac:	0d c0       	rjmp	.+26     	; 0x2c8 <__udivmodsi4_ep>
-
-000002ae <__udivmodsi4_loop>:
- 2ae:	aa 1f       	adc	r26, r26
- 2b0:	bb 1f       	adc	r27, r27
- 2b2:	ee 1f       	adc	r30, r30
- 2b4:	ff 1f       	adc	r31, r31
- 2b6:	a2 17       	cp	r26, r18
- 2b8:	b3 07       	cpc	r27, r19
- 2ba:	e4 07       	cpc	r30, r20
- 2bc:	f5 07       	cpc	r31, r21
- 2be:	20 f0       	brcs	.+8      	; 0x2c8 <__udivmodsi4_ep>
- 2c0:	a2 1b       	sub	r26, r18
- 2c2:	b3 0b       	sbc	r27, r19
- 2c4:	e4 0b       	sbc	r30, r20
- 2c6:	f5 0b       	sbc	r31, r21
-
-000002c8 <__udivmodsi4_ep>:
- 2c8:	66 1f       	adc	r22, r22
- 2ca:	77 1f       	adc	r23, r23
- 2cc:	88 1f       	adc	r24, r24
- 2ce:	99 1f       	adc	r25, r25
- 2d0:	1a 94       	dec	r1
- 2d2:	69 f7       	brne	.-38     	; 0x2ae <__udivmodsi4_loop>
- 2d4:	60 95       	com	r22
- 2d6:	70 95       	com	r23
- 2d8:	80 95       	com	r24
- 2da:	90 95       	com	r25
- 2dc:	9b 01       	movw	r18, r22
- 2de:	ac 01       	movw	r20, r24
- 2e0:	bd 01       	movw	r22, r26
- 2e2:	cf 01       	movw	r24, r30
- 2e4:	08 95       	ret
-
-000002e6 <_exit>:
- 2e6:	f8 94       	cli
-
-000002e8 <__stop_program>:
- 2e8:	ff cf       	rjmp	.-2      	; 0x2e8 <__stop_program>
+000001f6 <__stop_program>:
+ 1f6:	ff cf       	rjmp	.-2      	; 0x1f6 <__stop_program>

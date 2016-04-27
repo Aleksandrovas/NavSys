@@ -5,7 +5,7 @@
 ## General Flags
 PROJECT = Transceiver
 MCU = attiny24a
-TARGET = Transceiver.elf
+TARGET = RefPoint01-00.elf
 CC = avr-gcc
 
 CPP = avr-g++
@@ -15,7 +15,7 @@ COMMON = -mmcu=$(MCU)
 
 ## Compile options common for all C compilation units.
 CFLAGS = $(COMMON)
-CFLAGS += -Wall -gdwarf-2 -std=gnu99             -DF_CPU=8000000UL -O1 -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums
+CFLAGS += -Wall -gdwarf-2 -std=gnu99                          -DF_CPU=10000000UL -O1 -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums
 CFLAGS += -MD -MP -MT $(*F).o -MF dep/$(@F).d 
 
 ## Assembly specific flags
@@ -25,7 +25,7 @@ ASMFLAGS += -x assembler-with-cpp -Wa,-gdwarf2
 
 ## Linker flags
 LDFLAGS = $(COMMON)
-LDFLAGS +=  -Wl,-Map=Transceiver.map
+LDFLAGS +=  -Wl,-Map=RefPoint01-00.map
 
 
 ## Intel Hex file production flags
@@ -37,16 +37,16 @@ HEX_EEPROM_FLAGS += --change-section-lma .eeprom=0 --no-change-warnings
 
 
 ## Objects that must be built in order to link
-OBJECTS = Transceiver.o 
+OBJECTS = main.o 
 
 ## Objects explicitly added by the user
 LINKONLYOBJECTS = 
 
 ## Build
-all: $(TARGET) Transceiver.hex Transceiver.eep Transceiver.lss size
+all: $(TARGET) RefPoint01-00.hex RefPoint01-00.eep RefPoint01-00.lss size
 
 ## Compile
-Transceiver.o: ../Transceiver.c
+main.o: ../main.c
 	$(CC) $(INCLUDES) $(CFLAGS) -c  $<
 
 ##Link
@@ -69,9 +69,9 @@ size: ${TARGET}
 ## Clean target
 .PHONY: clean
 clean:
-	-rm -rf $(OBJECTS) Transceiver.elf dep/* Transceiver.hex Transceiver.eep Transceiver.lss Transceiver.map
+	-rm -rf $(OBJECTS) RefPoint01-00.elf dep/* RefPoint01-00.hex RefPoint01-00.eep RefPoint01-00.lss RefPoint01-00.map
 
 
 ## Other dependencies
--include $(shell mkdir dep 2>NUL) $(wildcard dep/*)
+-include $(shell mkdir dep 2>/dev/null) $(wildcard dep/*)
 
