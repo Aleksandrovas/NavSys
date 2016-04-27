@@ -8,11 +8,10 @@
 /***************************************************************************
 Definitions
 ***************************************************************************/
-#define Transmitter_ON	WriteCMD(0x98D0);WriteCMD(0x8238);	// Enable transmitter; Enable synthesizer; Enable crystal oscillator
-#define Receiver_ON		WriteCMD(0x82D8);	// Enable receiver; er, ebb, es, ex, dc - set to "1"
-#define RstFIFORecog	WriteCMD(0xCAF0);WriteCMD(0xCAF3);	// FIFO int: 16bits, Sync-word; Enable FIFO fill,
-
-#define SleepRF			WriteCMD(0x82D8);	// 8 visada paskutinis skaicius!!!!!! ant 82 registro
+#define RF_TXmode 		WriteCMD(0x8238);	// Enable transmitter; Enable synthesizer; Enable crystal oscillator
+#define RF_RXmode		WriteCMD(0x82D8);	// Enable receiver; er, ebb, es, ex, dc - set to "1"
+#define RF_Iddle		WriteCMD(0x8208);	// RX and TX off
+#define RF_FIFORecog	WriteCMD(0xCAF0);WriteCMD(0xCAF3);	// FIFO int: 16bits, Sync-word; Enable FIFO fill,
 
 #define Fc(freq)		(freq-430)*400
 
@@ -36,9 +35,8 @@ Definitions
 #define LED2_ON			PORTA &= ~(1<<PA2)
 #define LED2_OFF		PORTA |= (1<<PA2)
 
-#define RefPointNr 		1	// range: 0-7
-//#define	RFTransmit_us	500
-#define	RFTransmit_ms	10
+#define RefPointNr 		7	// range: 0-7
+#define	RFTransmit_ms	2
 
 
 
@@ -49,10 +47,10 @@ void PORTS_int(void);
 void WriteCMD(unsigned int CMD);
 uint16_t RMFM12_readFIFO(void);
 void RFM12_init(void);
-void RFTransmit_packet(uint8_t Refnr, uint16_t Value);
+void RFTransmit_packet(uint8_t RefNr, uint16_t Value);
 void RMFM12_send(uint16_t data);
 void Write_FSK_byte(uint8_t data);
-void BlinkNumber(uint8_t Refnr);
+void BlinkNumber(uint8_t RefNr);
 void Timer1_int(void);
 
 
@@ -65,49 +63,30 @@ volatile uint16_t laikas;
 int main(void)
 {
 	uint8_t TimeOutFlag;
-	uint16_t temp;
 
-	_delay_ms(200);
+	_delay_ms(10);
 
 	PORTS_int();
 	RFM12_init();
 	Timer1_int();
 	BlinkNumber(RefPointNr);
 
-	RstFIFORecog;
-	Receiver_ON;
+	RF_FIFORecog;
+	RF_RXmode;
 
 	while(1)
 	{ 
-
-	//_delay_ms(500);
-	//RFTransmit_packet(5,0x1454);
-
-
 		/* Wait for interupt from RFM12 (received Data) */
 		if(!nIRQ_PIN)	
 		{
 			/* Start 16bit Timer1 immediately for ToF measurments */
 			TCCR1B=1<<CS11;		// clk div 8, start (tres=0.8us, tmax=52,43ms, Lres=0,27mm, Lmax=17,83m c=340m/s)
-			
-			temp = RMFM12_readFIFO();
-
-			/* Check received data 
-			if(temp == 0xFFFE)//== 0xFFFF)
-			{
-				LED1_ON;
-				LED2_ON;
-				_delay_ms(50);
-	  			LED1_OFF;
-	 			LED2_OFF;
-			}*/
-
 
 			/* Check received data */
-			if(temp == 0x1454)
+			if(RMFM12_readFIFO() == 0x1454)
 			{
 				/* RF Trasmiter/Receiver modes OFF to save power */
-				//SleepRF;
+				RF_Iddle;
 
 	    		/* Send start signal to front-end (PW0268) */	   	   		    
 			    DDRA |= (1<<PA0);	// Configure PA0 as Output
@@ -128,23 +107,19 @@ int main(void)
 						break;
 					}
 				}
-				laikas=TCNT1/32;	// reduce bits number to 12bits (tres2=12.8us, Lres2=4.35mm)
+				laikas=TCNT1/8;	// reduce bits number to 13bits (tres2=6.4us, Lres2=2.18mm)
 
 				/* Check TimeOutFlag */
-				if (TimeOutFlag == 0)
+				if (!TimeOutFlag)
 				{
 					LED2_ON;		// UG signal received
 					
-					// Wait for Timer1 Overflow Flag to ensure all RefPoints allready received UG signal
-				//	while( !(TIFR1&(1<<TOV1)) );
+					/* Wait for Timer1 Overflow Flag to ensure all RefPoints allready received UG signal */
+					while( !(TIFR1&(1<<TOV1)) );
 
 					/* Send ToF to Host */
-					//_delay_us(RFTransmit_us*RefPointNr);
-					//_delay_ms(RFTransmit_ms*RefPointNr);
+					_delay_ms(RFTransmit_ms*RefPointNr);
 					RFTransmit_packet(RefPointNr,laikas);
-					//RFTransmit_packet(7,0xE055);
-
-
 				}
 	  			LED1_OFF;
 	 			LED2_OFF;
@@ -154,14 +129,12 @@ int main(void)
 		Timer1_int();
 
 		/* Restart the synchron pattern recognition */
-		RstFIFORecog;
+		RF_FIFORecog;
+		RF_RXmode;		
 		}
 
 	}	// while
 }		// main
-
-
-
 
 
 
@@ -176,23 +149,20 @@ Functions
 /***************************************************************************
 RFTransmit_packet - Transmit data to RF
 ***************************************************************************/
-void RFTransmit_packet(uint8_t Refnr, uint16_t Value)
+void RFTransmit_packet(uint8_t RefNr, uint16_t Value)
 {
 	uint16_t packet=0;
 
 	/* Prepare 16bit packet */
-	packet|=0x8000;				// MSB always set to 1 ??????????????????
-	packet|=(Refnr&0x07)<<12;	// Refnr 3 bits
-	packet|=(Value&2047);		// Value
+	packet|=(RefNr&0x07)<<13;	// RefNr 3 bits
+	packet|=(Value&0x1FFF);		// Value 13 bits
 	
 	/* Send 16bit packet */
-	Transmitter_ON;
-	_delay_ms(10);
-	//RMFM12_send(packet);
+	RF_TXmode;
+	_delay_ms(2);
 	RMFM12_send(packet);
-	_delay_ms(10);
-	Receiver_ON;
-	//Transmitter_OFF;
+	_delay_ms(2);
+	RF_Iddle;
 }
 
 
@@ -301,20 +271,40 @@ void RFM12_init(void)
 {
 	uint16_t F;
 
-	WriteCMD(0x80DF);		// 433MHz Band; Enable TX registere; Enable RX FIFO buffer, 16pF
-	WriteCMD(0xC0E0);		// 10MHz output  
+	/* Low Battery Detector and Microcontroller Clock Divider Command */
+	WriteCMD(0xC0E0);	// 10MHz output  
 	asm("nop");
-	_delay_ms(200);
 	asm("nop");
-	WriteCMD(0x82D8);		// Enable receiver; er, ebb, es, ex - set to "1"
+	asm("nop");
+
+	/* Configuration Setting Command  */
+	WriteCMD(0x80DF);	// 433MHz Band; Enable TX registere; Enable RX FIFO buffer, 16pF
+	
+	/* Frequency Setting Command */
 	F = Fc(439.00);
-	WriteCMD(0xA000|F);		// Fcarrier = 433.00MHz
-	WriteCMD(0xC629);		// 114.94Kbps
-	WriteCMD(0x9420);		// VDI, FAST, Bandwidth 400kHz, LNA gain 0dBm, -103dBm
-	WriteCMD(0xC2AC);		// Auto-lock; Digital filter;	
-	WriteCMD(0xCAF3);		// FIFO interrupt level: 16bits; FIFO fill start condition: Sync-word; Enable FIFO fill; dr - set to "1"
-	WriteCMD(0xC49B);		// AFC setting: Keep offset when VDI hi; select range limit +15/-16; Enable AFC funcition; st,oe - set to "1"
-	WriteCMD(0x98D0);		// 210kHz deviation,MAX OUT
+	WriteCMD(0xA000|F);	// Fcarrier = 439.00MHz
+
+	/* Data Rate Command */
+	WriteCMD(0xC629);	// error !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	//WriteCMD(0xC602);	// 114.943kbps
+
+	/* Receiver Control Command */
+	WriteCMD(0x9420);	// VDI, FAST, Bandwidth 400kHz, LNA gain 0dBm, -103dBm
+
+	/* Data Filter Command */
+	WriteCMD(0xC2AC);	// Auto-lock; Digital filter;
+	
+	/* FIFO and Reset Mode Command */
+	WriteCMD(0xCAF3);	// FIFO interrupt level: 16bits; FIFO fill start condition: Sync-word; Enable FIFO fill; dr - set to "1"
+	
+	/* AFC Command */
+	WriteCMD(0xC49B);	// AFC setting: Keep offset when VDI hi; select range limit +15/-16; Enable AFC funcition; st,oe - set to "1"
+	
+	/* TX Configuration Control Command */
+	WriteCMD(0x98D0);	// 210kHz deviation; MAX OUT
+
+	/* Power Management Command */
+	RF_Iddle;
 }
 
 
@@ -360,20 +350,20 @@ uint16_t RMFM12_readFIFO(void)
 /***************************************************************************
 BlinkNumber - 
 ***************************************************************************/
-void BlinkNumber(uint8_t Refnr)
+void BlinkNumber(uint8_t RefNr)
 {
 	LED2_ON;
 	LED1_OFF;
 	_delay_ms(500);
 
-	for (uint8_t i=0;i<Refnr;i++)
+	for (uint8_t i=0;i<RefNr;i++)
 	{
 		LED1_ON;
-		_delay_ms(500);
+		_delay_ms(250);
 		LED1_OFF;
-		_delay_ms(500);
+		_delay_ms(250);
 	}
-	if (Refnr==0)
+	if (RefNr==0)
 		_delay_ms(1000);
 	
 	LED1_OFF;
