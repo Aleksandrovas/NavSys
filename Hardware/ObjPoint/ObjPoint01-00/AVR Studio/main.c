@@ -4,6 +4,13 @@
 #include <util/delay.h>
 #include <avr/sleep.h>
  
+
+/***************************************************************************
+Definitions
+***************************************************************************/
+#define RF_TXmode 		WriteCMD(0x8238);	// Enable transmitter; Enable synthesizer; Enable crystal oscillator
+#define RF_Iddle		WriteCMD(0x8208);	// RX and TX off
+
 #define Sleep_TX		WriteCMD(0xC402);	// TX off (sleep) after 1us 
 #define Fc(freq)		( (freq/10) - 43 ) * 4000	
 
@@ -138,7 +145,6 @@ LED1_ON;
 	Write_FSK_byte(0xAA);	// Send Preamble
 	Write_FSK_byte(0xAA);	// Send Preamble
 	Write_FSK_byte(0xAA);	// Send Preamble
-
 	Write_FSK_byte(0x2D);	// Send sync word
 	Write_FSK_byte(0xD4);	// Send sync word
 	
@@ -154,28 +160,7 @@ LED1_ON;
 }
 
 
-/************************************
-RFM02 initialise
-*************************************/
-void RFM02_init(void)
-{
-	unsigned int F;
 
-	PORTB |= (1<<nSEL);
-	DDRB |= (1<<SCK) | (1<<nSEL);  
-	DDRA |= (1<<SDI);
-
-	WriteCMD(0x8FF6);			// 433MHz band, +/-210kHz, CLK 10MHz, 16pF.	
-	asm("nop");					// Wait for clock stabilize
-
-	F = Fc(439.00);				// 2.5kHz step (430.0975MHz - 439.7575MHz).
-	WriteCMD(0xA000|F);			// Fcarrier = 433.00MHz		
-	WriteCMD(0xC829);			// 114.94Kbps
-	WriteCMD(0xD282);			// Set PLL bandwidth, dr - set to "1".
-	WriteCMD(0xC2A8);			// ENABLE BIT SYNC ,dwc - set to "1".
-	// Pout = Pmax = 7dBm
-	WriteCMD(0xC0E0);			// a0,a1,ex - set to "1".	
-}
 
 
 /**************************************
@@ -241,49 +226,144 @@ unsigned char parity(unsigned short word)
 }
 
 
+
+
 int main(void)
 {
-unsigned short n=0;
-PORTS_int();
-RFM02_init();
-init_Ug();
+	//unsigned short n=0;
+	PORTS_int();
+	RFM02_init();
+	init_Ug();
 
-set_sleep_mode(SLEEP_MODE_PWR_DOWN);						
-PCMSK0 = (1<<PCINT2);
-GIMSK = (1<<PCIE0);	// Pin Change on PCINT7..0.
-
-
-
-while(1)
-{
-//	WriteCMD(0xE064);		// Twakeup = 100ms
-//	WriteCMD(0xC0E2);		// Set wake-up timer.
-//	WriteCMD(0xC40A);		// TX off (sleep) after 10 periods of CLK signal.
-//	PORTB &= ~(1<<nSEL);	// Turn off all Pull up resistors.
-//	sei();					// Enable wake up interupt. 		
-//	sleep_enable();
-//	sleep_cpu();
-
-//	PORTB |= (1<<nSEL);		// Reset Pull up resistors.
+	set_sleep_mode(SLEEP_MODE_PWR_DOWN);						
+	PCMSK0 = (1<<PCINT2);
+	GIMSK = (1<<PCIE0);	// Pin Change on PCINT7..0.
 
 
 
+	while(1)
+	{
+	//	WriteCMD(0xE064);		// Twakeup = 100ms
+	//	WriteCMD(0xC0E2);		// Set wake-up timer.
+	//	WriteCMD(0xC40A);		// TX off (sleep) after 10 periods of CLK signal.
+	//	PORTB &= ~(1<<nSEL);	// Turn off all Pull up resistors.
+	//	sei();					// Enable wake up interupt. 		
+	//	sleep_enable();
+	//	sleep_cpu();
 
-	_delay_ms(500);
+	//	PORTB |= (1<<nSEL);		// Reset Pull up resistors.
 
-	WriteCMD(0xC038);
+/*
+		_delay_ms(500);
+		RF_TXmode;
+		RMFM02_send(0x1454);
+		send_Ug(20);
+		//RF_Iddle;
+		LED1_OFF;
+		LED2_OFF;
+*/
+
+		_delay_ms(500);
+
+		WriteCMD(0xC038);
+		//_delay_ms(0);
+		RMFM02_send(0x1454);	// Sends only 15 bits!!!
+
+		send_Ug(20);
+		//_delay_ms(2);
+		WriteCMD(0xC000);
+
+		LED1_OFF;
+		LED2_OFF;
 
 
-	RMFM02_send(0x1454);	// Sends only 15 bits!!!
-	
-	send_Ug(20);
-	
-	WriteCMD(0xC000);
-
-	LED1_OFF;
-	LED2_OFF;
-
-
-//	WriteCMD(0xC0E0);		// Clear wake-up timer.
+	//	WriteCMD(0xC0E0);		// Clear wake-up timer.
 	}
 }
+
+
+
+
+
+/***************************************************************************
+****************************************************************************
+Functions
+***************************************************************************/
+
+
+/***************************************************************************
+RFM02_init - RFM02 initialise
+***************************************************************************/
+void RFM02_init(void)
+{
+	unsigned int F;
+
+	PORTB |= (1<<nSEL);
+	DDRB |= (1<<SCK) | (1<<nSEL);  
+	DDRA |= (1<<SDI);
+
+	WriteCMD(0x8FF6);			// 433MHz band, +/-210kHz, CLK 10MHz, 16pF.	
+	asm("nop");
+	asm("nop");
+	asm("nop");					// Wait for clock stabilize
+	
+	/* Frequency Setting Command */
+	F = Fc(439.00);				// 2.5kHz step (430.0975MHz - 439.7575MHz).
+	WriteCMD(0xA000|F);			// Fcarrier = 433.00MHz	
+		
+	/* Data Rate Command */
+	//WriteCMD(0xC829);			// 114.94Kbps
+	WriteCMD(0xC802);			// 114.94Kbps
+
+
+	WriteCMD(0xD282);			// Set PLL bandwidth, dr - set to "1".
+	WriteCMD(0xC2A8);			// ENABLE BIT SYNC ,dwc - set to "1".
+	// Pout = Pmax = 7dBm
+	WriteCMD(0xC0E0);			// a0,a1,ex - set to "1".	
+}
+
+/***************************************************************************
+RFM12_init - RFM12 initialise
+***************************************************************************/
+void RFM12_init(void)
+{
+	uint16_t F;
+
+	/* Low Battery Detector and Microcontroller Clock Divider Command */
+	WriteCMD(0xC0E0);	// 10MHz output  
+	asm("nop");
+	asm("nop");
+	asm("nop");
+
+	/* Configuration Setting Command  */
+	WriteCMD(0x80DF);	// 433MHz Band; Enable TX registere; Enable RX FIFO buffer, 16pF
+	
+	/* Frequency Setting Command */
+	F = Fc(439.00);
+	WriteCMD(0xA000|F);	// Fcarrier = 439.00MHz
+
+	/* Data Rate Command */
+	//WriteCMD(0xC629);	// error !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	WriteCMD(0xC602);	// 114.943kbps
+
+	/* Receiver Control Command */
+	WriteCMD(0x9420);	// VDI, FAST, Bandwidth 400kHz, LNA gain 0dBm, -103dBm
+
+	/* Data Filter Command */
+	WriteCMD(0xC2AC);	// Auto-lock; Digital filter;
+	
+	/* FIFO and Reset Mode Command */
+	WriteCMD(0xCAF3);	// FIFO interrupt level: 16bits; FIFO fill start condition: Sync-word; Enable FIFO fill; dr - set to "1"
+	
+	/* AFC Command */
+	WriteCMD(0xC49B);	// AFC setting: Keep offset when VDI hi; select range limit +15/-16; Enable AFC funcition; st,oe - set to "1"
+	
+	/* TX Configuration Control Command */
+	WriteCMD(0x98D0);	// 210kHz deviation; MAX OUT
+
+	/* Power Management Command */
+	RF_Iddle;
+}
+
+
+

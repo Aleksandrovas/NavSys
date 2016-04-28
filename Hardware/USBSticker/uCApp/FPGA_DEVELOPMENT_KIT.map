@@ -700,34 +700,34 @@ LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr35\libgcc.a
  .debug_frame   0x000003f0       0x30 default/usb_standard_request.o
  .debug_frame   0x00000420       0x50 default/usb_task.o
 
-.debug_str      0x00000000      0xc6c
+.debug_str      0x00000000      0xc75
  *(.debug_str)
- .debug_str     0x00000000      0x100 default/wdt_drv.o
-                                0x139 (size before relaxing)
- .debug_str     0x00000100       0x5b default/scheduler.o
-                                0x11a (size before relaxing)
- .debug_str     0x0000015b       0x26 default/main.o
-                                 0xe5 (size before relaxing)
- .debug_str     0x00000181       0x4d default/spi_drv.o
+ .debug_str     0x00000000      0x109 default/wdt_drv.o
+                                0x142 (size before relaxing)
+ .debug_str     0x00000109       0x5b default/scheduler.o
+                                0x123 (size before relaxing)
+ .debug_str     0x00000164       0x26 default/main.o
                                  0xee (size before relaxing)
- .debug_str     0x000001ce       0xbf default/power_drv.o
-                                0x17e (size before relaxing)
- .debug_str     0x0000028d       0xb8 default/hid_task.o
-                                0x185 (size before relaxing)
- .debug_str     0x00000345       0x57 default/start_boot.o
-                                0x11f (size before relaxing)
- .debug_str     0x0000039c      0x3b1 default/usb_descriptors.o
-                                0x48a (size before relaxing)
- .debug_str     0x0000074d       0x89 default/usb_device_task.o
-                                0x15d (size before relaxing)
- .debug_str     0x000007d6       0xd1 default/usb_drv.o
-                                0x190 (size before relaxing)
- .debug_str     0x000008a7      0x1ce default/usb_specific_request.o
-                                0x5b1 (size before relaxing)
- .debug_str     0x00000a75      0x1a6 default/usb_standard_request.o
-                                0x5ab (size before relaxing)
- .debug_str     0x00000c1b       0x51 default/usb_task.o
-                                0x12a (size before relaxing)
+ .debug_str     0x0000018a       0x4d default/spi_drv.o
+                                 0xf7 (size before relaxing)
+ .debug_str     0x000001d7       0xbf default/power_drv.o
+                                0x187 (size before relaxing)
+ .debug_str     0x00000296       0xb8 default/hid_task.o
+                                0x18e (size before relaxing)
+ .debug_str     0x0000034e       0x57 default/start_boot.o
+                                0x128 (size before relaxing)
+ .debug_str     0x000003a5      0x3b1 default/usb_descriptors.o
+                                0x493 (size before relaxing)
+ .debug_str     0x00000756       0x89 default/usb_device_task.o
+                                0x166 (size before relaxing)
+ .debug_str     0x000007df       0xd1 default/usb_drv.o
+                                0x199 (size before relaxing)
+ .debug_str     0x000008b0      0x1ce default/usb_specific_request.o
+                                0x5ba (size before relaxing)
+ .debug_str     0x00000a7e      0x1a6 default/usb_standard_request.o
+                                0x5b4 (size before relaxing)
+ .debug_str     0x00000c24       0x51 default/usb_task.o
+                                0x133 (size before relaxing)
 
 .debug_loc      0x00000000      0x915
  *(.debug_loc)

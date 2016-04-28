@@ -35,7 +35,7 @@ Definitions
 #define LED2_ON			PORTA &= ~(1<<PA2)
 #define LED2_OFF		PORTA |= (1<<PA2)
 
-#define RefPointNr 		7	// range: 0-7
+#define RefPointNr 		4	// range: 0-7
 #define	RFTransmit_ms	2
 
 
@@ -76,6 +76,11 @@ int main(void)
 
 	while(1)
 	{ 
+
+
+//RFTransmit_packet(8,0x1454);
+//_delay_ms(500);
+
 		/* Wait for interupt from RFM12 (received Data) */
 		if(!nIRQ_PIN)	
 		{
@@ -159,9 +164,11 @@ void RFTransmit_packet(uint8_t RefNr, uint16_t Value)
 	
 	/* Send 16bit packet */
 	RF_TXmode;
-	_delay_ms(2);
-	RMFM12_send(packet);
-	_delay_ms(2);
+	_delay_us(100);
+	3RMFM12_send(packet);
+	//RMFM12_send(Value);
+	_delay_us(100);
+	//_delay_ms(2);
 	RF_Iddle;
 }
 
@@ -285,8 +292,9 @@ void RFM12_init(void)
 	WriteCMD(0xA000|F);	// Fcarrier = 439.00MHz
 
 	/* Data Rate Command */
-	WriteCMD(0xC629);	// error !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-	//WriteCMD(0xC602);	// 114.943kbps
+	//WriteCMD(0xC629);	// error !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	WriteCMD(0xC602);	// 114.943kbps
+	//WriteCMD(0xC60A);	// 114.943kbps
 
 	/* Receiver Control Command */
 	WriteCMD(0x9420);	// VDI, FAST, Bandwidth 400kHz, LNA gain 0dBm, -103dBm
