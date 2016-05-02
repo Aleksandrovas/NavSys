@@ -1,0 +1,240 @@
+//---------------------------------------------------------------------------
+
+#include <vcl.h>
+#pragma hdrstop
+
+#include "Main.h"
+#include "winuser.h"
+#include "stdio.h"
+#include "AtUsbHid.h"
+//---------------------------------------------------------------------------
+#pragma package(smart_init)
+#pragma resource "*.dfm"
+
+
+#define wait_delay 3
+TForm1 *Form1;
+unsigned char buferis[64];
+bool not_connected;
+unsigned char alivecnt=0;
+
+//---------------------------------------------------------------------------
+__fastcall TForm1::TForm1(TComponent* Owner)
+    : TForm(Owner)
+{
+}
+//---------------------------------------------------------------------------
+bool connect(const UINT VendorID, const UINT ProductID)
+{
+  bool ans;
+  ans= findHidDevice(VendorID, ProductID);
+  if (!ans)
+  {
+
+    not_connected=true;
+  /*  Form1->VID=VendorID ;
+    Form1->PID= ProductID;   */
+    Form1->Label1->Caption="NOT CONNECTED";
+    Form1->Label1->Font->Color=clRed;
+  }
+  else
+  {
+    Form1->Label1->Caption="CONNECTED";
+    Form1->Label1->Font->Color=clGreen;
+  }
+  return  ans;
+}
+void disconnect()
+{
+    closeDevice();
+}
+bool test_alive()
+{
+  unsigned char buf[64];
+  int k=0;
+  buf[0]=254;
+  writeData(buf);
+   while((readData(buf)==false) && (k++<wait_delay)) Sleep(1);
+   return (k<wait_delay);
+}
+//---------------------------------------------------------------------------
+void __fastcall TForm1::FormClose(TObject *Sender, TCloseAction &Action)
+{
+        ConTimer->Enabled=false;
+        disconnect();
+}
+//---------------------------------------------------------------------------
+void __fastcall TForm1::Button2Click(TObject *Sender)
+{
+    for (int i=0;i<Memo1->Lines->Count;i++)
+        buferis[i]=StrToInt(Memo1->Lines->Strings[i]);
+    writeData(buferis);
+    Button3->Click();
+}
+//---------------------------------------------------------------------------
+void __fastcall TForm1::Button3Click(TObject *Sender)
+{
+    static int gauta=0,blogi=0;
+    int k=0,i=0;
+    buferis[0]=0;
+    buferis[1]=0;
+    k=0;
+    while((readData(buferis)==false) && (k++<wait_delay))
+    {
+        Sleep(1);
+        Application->ProcessMessages();
+    }
+        gauta++;
+
+      if (k<wait_delay)
+      {
+           // Memo2->Lines->Add(k);
+          Memo3->Lines->Clear();
+          gauta++;
+
+          if ((buferis[1]!=84) && (buferis[1]!=0)  )
+          {
+                int reiksme=(buferis[2])*256+buferis[1];
+//            Memo5->Lines->Add(IntToStr(buferis[1])+" "+IntToStr(buferis[2])+" "+IntToStr(buferis[1]*256+buferis[2])) ;
+             //   if (reiksme < 34000)
+            if (reiksme>0)
+            {
+                unsigned char nr,tl,ao;
+                unsigned short value,packet;
+                ao=(reiksme>>15)&0x01;
+                nr=(reiksme>>13)&0x03;
+                tl=(reiksme>>12)&0x01;
+                value=(reiksme>>1)&2047;
+              //  if (tl==0)
+                //{
+             /*   Memo5->Lines->Add(IntToStr(reiksme)+"No: "+IntToStr(nr)+ \
+                 "lt: "+IntToStr(tl) +\
+                 "val: "+IntToStr(value)
+                ) ;  */
+               // }
+
+            }
+          }
+          if ((buferis[0]!=37)&&(buferis[0]!=80))
+          {
+                blogi++;
+                  Memo4->Lines->Add(IntToStr(buferis[0])+" "+IntToStr(buferis[1])+" "+IntToStr(buferis[2])+" "+IntToStr(buferis[3])+" "+IntToStr(buferis[4])) ;
+                  }
+          if (buferis[0]==12)
+          {
+              //  Memo5->Lines->Add("----"+IntToStr(buferis[1])+"----");
+                for (int i=0;i<buferis[1];i++)
+                {
+                    //    Memo5->Lines->Add("Nr: "+IntToStr(buferis[2+i*5])+" laikas:"+IntToStr(buferis[2+i*5+1]*256+buferis[2+i*5+2])+" temp:"+IntToStr(buferis[2+i*5+3]*256+buferis[2+i*5+4]));
+//                          Memo5->Lines->Add(IntToStr(buferis[2+i*5])+"\t"+IntToStr(buferis[2+i*5+1]*256+buferis[2+i*5+2]));
+float atstumas;
+                        atstumas=(buferis[2+i*5+1]*256+buferis[2+i*5+2])*3.387*10000/61379+12.108;
+						Memo5->Lines->Add("atstumas: "+FloatToStr(atstumas));
+                }
+              //  Memo5->Lines->Add("===========");
+
+          }
+      }
+      for (i=0;i<30 && k<wait_delay;i++)
+        {
+            if (i==0)
+                Memo3->Lines->Add("---gauta---");
+            Memo3->Lines->Add(buferis[i]);
+        }
+
+        CheckBox1->Checked=((buferis[4]&128)==128);
+        CheckBox2->Checked=((buferis[4]&64)==64);
+        CheckBox3->Checked=((buferis[4]&32)==32);
+        CheckBox5->Checked=((buferis[4]&16)==16);
+
+        CheckBox4->Checked=((buferis[4]&8)==8);
+        CheckBox6->Checked=((buferis[4]&4)==4);
+        CheckBox7->Checked=((buferis[4]&2)==2);
+        CheckBox8->Checked=((buferis[4]&1)==1);
+
+        CheckBox9->Checked=((buferis[3]&128)==128);
+        CheckBox10->Checked=((buferis[3]&64)==64);
+
+
+   
+    Form1->Caption=IntToStr(gauta)+" blogi:"+IntToStr(blogi);
+}
+//---------------------------------------------------------------------------
+void __fastcall TForm1::ConTimerTimer(TObject *Sender)
+{
+  Application->ProcessMessages();
+  if (not_connected)
+        not_connected=~connect(VID,PID);
+  else
+  {
+  if (!test_alive())
+    not_connected=~connect(VID,PID);
+
+  }  
+  
+
+}
+//---------------------------------------------------------------------------
+void __fastcall TForm1::Button4Click(TObject *Sender)
+{
+    unsigned char buf[4];
+    buf[0]=0x55;
+    buf[1]=0xAA;
+    buf[2]=0x55;
+    buf[3]=0xAA;
+    setFeature(buf);
+        Timer1->Enabled=false;
+ 
+}
+//---------------------------------------------------------------------------
+void __fastcall TForm1::FormCreate(TObject *Sender)
+{
+  VID=0x03EB;
+  PID=0x2013;
+  connect(VID,PID);
+  Memo3->ScrollBy(0,-100);
+
+Memo4->Lines->Add(Time());
+}
+//---------------------------------------------------------------------------
+
+
+void __fastcall TForm1::Timer1Timer(TObject *Sender)
+{
+Button3->Click();
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TForm1::Button1Click(TObject *Sender)
+{
+Timer1->Enabled=true;        
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TForm1::Button5Click(TObject *Sender)
+{
+Timer1->Enabled=false;
+}
+//---------------------------------------------------------------------------
+//parity bito skaiciavimo paprograme
+unsigned char parity(unsigned short word)
+{
+	unsigned char count=0;
+	unsigned short i;
+	for (i=0;i<16;i++)
+        {
+                if ((word&1)==1)
+			count++;
+                word>>=1;
+        }
+	return (count%2);
+}
+
+
+void __fastcall TForm1::Button6Click(TObject *Sender)
+{
+int nr=StrToInt(Edit1->Text);
+Memo5->Lines->Add(parity(nr));
+}
+//---------------------------------------------------------------------------
+

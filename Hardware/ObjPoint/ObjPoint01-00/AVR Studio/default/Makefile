@@ -5,7 +5,7 @@
 ## General Flags
 PROJECT = main
 MCU = attiny24a
-TARGET = main.elf
+TARGET = ObjPoint01-00.elf
 CC = avr-gcc
 
 CPP = avr-g++
@@ -15,7 +15,7 @@ COMMON = -mmcu=$(MCU)
 
 ## Compile options common for all C compilation units.
 CFLAGS = $(COMMON)
-CFLAGS += -Wall -gdwarf-2 -std=gnu99 -DF_CPU=10000000UL -Os -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums
+CFLAGS += -Wall -gdwarf-2 -std=gnu99       -DF_CPU=10000000UL -Os -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums
 CFLAGS += -MD -MP -MT $(*F).o -MF dep/$(@F).d 
 
 ## Assembly specific flags
@@ -25,7 +25,7 @@ ASMFLAGS += -x assembler-with-cpp -Wa,-gdwarf2
 
 ## Linker flags
 LDFLAGS = $(COMMON)
-LDFLAGS +=  -Wl,-Map=main.map
+LDFLAGS +=  -Wl,-Map=ObjPoint01-00.map
 
 
 ## Intel Hex file production flags
@@ -43,7 +43,7 @@ OBJECTS = main.o
 LINKONLYOBJECTS = 
 
 ## Build
-all: $(TARGET) main.hex main.eep main.lss size
+all: $(TARGET) ObjPoint01-00.hex ObjPoint01-00.eep ObjPoint01-00.lss size
 
 ## Compile
 main.o: ../main.c
@@ -69,7 +69,7 @@ size: ${TARGET}
 ## Clean target
 .PHONY: clean
 clean:
-	-rm -rf $(OBJECTS) main.elf dep/* main.hex main.eep main.lss main.map
+	-rm -rf $(OBJECTS) ObjPoint01-00.elf dep/* ObjPoint01-00.hex ObjPoint01-00.eep ObjPoint01-00.lss ObjPoint01-00.map
 
 
 ## Other dependencies

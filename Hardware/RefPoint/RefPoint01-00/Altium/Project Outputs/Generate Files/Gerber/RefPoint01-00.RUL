@@ -1,6 +1,0 @@
-DRC Rules Export File for PCB: D:\Projetcs\NavSys\Hardware\RefPoint\RefPoint01-00\Altium\RefPoint01-00.PcbDoc
-RuleKind=SolderMaskExpansion|RuleName=SolderMaskExpansion|Scope=Board|Minimum=4.00
-RuleKind=Width|RuleName=Width|Scope=Board|Minimum=9.84
-RuleKind=Clearance|RuleName=Clearance|Scope=Board|Minimum=11.81
-RuleKind=ShortCircuit|RuleName=ShortCircuit|Scope=Board|Allowed=0
-RuleKind=Clearance|RuleName=KeepOut|Scope=Board|Minimum=0.39
