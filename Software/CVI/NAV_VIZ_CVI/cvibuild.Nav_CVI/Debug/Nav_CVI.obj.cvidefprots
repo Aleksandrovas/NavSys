@@ -1,0 +1,32 @@
+[connect]
+Class="Function"
+Prototype="unsigned char connect(const unsigned int VendorID, const unsigned int ProductID);"
+
+[disconnect]
+Class="Function"
+Prototype="void disconnect();"
+
+[test_alive]
+Class="Function"
+Prototype="unsigned char test_alive();"
+
+[main]
+Class="Function"
+Prototype="int main(int argc, char **argv);"
+
+[panelCB]
+Class="Function"
+Prototype="int panelCB(int panel, int event, void *callbackData, int eventData1, int eventData2);"
+
+[Connect_USB_BUTTON]
+Class="Function"
+Prototype="int Connect_USB_BUTTON(int panel, int control, int event, void *callbackData, int eventData1, int eventData2);"
+
+[Disconnect_USB_BUTTON]
+Class="Function"
+Prototype="int Disconnect_USB_BUTTON(int panel, int control, int event, void *callbackData, int eventData1, int eventData2);"
+
+[USB_TIMER]
+Class="Function"
+Prototype="int USB_TIMER(int panel, int control, int event, void *callbackData, int eventData1, int eventData2);"
+
