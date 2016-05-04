@@ -116,48 +116,34 @@
 #define LANG_ID               0x00
 
 
-#define USB_MN_LENGTH         7
+#define USB_MN_LENGTH         3
 #define USB_MANUFACTURER_NAME \
-{ Usb_unicode('V') \
-, Usb_unicode('A') \
-, Usb_unicode('I') \
-, Usb_unicode('D') \
-, Usb_unicode('A') \
-, Usb_unicode('S') \
-, Usb_unicode('Z') \
+{ Usb_unicode('K') \
+, Usb_unicode('T') \
+, Usb_unicode('U') \
 }
 
-#define USB_PN_LENGTH         20
+#define USB_PN_LENGTH         10
 #define USB_PRODUCT_NAME \
-{ Usb_unicode('F') \
- ,Usb_unicode('P') \
- ,Usb_unicode('G') \
+{ Usb_unicode('N') \
  ,Usb_unicode('A') \
- ,Usb_unicode(' ') \
- ,Usb_unicode('D') \
- ,Usb_unicode('E') \
  ,Usb_unicode('V') \
- ,Usb_unicode('E') \
- ,Usb_unicode('L') \
- ,Usb_unicode('O') \
- ,Usb_unicode('P') \
- ,Usb_unicode('M') \
- ,Usb_unicode('E') \
- ,Usb_unicode('N') \
- ,Usb_unicode('T') \
  ,Usb_unicode(' ') \
- ,Usb_unicode('K') \
- ,Usb_unicode('I') \
+ ,Usb_unicode('S') \
+ ,Usb_unicode('Y') \
+ ,Usb_unicode('S') \
  ,Usb_unicode('T') \
+ ,Usb_unicode('E') \
+ ,Usb_unicode('M') \
 }
 
 #define USB_SN_LENGTH         0x05
 #define USB_SERIAL_NUMBER \
-{ Usb_unicode('F') \
- ,Usb_unicode('P') \
- ,Usb_unicode('G') \
- ,Usb_unicode('0') \
- ,Usb_unicode('0') \
+{ Usb_unicode('N') \
+ ,Usb_unicode('A') \
+ ,Usb_unicode('V') \
+ ,Usb_unicode(' ') \
+ ,Usb_unicode('1') \
 }
 
 #define LANGUAGE_ID           0x0409

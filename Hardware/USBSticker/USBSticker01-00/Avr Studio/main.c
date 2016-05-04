@@ -1,19 +1,11 @@
 
 //_____  I N C L U D E S ___________________________________________________
-#define F_CPU 			800000UL
-
 #include "config.h"
 #include "modules/scheduler/scheduler.h"
 #include "lib_mcu/wdt/wdt_drv.h"
 #include "lib_mcu/power/power_drv.h"
 #include "lib_mcu/usb/usb_drv.h"
 #include "lib_mcu/util/start_boot.h"
-
-#include <util/delay.h>
-#include "spi_drv.h"
-#include "RFmodule.h"
-#include "main.h"
-
 
 //_____ M A C R O S ________________________________________________________
 
@@ -22,12 +14,6 @@
 
 int main(void)
 {
-	/* Configure LEDS Pins */
-	DDRD|=(1<<PD1)|(1<<PD2);
-
-	/* Configure RF nIRQ PIN */
-	DDRB&=~(1<<nIRQ);
-
 	Usb_enable_regulator();
    	wdtdrv_disable();
    	start_boot_if_required();

@@ -18,10 +18,8 @@ default/hid_task.o: hid_task.c conf/config.h conf/../lib_mcu/compiler.h \
   usb_descriptors.h modules/usb/device_chap9/usb_standard_request.h \
   conf/../modules/usb/usb_task.h conf/../usb_descriptors.h \
   conf/../modules/usb/device_chap9/usb_standard_request.h \
-  usb_specific_request.h lib_mcu/util/start_boot.h \
-  c:/winavr-20100110/lib/gcc/../../avr/include/util/delay.h \
-  c:/winavr-20100110/lib/gcc/../../avr/include/util/delay_basic.h \
-  spi_drv.h RFmodule.h main.h
+  usb_specific_request.h lib_mcu/util/start_boot.h spi_drv.h RFmodule.h \
+  main.h
 
 conf/config.h:
 
@@ -80,10 +78,6 @@ conf/../modules/usb/device_chap9/usb_standard_request.h:
 usb_specific_request.h:
 
 lib_mcu/util/start_boot.h:
-
-c:/winavr-20100110/lib/gcc/../../avr/include/util/delay.h:
-
-c:/winavr-20100110/lib/gcc/../../avr/include/util/delay_basic.h:
 
 spi_drv.h:
 

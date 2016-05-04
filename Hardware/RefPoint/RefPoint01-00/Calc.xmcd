@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<?validation-md5-digest 6054cbcdcfa9f6466a65f5352f6d2ef4?>
+<?validation-md5-digest 08da752749a44aecc0982dc25a48293d?>
 <worksheet version="3.0.3" xmlns="http://schemas.mathsoft.com/worksheet30" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ws="http://schemas.mathsoft.com/worksheet30" xmlns:ml="http://schemas.mathsoft.com/math30" xmlns:u="http://schemas.mathsoft.com/units10" xmlns:p="http://schemas.mathsoft.com/provenance10">
 	<pointReleaseData/>
 	<metadata>
@@ -13,9 +13,9 @@
 			<revisedBy>ArthurLaptop</revisedBy>
 		</userData>
 		<identityInfo>
-			<revision>30</revision>
+			<revision>31</revision>
 			<documentID>B47FFC65-F427-4504-B08A-5C4B07001ECA</documentID>
-			<versionID>05FD84D6-D240-4FA1-B497-28D7991923FE</versionID>
+			<versionID>47437559-C295-4DBC-9A19-03E09EC94453</versionID>
 			<parentVersionID>00000000-0000-0000-0000-000000000000</parentVersionID>
 			<branchID>00000000-0000-0000-0000-000000000000</branchID>
 		</identityInfo>
@@ -418,7 +418,7 @@
 							<ml:apply>
 								<ml:mult/>
 								<ml:id xml:space="preserve" subscript="res">t</ml:id>
-								<ml:real>1366</ml:real>
+								<ml:real>2000</ml:real>
 							</ml:apply>
 							<ml:real>8</ml:real>
 						</ml:apply>
@@ -426,7 +426,7 @@
 					</ml:apply>
 					<result xmlns="http://schemas.mathsoft.com/math30">
 						<unitedValue>
-							<ml:real>2.9724159999999995</ml:real>
+							<ml:real>4.3519999999999994</ml:real>
 							<unitMonomial xmlns="http://schemas.mathsoft.com/units10">
 								<unitReference unit="meter"/>
 							</unitMonomial>
@@ -913,20 +913,20 @@ QtoBqp7aFSn2r3miTZMwUFS8+yk1YlkFwEM7SKOSlqfgiTZNwjBR0XmbzloVAGxD9Xg+T7Sz
 n2jTJFwQlb6s6TI7XXYyBSO+S88KXyzYPnvPgflTnmjTPFzLVIbxA0xUxnBMVMZwTFTGYEL4
 Aplkq6NK0yIFAAAAAElFTkSuQmCC</item>
 		<item item-id="14">iVBORw0KGgoAAAANSUhEUgAAAIMAAAAWCAYAAADjNi+WAAAAAXNSR0IArs4c6QAAAARnQU1B
-AACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAKtSURBVGhD7ZcLlqQgDEVdlwtiPa6G
-zbgYJuH7gIRyqrQ/M7nneNqOGJLwCNYWDCNjYjAqJgajYmIwKl8uhvPYw+Z8/i8RbdtG1x6O
-MxsrZzh2fraF/jXN3mh+t7DPjh+mxSfnlcAYWx4+uGzrn13z+S69GLxTC3sHNXGc5DyCy1nN
-QslFmYLS7AiPyQWjOfYHirfiPFydzzuKdT9oKQc4rmKPMTqKmvA+/c14l+yXfH4AiCGp7kkx
-MPOCAyTGtoNTPPOO1uwDWFwUxnfQxdLgWmAevMBivk4RkuDzE7IYsP282nGfoYuBYjjAnpN1
-vAMwJs0+kXPi553IBOh5zf3m3RbhmAW/Yy1EMdC7pXN2SD45D7J59ku5sK84R75/BXSG1HrV
-2t6ELIbc9iHoNI6Uz0OjAFJsml3mwnESfWAHkfwNmwWvle+CJsYowra7JTHg0dAx+RxqmGvT
-7l93kefEoCyULIZEUnEKmu8x2VIozS7NlwqZF7LsomHc6O9+qK6LbsPxN3GNRxnFLh0Rmk9c
-dO1+wQ/pDAWOoYkBx6EYJPsEF6AWLAlCmnYdT+H9zlA+/l7CXWLyRfUQ/Ks+/ykxYEFiAmWn
-cGzSLwOwj3QFWOTW+Uv/i2f0G3Cudc6V3+G4qJB9jHnpE3PW7heAGHhuUHt0QEWiVsu2GEC0
-pTG4G+MCZ/vyAywmDXMQ3btj5jC+e6TZB9D38ijAuC4U7Qp9++cLxZzjLvMqNRs7gOoz0rqX
-83gPdVgVi+jE0Eg7qXfAE5TJcUfyfQv6pC87KTHj56OIgSidoawsdIVyFZ0UxT77IWY8zV+K
-YdVCSze5p80aX891MeQzqe5+Ou9SZ/D0XdE6gnf4jvGbUMSAP6Vgp+NRUb8l4Puisxu/Db0z
-GP8dJgajYmIwKiYGIxPCH9+i5E9VQxSZAAAAAElFTkSuQmCC</item>
+AACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAKWSURBVGhD7ZaLresgDIaZKwMxD9Ow
+TIbh2uAYYx5tVBrd6viTIiUuBT9+DC4ZBmFiMBgTg8GYGAzmQTGcKRwuOYfPkcJJZuQM6dhh
+V5zhoPVcOlYDv0z0LvlIH4rqo44lJk++O+fhC1nkcAOtGKKfOv0pZ/DsPCbHHQFCy18QNAWW
+i3wFfteu0eP2J+8tSLjDvMJvnpzKohCDZL4u5jncgxBDUd23xNAgiwgCrEkQPty1axqhCGE8
+TAwhhUVnYCCu2r3Q39IBph2tiW8PJAbZfuB56fmHYCCkar0jUPGYgLv2HooJxzaJHoACu2Lf
+udtg3rL8KzGAr2EwIBd8Ep/IIYNxgC3S0cP5ms2hEJ2hqHHt9CZEcdBZ6ags+h37GNphq6C6
+DjLKgdos8pnOXQu8FsOrLoC/DzpAJ3A1jxRSE+Oc74mBnOnng3WEoreJYbBeOWOpkNeaapye
+bxsRjgeadi2GAvpRL4ot0Wt7m0NGFn32vuDxztAFhq2NFy2Fy5937RpMACdsPi4XYTiBhAQF
++emeyX9RAHrsWnSY/1HBcO3W3ouD+CUxYOJ5fnCw3KRxXXHr5wLetSuaBCxiy+PE5RK+rxv+
+Lt7pDK3IBeo4GOeQkDHP3hcIMRSnWe15AkgStFq0ZQeyrVd5aXH030lx+p3SFqDMK2zIXbtC
++rXclVgIGjdr1Z/QiIF8LykWeeMBgPRH2Jc5zB2k2H2U72IducaARgyVspPaCXCBa3GxO/N7
+TeAZ43inGv89EzEAWcFCebwb63Pp5FLsVy5ixmPcFMOqhV7dZH+bNZ7hfTHQmcS7H8610hki
+3CtqR4he/sf4JSZiqBeQZqfLo4LvEuJ+0diNX2PeGYw/h4nBYEwMBmNiMIiU/gE0bNp9/cl0
+5gAAAABJRU5ErkJggg==</item>
 		<item item-id="15">iVBORw0KGgoAAAANSUhEUgAAAGMAAAAWCAYAAADU1CLnAAAAAXNSR0IArs4c6QAAAARnQU1B
 AACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAHtSURBVGhD7VeLrcMgDMxcDMQ8TMMy
 DMMzxgZjkhfaNBVROQmJxOZ3Z+NkiwvTYIkxEZYYE2GJMRFIjBCd2eK2qWZ9Nh/ZoRkXyOd3

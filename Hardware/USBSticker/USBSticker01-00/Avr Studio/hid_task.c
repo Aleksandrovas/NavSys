@@ -49,14 +49,10 @@
 #include "usb_specific_request.h"
 #include "lib_mcu/util/start_boot.h"
 
-#include <util/delay.h>
 #include "spi_drv.h"
 #include "RFmodule.h"
 #include "main.h"
 
-U8 buferis[64];
-const U8 alive[4]="\1\254\2\253";
-volatile uint8_t USBbuff[64];
 
 //_____ M A C R O S ________________________________________________________
 
@@ -65,64 +61,63 @@ volatile uint8_t USBbuff[64];
 
 
 //_____ D E C L A R A T I O N S ____________________________________________
+U8 buferis[64];
+const U8 alive[4]="\1\254\2\253";
 
-volatile U16    cpt_sof=0, cold=0;
-extern            U8    jump_bootloader;
-bool blinker=true;
+extern U8 jump_bootloader;
+uint8_t DataFifo[4];
 
-
-void hid_report_out  (void);
-void hid_report_in   (void);
+void hid_report_out(void);
+void hid_report_in(void);
 bool USB_Send(U8 *buff,unsigned char len);
 bool USB_Read(U8 *buff,unsigned char len);
-	#define interv 500
-	#define max 2100
 
+void hid_task_init(void);
+void UI_task(void);
+void DATA_RECEIVED(void);
+bool USB_Read(U8 *buff,unsigned char len);
+bool USB_Send(U8 *buff,unsigned char len);
 //--------------------------------------------------------------------------
-void delay_ms(unsigned int tim)
-{
-	while (tim >0)
-	{
-		TIFR0|= 1<<TOV0;//tifr
-		TCNT0=131;
-		TCCR0B = (1<<CS01)|(1<<CS00);//fclk/64 0.008ms 125/ms
-		while (  (TIFR0&(1<<TOV0)) ==0) ;
-		tim--;
-	}
-}
-
-ISR(TIMER0_OVF_vect)
-{
-	TCNT1=131;
-	if (cpt_sof<max)
-	cpt_sof++;
-	else
-	cpt_sof=0;
-}
 
 
 //! @brief This function initializes the target board ressources.
 //!
 void hid_task_init(void)
 {
+	/* Configure LEDS Pins */
+	DDRD|=(1<<PD1)|(1<<PD2);
+
+	/* Configure RF nIRQ PIN */
+	DDRB&=~(1<<nIRQ);
+
 	Init_SPI();
 	RFM01_init();
 	RF_FIFORecog;
 	RF_RXmode;
-	USBbuff[0]=0;
-
-	TCNT0=131;
-	TCCR0B = (1<<CS01)|(1<<CS00);//fclk/64 0.008ms 125/ms
-	TIMSK0|=1<<TOIE0;
-	sei();
+	DataFifo[0]=0;
 }
+
+
+//! @brief Entry point of the HID generic communication task
+//! This function manages IN/OUT repport management.
+//!
+void hid_task(void)
+{
+	UI_task();
+
+   	/*if(!Is_device_enumerated())          // Check USB HID is enumerated
+      	return;
+
+   	if (USB_Read(buferis,64))
+   		DATA_RECEIVED();*/
+} 
 
 
 void UI_task(void)
 {
 	uint16_t temp;
 
-	/* Check for interupt from RFM12 (received Data) */
+	// Check for interupt from RFM12 (received Data)
 	if(!nIRQ_PIN)	
 	{
 		temp = RMFM12_ReadFIFO();
@@ -135,10 +130,12 @@ void UI_task(void)
 		else
 		{
 			LED2_ON;
-			USBbuff[0] = ~USBbuff[0];
-			USBbuff[1] = temp>>8;
-			USBbuff[2] = temp&0xFF;
-			USB_Send(USBbuff,64);
+			DataFifo[0] = ~DataFifo[0];
+			DataFifo[1] = temp>>8;
+			DataFifo[2] = temp&0xFF;
+
+			if(Is_device_enumerated())  
+				USB_Send(DataFifo,4);
 		}
 		RF_FIFORecog;
 		LED1_OFF;
@@ -148,69 +145,45 @@ void UI_task(void)
 
 
 void DATA_RECEIVED(void)
-{
-	/*U8 inbuf[64];
-	
+{	
 	switch(buferis[0])
 	{
 		case 12:
-			//LED1_ON;
-			//LED2_ON;
-			//buferis[1]=USBbuff[0];
-			//buferis[2]=USBbuff[1];
-		break;
-		case 1:
-			SPI_SendBuff(&buferis[2],buferis[1],&inbuf);
-			memcpy(&buferis[0],inbuf,buferis[1]);
-		break;
-		case 2:
-			blinker=~blinker;
+			LED1_ON;
+			LED2_ON;
+			break;
 		default:
-		break;
+			break;
 	
 	}
 	buferis[0]=~buferis[0];
 	USB_Send(buferis,64);
-	*/
 }
-
-
-//! @brief Entry point of the HID generic communication task
-//! This function manages IN/OUT repport management.
-//!
-void hid_task(void)
-{
-   	if(!Is_device_enumerated())          // Check USB HID is enumerated
-      	return;
-
-   	if (USB_Read(buferis,64))
-   		DATA_RECEIVED();
-
-	UI_task();
-} 
 
 
 //! @brief Get data report from Host
 //!
 bool USB_Read(U8 *buff,unsigned char len)
 {
-	bool received=false;
-  Usb_select_endpoint(EP_HID_OUT);
-  received=Is_usb_receive_out();
-   if(received)
-   {
-	  usb_read_packet(EP_HID_OUT, buff, len);
-      Usb_ack_receive_out();
-   }
-   //** Check if we received DFU mode command from host
-   if(jump_bootloader)
-   {
-      U32 volatile tempo;
-      Usb_detach();                          // Detach actual generic HID application
-      for(tempo=0;tempo<70000;tempo++);      // Wait some time before
-      start_boot();                          // Jumping to booltoader
-   }
-   return received;
+	bool received = false;
+
+  	Usb_select_endpoint(EP_HID_OUT);
+  	received=Is_usb_receive_out();
+   	if(received)
+   	{
+		usb_read_packet(EP_HID_OUT, buff, len);
+      	Usb_ack_receive_out();
+   	}
+
+   // Check if we received DFU mode command from host
+   	if(jump_bootloader)
+   	{
+		U32 volatile tempo;
+      	Usb_detach();                          // Detach actual generic HID application
+      	for(tempo=0;tempo<70000;tempo++);      // Wait some time before
+      	start_boot();                          // Jumping to booltoader
+   	}
+   	return received;
 }
 
 
@@ -220,8 +193,8 @@ bool USB_Send(U8 *buff,unsigned char len)
 {
    Usb_select_endpoint(EP_HID_IN);
    if(!Is_usb_write_enabled())
-      return false;                                // Not ready to send report
+      return false;                    		// Not ready to send report
    usb_send_packet(EP_HID_IN, buff, len);
-   Usb_ack_in_ready();                       // Send data over the USB                     // Send data over the USB
+   Usb_ack_in_ready();                     	// Send data over the USB                     // Send data over the USB
    return true;
 }

@@ -18,10 +18,7 @@ default/main.o: main.c conf/config.h conf/../lib_mcu/compiler.h \
   c:/winavr-20100110/lib/gcc/../../avr/include/avr/wdt.h \
   lib_mcu/power/power_drv.h \
   c:/winavr-20100110/lib/gcc/../../avr/include/avr/power.h \
-  lib_mcu/usb/usb_drv.h lib_mcu/util/start_boot.h \
-  c:/winavr-20100110/lib/gcc/../../avr/include/util/delay.h \
-  c:/winavr-20100110/lib/gcc/../../avr/include/util/delay_basic.h \
-  spi_drv.h RFmodule.h main.h
+  lib_mcu/usb/usb_drv.h lib_mcu/util/start_boot.h
 
 conf/config.h:
 
@@ -70,13 +67,3 @@ c:/winavr-20100110/lib/gcc/../../avr/include/avr/power.h:
 lib_mcu/usb/usb_drv.h:
 
 lib_mcu/util/start_boot.h:
-
-c:/winavr-20100110/lib/gcc/../../avr/include/util/delay.h:
-
-c:/winavr-20100110/lib/gcc/../../avr/include/util/delay_basic.h:
-
-spi_drv.h:
-
-RFmodule.h:
-
-main.h:

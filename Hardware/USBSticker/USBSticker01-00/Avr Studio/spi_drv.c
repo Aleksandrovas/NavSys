@@ -12,10 +12,12 @@ void Init_SPI(void)
 	/* Chip Select */
 	PORTCS|= (1<<CS);
 
-	/* Enable SPI, Master, set clock rate fck/16 */
-	SPCR = (1<<SPE)|	//enable spi
-		   (1<<MSTR)|	//master mode
-		   (1<<SPR0);	//fosc/16 (1000000/16 hz)
+	/* Enable SPI, Master, set clock rate */
+	SPCR = (1<<SPE)|		// enable spi
+		   (1<<MSTR)|		// master mode
+		   (SPI2X<<1);		// fosc/2
+		   //;				// fosc/4
+		   //(1<<SPR0);		// fosc/16
 }
 
 
