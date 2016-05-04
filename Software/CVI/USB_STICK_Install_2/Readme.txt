@@ -1,0 +1,1 @@
+rename "binas" folder to to install software
