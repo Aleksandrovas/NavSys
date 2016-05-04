@@ -1,0 +1,581 @@
+
+ObjPoint01-00.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .text         000001ec  00000000  00000000  00000054  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  1 .data         00000000  00800060  00800060  00000240  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  2 .comment      00000030  00000000  00000000  00000240  2**0
+                  CONTENTS, READONLY
+  3 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  00000270  2**2
+                  CONTENTS, READONLY
+  4 .debug_aranges 00000058  00000000  00000000  000002ac  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  5 .debug_info   00000621  00000000  00000000  00000304  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  6 .debug_abbrev 000001a9  00000000  00000000  00000925  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  7 .debug_line   0000026c  00000000  00000000  00000ace  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  8 .debug_frame  000000a0  00000000  00000000  00000d3c  2**2
+                  CONTENTS, READONLY, DEBUGGING
+  9 .debug_str    00000336  00000000  00000000  00000ddc  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 10 .debug_loc    00000207  00000000  00000000  00001112  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 11 .debug_ranges 00000048  00000000  00000000  00001319  2**0
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+00000000 <__vectors>:
+   0:	10 c0       	rjmp	.+32     	; 0x22 <__ctors_end>
+   2:	15 c0       	rjmp	.+42     	; 0x2e <__bad_interrupt>
+   4:	14 c0       	rjmp	.+40     	; 0x2e <__bad_interrupt>
+   6:	13 c0       	rjmp	.+38     	; 0x2e <__bad_interrupt>
+   8:	12 c0       	rjmp	.+36     	; 0x2e <__bad_interrupt>
+   a:	11 c0       	rjmp	.+34     	; 0x2e <__bad_interrupt>
+   c:	10 c0       	rjmp	.+32     	; 0x2e <__bad_interrupt>
+   e:	0f c0       	rjmp	.+30     	; 0x2e <__bad_interrupt>
+  10:	0e c0       	rjmp	.+28     	; 0x2e <__bad_interrupt>
+  12:	0d c0       	rjmp	.+26     	; 0x2e <__bad_interrupt>
+  14:	0c c0       	rjmp	.+24     	; 0x2e <__bad_interrupt>
+  16:	0b c0       	rjmp	.+22     	; 0x2e <__bad_interrupt>
+  18:	0a c0       	rjmp	.+20     	; 0x2e <__bad_interrupt>
+  1a:	09 c0       	rjmp	.+18     	; 0x2e <__bad_interrupt>
+  1c:	08 c0       	rjmp	.+16     	; 0x2e <__bad_interrupt>
+  1e:	07 c0       	rjmp	.+14     	; 0x2e <__bad_interrupt>
+  20:	06 c0       	rjmp	.+12     	; 0x2e <__bad_interrupt>
+
+00000022 <__ctors_end>:
+  22:	11 24       	eor	r1, r1
+  24:	1f be       	out	0x3f, r1	; 63
+  26:	cf ed       	ldi	r28, 0xDF	; 223
+  28:	cd bf       	out	0x3d, r28	; 61
+  2a:	ad d0       	rcall	.+346    	; 0x186 <main>
+  2c:	dd c0       	rjmp	.+442    	; 0x1e8 <_exit>
+
+0000002e <__bad_interrupt>:
+  2e:	e8 cf       	rjmp	.-48     	; 0x0 <__vectors>
+
+00000030 <PORTS_int>:
+PORTS initialize
+***********************************/
+void PORTS_int(void)
+{
+	/* Configure RF module pins */
+	PORTB |= (1<<nSEL);
+  30:	c1 9a       	sbi	0x18, 1	; 24
+	DDRB |= (1<<SCK) | (1<<nSEL);  
+  32:	87 b3       	in	r24, 0x17	; 23
+  34:	86 60       	ori	r24, 0x06	; 6
+  36:	87 bb       	out	0x17, r24	; 23
+	DDRA |= (1<<SDI);
+  38:	d7 9a       	sbi	0x1a, 7	; 26
+
+	/* Configure LEDS Pins */
+	DDRA |= (1<<PA0) | (1<<PA1);
+  3a:	8a b3       	in	r24, 0x1a	; 26
+  3c:	83 60       	ori	r24, 0x03	; 3
+  3e:	8a bb       	out	0x1a, r24	; 26
+
+	/* Configure UG send Pins */
+	DDRA |= (1<<PA5) | (1<<PA6);
+  40:	8a b3       	in	r24, 0x1a	; 26
+  42:	80 66       	ori	r24, 0x60	; 96
+  44:	8a bb       	out	0x1a, r24	; 26
+
+	LED1_OFF;
+  46:	d8 9a       	sbi	0x1b, 0	; 27
+	LED2_OFF;
+  48:	d9 9a       	sbi	0x1b, 1	; 27
+  4a:	08 95       	ret
+
+0000004c <WriteCMD>:
+
+/************************************
+Write command
+*************************************/
+void WriteCMD(uint16_t CMD)
+{
+  4c:	9c 01       	movw	r18, r24
+	uint8_t n = 16;
+
+	nSEL_LOW;
+  4e:	c1 98       	cbi	0x18, 1	; 24
+  50:	90 e1       	ldi	r25, 0x10	; 16
+	
+	while(n--)
+		{
+		SCK_LOW;
+  52:	c2 98       	cbi	0x18, 2	; 24
+
+		if(CMD&0x8000)
+  54:	33 23       	and	r19, r19
+  56:	14 f4       	brge	.+4      	; 0x5c <WriteCMD+0x10>
+			SDI_HI;
+  58:	df 9a       	sbi	0x1b, 7	; 27
+  5a:	01 c0       	rjmp	.+2      	; 0x5e <WriteCMD+0x12>
+
+		else
+			SDI_LOW;
+  5c:	df 98       	cbi	0x1b, 7	; 27
+
+		SCK_HI;	
+  5e:	c2 9a       	sbi	0x18, 2	; 24
+			
+		CMD = CMD<<1;
+  60:	22 0f       	add	r18, r18
+  62:	33 1f       	adc	r19, r19
+  64:	91 50       	subi	r25, 0x01	; 1
+{
+	uint8_t n = 16;
+
+	nSEL_LOW;
+	
+	while(n--)
+  66:	a9 f7       	brne	.-22     	; 0x52 <WriteCMD+0x6>
+		SCK_HI;	
+			
+		CMD = CMD<<1;
+		}
+
+	SCK_LOW;
+  68:	c2 98       	cbi	0x18, 2	; 24
+	nSEL_HI;
+  6a:	c1 9a       	sbi	0x18, 1	; 24
+  6c:	08 95       	ret
+
+0000006e <RFM02_init>:
+void RFM02_init(void)
+{
+	uint16_t Fcarr;
+
+	/* Configuration Setting Command: 433MHz band, +/-210kHz, CLK 10MHz, 16pF	*/
+	WriteCMD(0x8000 | (RF_433MHz<<11) | (CLK10MHz<<8) | (0x0F<<4) | FreqDev210kHz);	
+  6e:	86 ef       	ldi	r24, 0xF6	; 246
+  70:	9f e8       	ldi	r25, 0x8F	; 143
+  72:	ec df       	rcall	.-40     	; 0x4c <WriteCMD>
+	#else
+		//round up by default
+		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
+	#endif
+
+	__builtin_avr_delay_cycles(__ticks_dc);
+  74:	2f e3       	ldi	r18, 0x3F	; 63
+  76:	8d e0       	ldi	r24, 0x0D	; 13
+  78:	93 e0       	ldi	r25, 0x03	; 3
+  7a:	21 50       	subi	r18, 0x01	; 1
+  7c:	80 40       	sbci	r24, 0x00	; 0
+  7e:	90 40       	sbci	r25, 0x00	; 0
+  80:	e1 f7       	brne	.-8      	; 0x7a <RFM02_init+0xc>
+  82:	00 c0       	rjmp	.+0      	; 0x84 <RFM02_init+0x16>
+  84:	00 00       	nop
+	_delay_ms(100);
+	WriteCMD(0x8000 | (RF_433MHz<<11) | (CLK10MHz<<8) | (0x0F<<4) | FreqDev210kHz);	
+  86:	86 ef       	ldi	r24, 0xF6	; 246
+  88:	9f e8       	ldi	r25, 0x8F	; 143
+  8a:	e0 df       	rcall	.-64     	; 0x4c <WriteCMD>
+  8c:	2f e3       	ldi	r18, 0x3F	; 63
+  8e:	8d e0       	ldi	r24, 0x0D	; 13
+  90:	93 e0       	ldi	r25, 0x03	; 3
+  92:	21 50       	subi	r18, 0x01	; 1
+  94:	80 40       	sbci	r24, 0x00	; 0
+  96:	90 40       	sbci	r25, 0x00	; 0
+  98:	e1 f7       	brne	.-8      	; 0x92 <RFM02_init+0x24>
+  9a:	00 c0       	rjmp	.+0      	; 0x9c <RFM02_init+0x2e>
+  9c:	00 00       	nop
+	_delay_ms(100);
+
+	/* Frequency Setting Command: Fcarrier = 439.00MHz */
+	Fcarr = Fc(439.00);
+	WriteCMD(0xA000|Fcarr);
+  9e:	80 e1       	ldi	r24, 0x10	; 16
+  a0:	9e ea       	ldi	r25, 0xAE	; 174
+  a2:	d4 df       	rcall	.-88     	; 0x4c <WriteCMD>
+	
+	/* PLL Setting Command */
+	WriteCMD(0xD282);
+  a4:	82 e8       	ldi	r24, 0x82	; 130
+  a6:	92 ed       	ldi	r25, 0xD2	; 210
+  a8:	d1 df       	rcall	.-94     	; 0x4c <WriteCMD>
+	
+	/* Data Rate Command: BR 114.943Kbps */
+	WriteCMD(0xC800|BR114_943kbs);	
+  aa:	82 e0       	ldi	r24, 0x02	; 2
+  ac:	98 ec       	ldi	r25, 0xC8	; 200
+  ae:	ce df       	rcall	.-100    	; 0x4c <WriteCMD>
+
+	/* Power Setting Command */
+	//WriteCMD(0xB0xx);
+
+	/* Low Battery Detector and Tx bit Synchronization Command */
+	WriteCMD(0xC2A0);	// ENABLE BIT SYNC ,dwc - set to "1".
+  b0:	80 ea       	ldi	r24, 0xA0	; 160
+  b2:	92 ec       	ldi	r25, 0xC2	; 194
+  b4:	cb df       	rcall	.-106    	; 0x4c <WriteCMD>
+  b6:	08 95       	ret
+
+000000b8 <Write_FSK_byte>:
+
+/**************************************
+Write FSK data
+**************************************/
+void Write_FSK_byte(uint8_t data)
+{
+  b8:	98 e0       	ldi	r25, 0x08	; 8
+	uint8_t n = 8;
+
+	while(n--)
+		{
+		while(nIRQ_PIN);	
+  ba:	ca 99       	sbic	0x19, 2	; 25
+  bc:	fe cf       	rjmp	.-4      	; 0xba <Write_FSK_byte+0x2>
+		while(!nIRQ_PIN);
+  be:	ca 9b       	sbis	0x19, 2	; 25
+  c0:	fe cf       	rjmp	.-4      	; 0xbe <Write_FSK_byte+0x6>
+
+		if(data&0x80)
+  c2:	88 23       	and	r24, r24
+  c4:	14 f4       	brge	.+4      	; 0xca <Write_FSK_byte+0x12>
+			SDI_HI;
+  c6:	df 9a       	sbi	0x1b, 7	; 27
+  c8:	01 c0       	rjmp	.+2      	; 0xcc <Write_FSK_byte+0x14>
+		else
+			SDI_LOW;
+  ca:	df 98       	cbi	0x1b, 7	; 27
+
+		data = data<<1;
+  cc:	88 0f       	add	r24, r24
+  ce:	91 50       	subi	r25, 0x01	; 1
+**************************************/
+void Write_FSK_byte(uint8_t data)
+{
+	uint8_t n = 8;
+
+	while(n--)
+  d0:	a1 f7       	brne	.-24     	; 0xba <Write_FSK_byte+0x2>
+		else
+			SDI_LOW;
+
+		data = data<<1;
+		}
+}
+  d2:	08 95       	ret
+
+000000d4 <Write_FSK_word>:
+
+/**************************************
+Write FSK data
+**************************************/
+void Write_FSK_word(uint16_t data)
+{
+  d4:	9c 01       	movw	r18, r24
+  d6:	9f e0       	ldi	r25, 0x0F	; 15
+	uint8_t n = 15;
+
+	while(n--)
+		{
+		while(nIRQ_PIN);	
+  d8:	ca 99       	sbic	0x19, 2	; 25
+  da:	fe cf       	rjmp	.-4      	; 0xd8 <Write_FSK_word+0x4>
+		while(!nIRQ_PIN);
+  dc:	ca 9b       	sbis	0x19, 2	; 25
+  de:	fe cf       	rjmp	.-4      	; 0xdc <Write_FSK_word+0x8>
+
+		if(data&0x8000)
+  e0:	33 23       	and	r19, r19
+  e2:	14 f4       	brge	.+4      	; 0xe8 <__stack+0x9>
+			SDI_HI;
+  e4:	df 9a       	sbi	0x1b, 7	; 27
+  e6:	01 c0       	rjmp	.+2      	; 0xea <__stack+0xb>
+		else
+			SDI_LOW;
+  e8:	df 98       	cbi	0x1b, 7	; 27
+
+		data = data<<1;
+  ea:	22 0f       	add	r18, r18
+  ec:	33 1f       	adc	r19, r19
+  ee:	91 50       	subi	r25, 0x01	; 1
+**************************************/
+void Write_FSK_word(uint16_t data)
+{
+	uint8_t n = 15;
+
+	while(n--)
+  f0:	99 f7       	brne	.-26     	; 0xd8 <Write_FSK_word+0x4>
+		else
+			SDI_LOW;
+
+		data = data<<1;
+		}
+}
+  f2:	08 95       	ret
+
+000000f4 <RMFM02_send>:
+
+/**************************************
+Send FSK data
+**************************************/
+void RMFM02_send(uint16_t data)
+{
+  f4:	cf 93       	push	r28
+  f6:	df 93       	push	r29
+  f8:	ec 01       	movw	r28, r24
+	uint8_t n = 8;
+	uint8_t CMD = 0xC6;
+
+	nSEL_LOW;
+  fa:	c1 98       	cbi	0x18, 1	; 24
+  fc:	28 e0       	ldi	r18, 0x08	; 8
+Send FSK data
+**************************************/
+void RMFM02_send(uint16_t data)
+{
+	uint8_t n = 8;
+	uint8_t CMD = 0xC6;
+  fe:	96 ec       	ldi	r25, 0xC6	; 198
+
+	nSEL_LOW;
+
+	while(n--)
+		{
+		SCK_LOW;
+ 100:	c2 98       	cbi	0x18, 2	; 24
+
+		if(CMD&0x80)
+ 102:	99 23       	and	r25, r25
+ 104:	14 f4       	brge	.+4      	; 0x10a <RMFM02_send+0x16>
+			SDI_HI;
+ 106:	df 9a       	sbi	0x1b, 7	; 27
+ 108:	01 c0       	rjmp	.+2      	; 0x10c <RMFM02_send+0x18>
+		else
+			SDI_LOW;
+ 10a:	df 98       	cbi	0x1b, 7	; 27
+
+		SCK_HI;	
+ 10c:	c2 9a       	sbi	0x18, 2	; 24
+			
+		CMD = CMD<<1;
+ 10e:	99 0f       	add	r25, r25
+ 110:	21 50       	subi	r18, 0x01	; 1
+	uint8_t n = 8;
+	uint8_t CMD = 0xC6;
+
+	nSEL_LOW;
+
+	while(n--)
+ 112:	b1 f7       	brne	.-20     	; 0x100 <RMFM02_send+0xc>
+		SCK_HI;	
+			
+		CMD = CMD<<1;
+		}
+
+	SCK_LOW;
+ 114:	c2 98       	cbi	0x18, 2	; 24
+
+	Write_FSK_byte(0xAA);	// Send Preamble
+ 116:	8a ea       	ldi	r24, 0xAA	; 170
+ 118:	cf df       	rcall	.-98     	; 0xb8 <Write_FSK_byte>
+	Write_FSK_byte(0xAA);	// Send Preamble
+ 11a:	8a ea       	ldi	r24, 0xAA	; 170
+ 11c:	cd df       	rcall	.-102    	; 0xb8 <Write_FSK_byte>
+	Write_FSK_byte(0xAA);	// Send Preamble
+ 11e:	8a ea       	ldi	r24, 0xAA	; 170
+ 120:	cb df       	rcall	.-106    	; 0xb8 <Write_FSK_byte>
+	Write_FSK_byte(0x2D);	// Send sync word
+ 122:	8d e2       	ldi	r24, 0x2D	; 45
+ 124:	c9 df       	rcall	.-110    	; 0xb8 <Write_FSK_byte>
+	Write_FSK_byte(0xD4);	// Send sync word	
+ 126:	84 ed       	ldi	r24, 0xD4	; 212
+ 128:	c7 df       	rcall	.-114    	; 0xb8 <Write_FSK_byte>
+	Write_FSK_word(data);	
+ 12a:	ce 01       	movw	r24, r28
+ 12c:	d3 df       	rcall	.-90     	; 0xd4 <Write_FSK_word>
+
+	nSEL_HI;
+ 12e:	c1 9a       	sbi	0x18, 1	; 24
+
+	while(nIRQ_PIN);		// wait until transfer done
+ 130:	ca 99       	sbic	0x19, 2	; 25
+ 132:	fe cf       	rjmp	.-4      	; 0x130 <RMFM02_send+0x3c>
+}
+ 134:	df 91       	pop	r29
+ 136:	cf 91       	pop	r28
+ 138:	08 95       	ret
+
+0000013a <Send_UG>:
+**************************************/
+void Send_UG(uint16_t n)
+{
+	uint8_t i=0;
+
+	TIFR1=0xFF;
+ 13a:	2f ef       	ldi	r18, 0xFF	; 255
+ 13c:	2b b9       	out	0x0b, r18	; 11
+	TCNT1=0;
+ 13e:	1d bc       	out	0x2d, r1	; 45
+ 140:	1c bc       	out	0x2c, r1	; 44
+	ICR1 = 124;		// Top(12.5us)
+ 142:	2c e7       	ldi	r18, 0x7C	; 124
+ 144:	30 e0       	ldi	r19, 0x00	; 0
+ 146:	35 bd       	out	0x25, r19	; 37
+ 148:	24 bd       	out	0x24, r18	; 36
+	OCR1A = 59;		// 6us
+ 14a:	2b e3       	ldi	r18, 0x3B	; 59
+ 14c:	30 e0       	ldi	r19, 0x00	; 0
+ 14e:	3b bd       	out	0x2b, r19	; 43
+ 150:	2a bd       	out	0x2a, r18	; 42
+	OCR1B = 64;		// 6.5us
+ 152:	20 e4       	ldi	r18, 0x40	; 64
+ 154:	30 e0       	ldi	r19, 0x00	; 0
+ 156:	39 bd       	out	0x29, r19	; 41
+ 158:	28 bd       	out	0x28, r18	; 40
+	TCCR1A = (1<<COM1A1) | (1<<COM1B1) | (1<<COM1B0);
+ 15a:	20 eb       	ldi	r18, 0xB0	; 176
+ 15c:	2f bd       	out	0x2f, r18	; 47
+	TCCR1B = (1<<WGM13);		// Fcpu/1, start Timer/Counter1.
+ 15e:	20 e1       	ldi	r18, 0x10	; 16
+ 160:	2e bd       	out	0x2e, r18	; 46
+	TCCR1B |= (1<<CS10) ;		
+ 162:	2e b5       	in	r18, 0x2e	; 46
+ 164:	21 60       	ori	r18, 0x01	; 1
+ 166:	2e bd       	out	0x2e, r18	; 46
+/**************************************
+Send Ug signals
+**************************************/
+void Send_UG(uint16_t n)
+{
+	uint8_t i=0;
+ 168:	40 e0       	ldi	r20, 0x00	; 0
+	OCR1B = 64;		// 6.5us
+	TCCR1A = (1<<COM1A1) | (1<<COM1B1) | (1<<COM1B0);
+	TCCR1B = (1<<WGM13);		// Fcpu/1, start Timer/Counter1.
+	TCCR1B |= (1<<CS10) ;		
+
+	while(i<=n)
+ 16a:	04 c0       	rjmp	.+8      	; 0x174 <Send_UG+0x3a>
+	{
+		if ((TIFR1&(1<<TOV1))==(1<<TOV1))
+ 16c:	58 9b       	sbis	0x0b, 0	; 11
+ 16e:	04 c0       	rjmp	.+8      	; 0x178 <Send_UG+0x3e>
+		{
+			TIFR1|=1<<TOV1;
+ 170:	58 9a       	sbi	0x0b, 0	; 11
+			i++;
+ 172:	4f 5f       	subi	r20, 0xFF	; 255
+	OCR1B = 64;		// 6.5us
+	TCCR1A = (1<<COM1A1) | (1<<COM1B1) | (1<<COM1B0);
+	TCCR1B = (1<<WGM13);		// Fcpu/1, start Timer/Counter1.
+	TCCR1B |= (1<<CS10) ;		
+
+	while(i<=n)
+ 174:	24 2f       	mov	r18, r20
+ 176:	30 e0       	ldi	r19, 0x00	; 0
+ 178:	82 17       	cp	r24, r18
+ 17a:	93 07       	cpc	r25, r19
+ 17c:	b8 f7       	brcc	.-18     	; 0x16c <Send_UG+0x32>
+		{
+			TIFR1|=1<<TOV1;
+			i++;
+		}
+	}
+	TCCR1B = 0;
+ 17e:	1e bc       	out	0x2e, r1	; 46
+	TCCR1A = 0;
+ 180:	1f bc       	out	0x2f, r1	; 47
+	PORTA &= ~(1<<PA5);
+ 182:	dd 98       	cbi	0x1b, 5	; 27
+ 184:	08 95       	ret
+
+00000186 <main>:
+ 186:	2f e3       	ldi	r18, 0x3F	; 63
+ 188:	8d e0       	ldi	r24, 0x0D	; 13
+ 18a:	93 e0       	ldi	r25, 0x03	; 3
+ 18c:	21 50       	subi	r18, 0x01	; 1
+ 18e:	80 40       	sbci	r24, 0x00	; 0
+ 190:	90 40       	sbci	r25, 0x00	; 0
+ 192:	e1 f7       	brne	.-8      	; 0x18c <main+0x6>
+ 194:	00 c0       	rjmp	.+0      	; 0x196 <main+0x10>
+ 196:	00 00       	nop
+int main(void)
+{
+	/* Wait for Vcc stabilize */
+	_delay_ms(100);
+
+	PORTS_int();
+ 198:	4b df       	rcall	.-362    	; 0x30 <PORTS_int>
+	RFM02_init();
+ 19a:	69 df       	rcall	.-302    	; 0x6e <RFM02_init>
+ 19c:	2f e7       	ldi	r18, 0x7F	; 127
+ 19e:	84 e8       	ldi	r24, 0x84	; 132
+ 1a0:	9e e1       	ldi	r25, 0x1E	; 30
+ 1a2:	21 50       	subi	r18, 0x01	; 1
+ 1a4:	80 40       	sbci	r24, 0x00	; 0
+ 1a6:	90 40       	sbci	r25, 0x00	; 0
+ 1a8:	e1 f7       	brne	.-8      	; 0x1a2 <main+0x1c>
+ 1aa:	00 c0       	rjmp	.+0      	; 0x1ac <main+0x26>
+ 1ac:	00 00       	nop
+
+	while(1)
+	{
+		_delay_ms(PRF);
+
+		RF_TXmode;
+ 1ae:	88 e3       	ldi	r24, 0x38	; 56
+ 1b0:	90 ec       	ldi	r25, 0xC0	; 192
+ 1b2:	4c df       	rcall	.-360    	; 0x4c <WriteCMD>
+	#else
+		//round up by default
+		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
+	#endif
+
+	__builtin_avr_delay_cycles(__ticks_dc);
+ 1b4:	81 ee       	ldi	r24, 0xE1	; 225
+ 1b6:	94 e0       	ldi	r25, 0x04	; 4
+ 1b8:	01 97       	sbiw	r24, 0x01	; 1
+ 1ba:	f1 f7       	brne	.-4      	; 0x1b8 <main+0x32>
+ 1bc:	00 c0       	rjmp	.+0      	; 0x1be <main+0x38>
+ 1be:	00 00       	nop
+		_delay_us(500);
+
+		LED1_ON;
+ 1c0:	d8 98       	cbi	0x1b, 0	; 27
+		LED2_ON;
+ 1c2:	d9 98       	cbi	0x1b, 1	; 27
+
+		RMFM02_send(RF_StartCode);
+ 1c4:	84 e5       	ldi	r24, 0x54	; 84
+ 1c6:	94 e1       	ldi	r25, 0x14	; 20
+ 1c8:	95 df       	rcall	.-214    	; 0xf4 <RMFM02_send>
+		Send_UG(20);
+ 1ca:	84 e1       	ldi	r24, 0x14	; 20
+ 1cc:	90 e0       	ldi	r25, 0x00	; 0
+ 1ce:	b5 df       	rcall	.-150    	; 0x13a <Send_UG>
+ 1d0:	81 ee       	ldi	r24, 0xE1	; 225
+ 1d2:	94 e0       	ldi	r25, 0x04	; 4
+ 1d4:	01 97       	sbiw	r24, 0x01	; 1
+ 1d6:	f1 f7       	brne	.-4      	; 0x1d4 <main+0x4e>
+ 1d8:	00 c0       	rjmp	.+0      	; 0x1da <main+0x54>
+ 1da:	00 00       	nop
+
+		_delay_us(500);
+		RF_Iddle;
+ 1dc:	80 e2       	ldi	r24, 0x20	; 32
+ 1de:	90 ec       	ldi	r25, 0xC0	; 192
+ 1e0:	35 df       	rcall	.-406    	; 0x4c <WriteCMD>
+
+		LED1_OFF;
+ 1e2:	d8 9a       	sbi	0x1b, 0	; 27
+		LED2_OFF;
+ 1e4:	d9 9a       	sbi	0x1b, 1	; 27
+	}
+ 1e6:	da cf       	rjmp	.-76     	; 0x19c <main+0x16>
+
+000001e8 <_exit>:
+ 1e8:	f8 94       	cli
+
+000001ea <__stop_program>:
+ 1ea:	ff cf       	rjmp	.-2      	; 0x1ea <__stop_program>
