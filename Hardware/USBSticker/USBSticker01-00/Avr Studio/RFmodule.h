@@ -3,17 +3,14 @@
 #ifndef __RFMODULE_H
 #define __RFMODULE_H
 
-
-/***************************************************************************
-Definitions
-***************************************************************************/
-#define RF_StartCode	0x1454
+/* Definitions ************************************************************/
+#define StartCode		0x1454
 
 #define Fc(freq)		(uint16_t)((freq - 430)*400)
 
 #define RF_RXmode 		WriteCMD(0xC0C1)	// VDI always on, LNA gain 0dBm, -103dBm, RX on
 #define RF_Iddle		WriteCMD(0xC0C0)	// RX off
-#define RF_FIFORecog	WriteCMD(0xCEF4);WriteCMD(0xCEF7);	// FIFO int: 16bits, Sync-word; Enable FIFO fill,
+#define RF_FIFORecog	WriteCMD(0xCEF4);WriteCMD(0xCEF7);	// FIFO int: 8bits, Sync-word Enable FIFO fill,
 
 typedef enum 
 {
@@ -58,12 +55,9 @@ typedef enum
 } RF_BaudRate;
 
 
-/***************************************************************************
-Functions prototypes
-***************************************************************************/
-void RFM01_init(void);
+/* Functions prototypes ****************************************************/
+void RF01_init(void);
+uint16_t RF01_ReadFIFO(void);
 void WriteCMD(uint16_t CMD);
-uint16_t RMFM12_ReadFIFO(void);
-
 
 #endif

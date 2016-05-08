@@ -4,10 +4,15 @@
 #define __MAIN_H
 
 
+/* Definitions ************************************************************/
+#define StartCode		0x1454
+#define	RFTransmit_us	1000
+#define RefPointNr 		0		// range: 0-7
+
 #define RF_TXmode 		WriteCMD(0x8238)	// Enable transmitter; Enable synthesizer; Enable crystal oscillator
 #define RF_RXmode		WriteCMD(0x82D8)	// Enable receiver; er, ebb, es, ex, dc - set to "1"
 #define RF_Iddle		WriteCMD(0x8208)	// RX and TX off
-#define RF_FIFORecog	WriteCMD(0xCAF0);WriteCMD(0xCAF3);	// FIFO int: 16bits, Sync-word; Enable FIFO fill,
+#define RF_FIFORecog	WriteCMD(0xCAF1);WriteCMD(0xCAF3);	// FIFO int: 8bits, Sync-word; Enable FIFO fill,
 
 
 #define SDI 			PA6	// SDI 	-> 	RFM12 12
@@ -32,6 +37,20 @@
 
 #define PW0268_OFF		PORTB &= ~(1<<PB2)
 #define PW0268_ON		PORTB |= (1<<PB2)
+
+#define Fc(freq)		(uint16_t)((freq - 430)*400)
+
+
+/* Functions prototypes ****************************************************/
+void PORTS_init(void);
+void Timer1_init(void);
+void BlinkNumber(uint8_t RefNr);
+void RF12_init(void);
+uint16_t RF12_ReadFIFO(void);
+void RF12_Send(uint16_t Data);
+void WriteCMD(uint16_t CMD);
+void Write_FSK_byte(uint8_t data);
+uint8_t GetParity(uint16_t x);
 
 
 typedef enum 
@@ -77,8 +96,17 @@ typedef enum
   BR31_348kbs	= 0x0A
 } RF_BaudRate;
 
-
-/* 433band: Fc=430+F*0.0025 MHz */
-#define Fc(freq)		(uint16_t)((freq - 430)*400)
+typedef enum 
+{
+  P_0dBm	= 0x00,
+  P_m3dBm	= 0x01,
+  P_m6dBm	= 0x02,
+  P_m9dBm	= 0x03,
+  P_m12dBm	= 0x04,
+  P_m15dBm	= 0x05,
+  P_m18dBm	= 0x06,
+  P_m21dBm	= 0x07,
+  P_m24dBm	= 0x08,
+} RF_Pout;
 
 #endif

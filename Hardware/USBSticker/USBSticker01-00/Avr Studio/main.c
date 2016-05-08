@@ -18,10 +18,15 @@ int main(void)
    	wdtdrv_disable();
    	start_boot_if_required();
    	boot_key=0;
+
   	//Clear_prescaler();
+   //U8 save_int=Get_interrupt_state();
+   Disable_interrupt();
+   CLKPR=(1<<CLKPCE);
+   CLKPR=0;
+   //if(save_int) { Enable_interrupt();
 
    	scheduler();
-
    	return 0;
 }
 

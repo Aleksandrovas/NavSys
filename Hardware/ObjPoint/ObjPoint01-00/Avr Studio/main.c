@@ -6,47 +6,29 @@
 #include "main.h"
 
 
-/***************************************************************************
-Definitions
-***************************************************************************/
-#define RF_StartCode	0x1454
-#define PRF				100		// xx ms
-
-
-/***************************************************************************
-Functions prototypes
-***************************************************************************/
-void RFM02_init(void);
-void Send_UG(uint16_t n);
-void RMFM02_send(uint16_t data);
-void Write_FSK_word(uint16_t data);
-void Write_FSK_byte(uint8_t data);
-void WriteCMD(uint16_t CMD);
-void PORTS_int(void);
-
-
 int main(void)
 {
 	/* Wait for Vcc stabilize */
 	_delay_ms(100);
 
-	PORTS_int();
-	RFM02_init();
+	/* Initialize Peripheral */
+	PORTS_init();
+	RF02_init();
 
 	while(1)
 	{
-		_delay_ms(PRF);
+		_delay_ms(PRF_ms);
 
 		RF_TXmode;
-		_delay_us(500);
+		_delay_us(300);
 
 		LED1_ON;
 		LED2_ON;
 
-		RMFM02_send(RF_StartCode);
+		RF02_Send(StartCode);
 		Send_UG(20);
 
-		_delay_us(500);
+		_delay_us(300);
 		RF_Iddle;
 
 		LED1_OFF;
@@ -65,40 +47,40 @@ Functions
 
 
 /***************************************************************************
-RFM02_init - RFM02 initialize
+RF02_init - RFM02 initialize
 ***************************************************************************/
-void RFM02_init(void)
+void RF02_init(void)
 {
 	uint16_t Fcarr;
 
 	/* Configuration Setting Command: 433MHz band, +/-210kHz, CLK 10MHz, 16pF	*/
-	WriteCMD(0x8000 | (RF_433MHz<<11) | (CLK10MHz<<8) | (0x0F<<4) | FreqDev210kHz);	
+	WriteCMD16b(0x8000 | (RF_433MHz<<11) | (CLK10MHz<<8) | (0x0F<<4) | FreqDev210kHz);	
 	_delay_ms(100);
-	WriteCMD(0x8000 | (RF_433MHz<<11) | (CLK10MHz<<8) | (0x0F<<4) | FreqDev210kHz);	
+	WriteCMD16b(0x8000 | (RF_433MHz<<11) | (CLK10MHz<<8) | (0x0F<<4) | FreqDev210kHz);	
 	_delay_ms(100);
 
 	/* Frequency Setting Command: Fcarrier = 439.00MHz */
-	Fcarr = Fc(439.00);
-	WriteCMD(0xA000|Fcarr);
+	Fcarr = Fc(432.00);
+	WriteCMD16b(0xA000|Fcarr);
 	
 	/* PLL Setting Command */
-	WriteCMD(0xD282);
+	WriteCMD16b(0xD282);
 	
 	/* Data Rate Command: BR 114.943Kbps */
-	WriteCMD(0xC800|BR114_943kbs);	
-
-	/* Power Setting Command */
-	//WriteCMD(0xB0xx);
+	WriteCMD16b(0xC800|BR114_943kbs);
 
 	/* Low Battery Detector and Tx bit Synchronization Command */
-	WriteCMD(0xC2A0);	// ENABLE BIT SYNC ,dwc - set to "1".
+	WriteCMD16b(0xC2A0);	// ENABLE BIT SYNC ,dwc - set to "1"
+
+	/* Power Setting Command */
+	WriteCMD8b(0xB0|P_0dBm);
 }
 
 
 /***********************************
 PORTS initialize
 ***********************************/
-void PORTS_int(void)
+void PORTS_init(void)
 {
 	/* Configure RF module pins */
 	PORTB |= (1<<nSEL);
@@ -117,9 +99,9 @@ void PORTS_int(void)
 
 
 /************************************
-Write command
+Write 16 bit command
 *************************************/
-void WriteCMD(uint16_t CMD)
+void WriteCMD16b(uint16_t CMD)
 {
 	uint8_t n = 16;
 
@@ -131,7 +113,34 @@ void WriteCMD(uint16_t CMD)
 
 		if(CMD&0x8000)
 			SDI_HI;
+		else
+			SDI_LOW;
 
+		SCK_HI;	
+			
+		CMD = CMD<<1;
+		}
+
+	SCK_LOW;
+	nSEL_HI;
+}
+
+
+/************************************
+Write 8 bit command
+*************************************/
+void WriteCMD8b(uint8_t CMD)
+{
+	uint8_t n = 8;
+
+	nSEL_LOW;
+	
+	while(n--)
+		{
+		SCK_LOW;
+
+		if(CMD&0x80)
+			SDI_HI;
 		else
 			SDI_LOW;
 
@@ -148,7 +157,7 @@ void WriteCMD(uint16_t CMD)
 /**************************************
 Write FSK data
 **************************************/
-void Write_FSK_byte(uint8_t data)
+void WriteFSKdata(uint8_t data)
 {
 	uint8_t n = 8;
 
@@ -168,37 +177,20 @@ void Write_FSK_byte(uint8_t data)
 
 
 /**************************************
-Write FSK data
+Send data
 **************************************/
-void Write_FSK_word(uint16_t data)
+void RF02_Send(uint16_t Data)
 {
-	uint8_t n = 15;
-
-	while(n--)
-		{
-		while(nIRQ_PIN);	
-		while(!nIRQ_PIN);
-
-		if(data&0x8000)
-			SDI_HI;
-		else
-			SDI_LOW;
-
-		data = data<<1;
-		}
-}
-
-
-/**************************************
-Send FSK data
-**************************************/
-void RMFM02_send(uint16_t data)
-{
+	uint8_t parity;
 	uint8_t n = 8;
 	uint8_t CMD = 0xC6;
 
+	parity = GetParity(Data)&0x01;
+	Data = Data | (parity<<15);
+
 	nSEL_LOW;
 
+	/* Send 8bit Data Transmit Command */
 	while(n--)
 		{
 		SCK_LOW;
@@ -212,19 +204,22 @@ void RMFM02_send(uint16_t data)
 			
 		CMD = CMD<<1;
 		}
-
 	SCK_LOW;
 
-	Write_FSK_byte(0xAA);	// Send Preamble
-	Write_FSK_byte(0xAA);	// Send Preamble
-	Write_FSK_byte(0xAA);	// Send Preamble
-	Write_FSK_byte(0x2D);	// Send sync word
-	Write_FSK_byte(0xD4);	// Send sync word	
-	Write_FSK_word(data);	
+	/* Send Preamble and Send sync word */
+	WriteFSKdata(0xAA);	// Send Preamble
+	WriteFSKdata(0xAA);	// Send Preamble
+	WriteFSKdata(0xAA);	// Send Preamble
+	WriteFSKdata(0x2D);	// Send sync word
+	WriteFSKdata(0xD4);	// Send sync word
 
+	/* Send Data + ObjNr + Parity */
+	WriteFSKdata(Data>>8);
+	WriteFSKdata(Data&0xFF);
+	
+	while(nIRQ_PIN);	// wait until transfer done
+	
 	nSEL_HI;
-
-	while(nIRQ_PIN);		// wait until transfer done
 }
 
 
@@ -256,4 +251,17 @@ void Send_UG(uint16_t n)
 	TCCR1B = 0;
 	TCCR1A = 0;
 	PORTA &= ~(1<<PA5);
+}
+
+
+uint8_t GetParity(uint16_t x) 
+{
+	uint8_t parity=0;
+    
+	while (x > 0) 
+	{
+       parity = (parity + (x & 1)) % 2;
+       x >>= 1;
+    }
+	return parity;
 }

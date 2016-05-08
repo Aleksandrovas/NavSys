@@ -98,7 +98,7 @@ void disconnect()
 //---------------------------------------
 unsigned char test_alive()
 {
-	unsigned char buf[64];
+	unsigned char buf[3];
 	int k=0;
 	buf[0]=254;
 	writeData(buf);

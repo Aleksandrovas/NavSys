@@ -6,113 +6,108 @@
 #include "main.h"
 
 
-/***************************************************************************
-Definitions
-***************************************************************************/
-#define RF_StartCode	0x1454
-#define RefPointNr 		6		// range: 0-7
-#define	RFTransmit_us	600
-
-
-/***************************************************************************
-Functions prototypes
-***************************************************************************/
-void PORTS_int(void);
-void WriteCMD(unsigned int CMD);
-uint16_t RMFM12_readFIFO(void);
-void RFM12_init(void);
-void RFTransmit_packet(uint8_t RefNr, uint16_t Value);
-void RMFM12_send(uint16_t data);
-void Write_FSK_byte(uint8_t data);
-void BlinkNumber(uint8_t RefNr);
-void Timer1_int(void);
-
-
-/***************************************************************************
-Global variables
-***************************************************************************/
-volatile uint16_t laikas;
-
-
 int main(void)
 {
-	uint8_t TimeOutFlag;
+	volatile uint16_t ToF;
+	uint16_t temp;
+	volatile uint8_t TimeOutFlag;
+	uint8_t parity;
 
 	/* Wait for Vcc stabilize */
 	_delay_ms(100);
 
-	PORTS_int();
-	RFM12_init();
-	Timer1_int();
+	PORTS_init();
+	RF12_init();
+	Timer1_init();
 	BlinkNumber(RefPointNr);
 
 	RF_FIFORecog;
 	RF_RXmode;
+	RF12_ReadFIFO();
+
+PW0268_ON;
 
 	while(1)
 	{
-		/* Wait for interrupt from RFM12 (received Data) */
+		/* Wait for interrupt from RF (received Data) */
 		if(!nIRQ_PIN)	
 		{
 			/* Start 16bit Timer1 immediately for ToF measurements */
 			TCCR1B=1<<CS11;		// clk div 8, start (tres=0.8us, tmax=52,43ms, Lres=0,27mm, Lmax=17,83m c=340m/s)
 
-			/* Check received data */
-			if(RMFM12_readFIFO() == RF_StartCode)
+			temp = RF12_ReadFIFO();
+			parity = temp>>15;
+			temp = temp&0x7FFF;
+
+			/* Check received data */		
+			if ( (GetParity(temp) == parity) && (temp > 0) )
 			{
-				/* Turn ON PW0268 */
-				PW0268_ON;
-				_delay_us(300);
+				/* Start Timout Timer and clear Data Buffer */
+				if(temp == StartCode)
+				{
+				LED1_ON;
+
+					/* Turn ON PW0268 */
+					//PW0268_ON;
+					//_delay_us(300);
 				
-				/* RF Transmitter/Receiver modes OFF to save power */
-				RF_Iddle;
+					/* RF Transmitter/Receiver modes OFF to save power */
+					//RF_Iddle;
 
-	    		/* Send start signal to front-end (PW0268) */	   	   		    
-			    DDRA |= (1<<PA0);	// Configure PA0 as Output
-				PORTA &= ~(1<<PA0);	// Clear PA0
-				_delay_us(50);	
-				PORTA |= (1<<PA0);	// Set PA0
-				DDRA &= ~(1<<PA0);	// Configure PA0 as Input
+		    		/* Send start signal to front-end (PW0268) */	   	   		    
+				    DDRA |= (1<<PA0);	// Configure PA0 as Output
+					PORTA &= ~(1<<PA0);	// Clear PA0
+					_delay_us(1000);	
+					PORTA |= (1<<PA0);	// Set PA0
+					DDRA &= ~(1<<PA0);	// Configure PA0 as Input
 			
-				LED1_ON;			// RF received
+					//LED1_ON;			// RF received
 
-				/* Wait for UG signal */
-				TimeOutFlag=0;
-				while(PINA&(1<<PA0))
-				{
-					if (TIFR1&(1<<TOV1))	// Check for Overflow Flag
+					/* Wait for UG signal */
+					TimeOutFlag = 0;
+					while(PINA&(1<<PA0))
 					{
-						TimeOutFlag = 1;
-						break;
+						if (TIFR1&(1<<TOV1))	// Check for Overflow Flag
+						{
+							TimeOutFlag = 1;
+							break;
+						}
 					}
-				}
-				laikas=TCNT1/8;	// reduce bits number to 13bits (tres2=6.4us, Lres2=2.18mm)
+					ToF = TCNT1/16;
 								
-				/* Turn OFF PW0268 */
-				PW0268_OFF;
+					/* Turn OFF PW0268 */
+					//PW0268_OFF;
 
-				/* Check TimeOutFlag */
-				if (!TimeOutFlag)
-				{
-					LED2_ON;		// UG signal received
+					/* Check TimeOutFlag */
+					if (!TimeOutFlag)
+					{
+						LED2_ON;		// UG signal received
 					
-					/* Wait for Timer1 Overflow Flag to ensure all RefPoints already received UG signal */
-					while( !(TIFR1&(1<<TOV1)) );
+						/* Wait for Timer1 Overflow Flag to ensure all RefPoints already received UG signal */
+						if (!TimeOutFlag)
+							{
+								while( !(TIFR1&(1<<TOV1)) );
+							}
 
-					/* Send ToF to Host */
-					_delay_us(RFTransmit_us*RefPointNr);
-					RFTransmit_packet(RefPointNr,laikas);
+						/* Send ToF to Host */
+						_delay_us(RFTransmit_us*RefPointNr);
+						RF_TXmode;
+						_delay_us(300);
+						RF12_Send(ToF);
+						LED1_ON;
+						_delay_us(100);
+						RF_Iddle;
+					}
+		  			LED1_OFF;
+		 			LED2_OFF;
 				}
-	  			LED1_OFF;
-	 			LED2_OFF;
 			}
-
-		/* Restart Timer1 Configuration */
-		Timer1_int();
-
-		/* Restart the synchrony pattern recognition */
-		RF_FIFORecog;
-		RF_RXmode;		
+			/* Restart the synchrony pattern recognition */
+			RF_FIFORecog;
+			RF_RXmode;
+					
+			/* Restart Timer1 Configuration */
+			Timer1_init();		
 		}
 
 	}	// while
@@ -128,10 +123,29 @@ Functions
 ***************************************************************************/
 
 
+void PrepareRFpacket(uint8_t* RFpacket, uint16_t Data, uint8_t RefNr)
+{
+	uint8_t MSB;
+	uint8_t LSB;
+	uint8_t ChkSum;
+	
+	RefNr = RefNr&0x0F;	// max number of Ref points is 16
+	MSB = Data>>8;
+	LSB = Data&0xFF;
+	ChkSum = MSB + LSB + RefNr;
+	ChkSum = ChkSum&0x0F;		// use only 4 LSB bits of checksum
+
+	/* Check sum just 4 bits */
+	RFpacket[0] = (ChkSum<<4) | RefNr;
+	RFpacket[1] = Data>>8;
+	RFpacket[2] = Data&0xFF;
+}
+
+
 /***************************************************************************
 RFM12_init - RFM12 initialize
 ***************************************************************************/
-void RFM12_init(void)
+void RF12_init(void)
 {
 	uint16_t Fcarr;
 
@@ -144,8 +158,8 @@ void RFM12_init(void)
 	/* Configuration Setting Command  */
 	WriteCMD(0x80DF);	// 433MHz Band; Enable TX registere; Enable RX FIFO buffer, 16pF
 	
-	/* Frequency Setting Command: F carrier = 439.00MHz */
-	Fcarr = Fc(439.00);
+	/* Frequency Setting Command: F carrier = 432.00MHz */
+	Fcarr = Fc(432.00);
 	WriteCMD(0xA000|Fcarr);
 
 	/* Data Rate Command: 114.943kbps */
@@ -158,13 +172,13 @@ void RFM12_init(void)
 	WriteCMD(0xC2AC);	// Auto-lock; Digital filter;
 	
 	/* FIFO and Reset Mode Command */
-	WriteCMD(0xCAF3);	// FIFO interrupt level: 16bits; FIFO fill start condition: Sync-word; Enable FIFO fill; dr - set to "1"
+	WriteCMD(0xCA73);	// FIFO interrupt level: 7bits; FIFO fill start condition: Sync-word; Enable FIFO fill; dr - set to "1"
 	
 	/* AFC Command */
 	WriteCMD(0xC49B);	// AFC setting: Keep offset when VDI hi; select range limit +15/-16; Enable AFC funcition; st,oe - set to "1"
 	
 	/* TX Configuration Control Command */
-	WriteCMD(0x98D0);	// 210kHz deviation; MAX OUT
+	WriteCMD(0x98D0|P_m6dBm);	// 210kHz deviation; MAX OUT
 
 	/* Power Management Command */
 	RF_Iddle;
@@ -172,29 +186,9 @@ void RFM12_init(void)
 
 
 /***************************************************************************
-RFTransmit_packet - Transmit data to RF
+Timer1_init - restart Timer1
 ***************************************************************************/
-void RFTransmit_packet(uint8_t RefNr, uint16_t Value)
-{
-	uint16_t packet=0;
-
-	/* Prepare 16bit packet */
-	packet|=(RefNr&0x07)<<13;	// RefNr 3 bits
-	packet|=(Value&0x1FFF);		// Value 13 bits
-	
-	/* Send 16bit packet */
-	RF_TXmode;
-	_delay_us(100);
-	RMFM12_send(packet);
-	_delay_us(500);
-	RF_Iddle;
-}
-
-
-/***************************************************************************
-Timer1_int - restart Timer1
-***************************************************************************/
-void Timer1_int(void)
+void Timer1_init(void)
 {
 	/* Reset 16bit Timer1 for ToF measurements */
 	TCCR1B=0;			// Stop Timer/Counter1
@@ -207,7 +201,7 @@ void Timer1_int(void)
 /***************************************************************************
 PORTS_int - PORTS initialize
 ***************************************************************************/
-void PORTS_int(void)
+void PORTS_init(void)
 {
 	/* Configure PW0268 Pin */
 	PORTB &= ~(1<<PB2);	
@@ -226,14 +220,13 @@ void PORTS_int(void)
 }
 
 
-/***************************************************************************
-WriteCMD - Write command
-***************************************************************************/
-void WriteCMD(unsigned int CMD)
+/************************************
+Write 16 bit command
+*************************************/
+void WriteCMD(uint16_t CMD)
 {
 	uint8_t n = 16;
 
-	SCK_LOW;
 	nSEL_LOW;
 	
 	while(n--)
@@ -247,7 +240,7 @@ void WriteCMD(unsigned int CMD)
 
 		SCK_HI;	
 			
-		CMD=CMD<<1;
+		CMD = CMD<<1;
 		}
 
 	SCK_LOW;
@@ -284,25 +277,33 @@ void Write_FSK_byte(uint8_t data)
 
 
 /***************************************************************************
-RMFM12_send - Send FSK data 
+RF12_Send - Send data 
 ***************************************************************************/
-void RMFM12_send(uint16_t data)
+void RF12_Send(uint16_t Data)
 {
-	/* RF packet [0xAA 0xAA 0xAA 0x2D 0xD4 Data_MSB Data_LSB] */
+	uint8_t parity;
+
+	Data = Data | (RefPointNr<<12);
+	parity = GetParity(Data)&0x01;
+	Data = Data | (parity<<15);
+
+	/* Send Preamble and Send sync word */
 	Write_FSK_byte(0xAA);		// Send Preamble
 	Write_FSK_byte(0xAA);		// Send Preamble
 	Write_FSK_byte(0xAA);		// Send Preamble
 	Write_FSK_byte(0x2D);		// Send sync word
 	Write_FSK_byte(0xD4);		// Send sync word
-	Write_FSK_byte(data>>8);	// Send Data
-	Write_FSK_byte(data&0xFF);	// Send Data
+
+	/* Send Data */
+	Write_FSK_byte(Data>>8);
+	Write_FSK_byte(Data&0xFF);
 }
 
 
 /***************************************************************************
-RMFM12_readFIFO - Read FIFO
+RF12_ReadFIFO - Read FIFO
 ***************************************************************************/
-uint16_t RMFM12_readFIFO(void)
+uint16_t RF12_ReadFIFO(void)
 {
 	uint16_t Result=0;
 
@@ -358,3 +359,15 @@ void BlinkNumber(uint8_t RefNr)
 	LED2_OFF;
 }
 
+
+uint8_t GetParity(uint16_t x) 
+{
+	uint8_t parity=0;
+    
+	while (x > 0) 
+	{
+       parity = (parity + (x & 1)) % 2;
+       x >>= 1;
+    }
+	return parity;
+}

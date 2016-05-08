@@ -4,9 +4,13 @@
 #define __MAIN_H
 
 
-#define RF_TXmode 		WriteCMD(0xC038);	// Enable transmitter; Enable synthesizer; Enable crystal oscillator
-#define RF_Iddle		WriteCMD(0xC020);	// RX and TX off
-#define RF_Sleep		WriteCMD(0xC40A);	
+/* Definitions ************************************************************/
+#define StartCode		0x1454
+#define PRF_ms			2000
+
+#define RF_TXmode 		WriteCMD16b(0xC038);	// Enable transmitter; Enable synthesizer; Enable crystal oscillator
+#define RF_Iddle		WriteCMD16b(0xC020);	// RX and TX off
+#define RF_Sleep		WriteCMD16b(0xC40A);	
 
 #define nIRQ 			PA2		// nIRQ <- 	RFM02 02
 #define SDI 			PA7		// SDI 	-> 	RFM02 12
@@ -26,6 +30,19 @@
 #define LED2_ON			PORTA &= ~(1<<PA1)
 #define LED2_OFF		PORTA |= (1<<PA1)
 
+#define Fc(freq)		(uint16_t)((freq - 430)*400)
+
+
+/* Functions prototypes ****************************************************/
+void PORTS_init(void);
+void RF02_init(void);
+void Send_UG(uint16_t n);
+void PrepareRFpacket(uint8_t* RFpacket, uint16_t Data, uint8_t RefNr);
+void RF02_Send(uint16_t Data);
+void WriteFSKdata(uint8_t data);
+void WriteCMD16b(uint16_t CMD);
+void WriteCMD8b(uint8_t CMD);
+uint8_t GetParity(uint16_t x);
 
 typedef enum 
 {
@@ -71,7 +88,18 @@ typedef enum
 } RF_BaudRate;
 
 
-/* 433band: Fc=430+F*0.0025 MHz */
-#define Fc(freq)		(uint16_t)((freq - 430)*400)
+typedef enum 
+{
+  P_0dBm	= 0x00,
+  P_m3dBm	= 0x01,
+  P_m6dBm	= 0x02,
+  P_m9dBm	= 0x03,
+  P_m12dBm	= 0x04,
+  P_m15dBm	= 0x05,
+  P_m18dBm	= 0x06,
+  P_m21dBm	= 0x07,
+  P_m24dBm	= 0x08,
+} RF_Pout;
+
 
 #endif

@@ -49,10 +49,11 @@
 #include "usb_specific_request.h"
 #include "lib_mcu/util/start_boot.h"
 
+#include <avr/io.h>
 #include "spi_drv.h"
 #include "RFmodule.h"
 #include "main.h"
-
+#include <avr/interrupt.h>
 
 //_____ M A C R O S ________________________________________________________
 
@@ -63,12 +64,8 @@
 //_____ D E C L A R A T I O N S ____________________________________________
 U8 buferis[64];
 const U8 alive[4]="\1\254\2\253";
-
 extern U8 jump_bootloader;
-uint8_t DataFifo[4];
 
-void hid_report_out(void);
-void hid_report_in(void);
 bool USB_Send(U8 *buff,unsigned char len);
 bool USB_Read(U8 *buff,unsigned char len);
 
@@ -77,6 +74,13 @@ void UI_task(void);
 void DATA_RECEIVED(void);
 bool USB_Read(U8 *buff,unsigned char len);
 bool USB_Send(U8 *buff,unsigned char len);
+
+uint8_t GetParity(uint16_t x) ;
+void Timer1_init(void);
+volatile uint8_t SendDataFlag=0;
+volatile uint8_t StartLogFlag=0;
+uint8_t ToFData[64];;
+
 //--------------------------------------------------------------------------
 
 
@@ -91,10 +95,11 @@ void hid_task_init(void)
 	DDRB&=~(1<<nIRQ);
 
 	Init_SPI();
-	RFM01_init();
+	RF01_init();
 	RF_FIFORecog;
 	RF_RXmode;
-	DataFifo[0]=0;
+	RF01_ReadFIFO();
+	sei();
 }
 
 
@@ -116,31 +121,58 @@ void hid_task(void)
 void UI_task(void)
 {
 	uint16_t temp;
+	uint16_t ToF;
+	uint8_t parity;
+	uint8_t RefNr;
+	uint8_t i;
+	uint8_t indx;
 
-	// Check for interupt from RFM12 (received Data)
+	/* Wait for interrupt from RF (received Data) */
 	if(!nIRQ_PIN)	
 	{
-		temp = RMFM12_ReadFIFO();
-			
-		// Check for StartCode
-		if(temp == RF_StartCode)
-		{
-			LED1_ON;
-		}
-		else
-		{
-			LED2_ON;
-			DataFifo[0] = ~DataFifo[0];
-			DataFifo[1] = temp>>8;
-			DataFifo[2] = temp&0xFF;
+		temp = RF01_ReadFIFO();
+		parity = temp>>15;
+		temp = temp&0x7FFF;
 
-			if(Is_device_enumerated())  
-				USB_Send(DataFifo,4);
+		/* Check received data */		
+		if ( (GetParity(temp) == parity) && (temp > 0) )
+		{
+			/* Start Timout Timer and clear Data Buffer */
+			if(temp == StartCode)
+			{	
+				LED2_ON;
+				SendDataFlag = 0;
+				StartLogFlag = 0;
+				Timer1_init();
+				for (i=0;i<64;i++)
+					ToFData[i]=0;
+			}
+			/* Store Data to Buffer */
+			else if (StartLogFlag)
+			{
+				LED1_ON;
+				RefNr = (temp>>12)&0x07;
+				ToF = temp&0x0FFF;
+				indx = RefNr*2;
+				ToFData[indx] = ToF>>8;
+				ToFData[indx+1] = ToF&0xFF;
+			}
 		}
+		//while(!nIRQ_PIN);
+
 		RF_FIFORecog;
 		LED1_OFF;
 		LED2_OFF;
 	}
+
+	if (SendDataFlag)
+	{	
+		if(Is_device_enumerated())  
+			USB_Send(ToFData,64);
+		SendDataFlag = 0;
+		StartLogFlag = 0;
+	}
+
 }
 
 
@@ -198,3 +230,48 @@ bool USB_Send(U8 *buff,unsigned char len)
    Usb_ack_in_ready();                     	// Send data over the USB                     // Send data over the USB
    return true;
 }
+
+
+uint8_t GetParity(uint16_t x) 
+{
+	uint8_t parity=0;
+    
+	while (x > 0) 
+	{
+       parity = (parity + (x & 1)) % 2;
+       x >>= 1;
+    }
+	return parity;
+}
+
+
+/***************************************************************************
+Timer1_init - restart Timer1
+***************************************************************************/
+void Timer1_init(void)
+{
+	/* Reset 16bit Timer1 for ToF measurements */
+	TCCR1B=0;			// Stop Timer/Counter1
+	TCNT1=0;			// Reset Timer/Counter1
+	TCCR1A=0;			// Normal mode
+	TIFR1 |= (1<<OCF1A) | (1<<OCF1B);
+	OCR1A = 50000;		// set compare match register to 50ms
+	OCR1B = 63000;		// set compare match register to 60ms
+    TIMSK1 = (1<<OCIE1A) | (1<<OCIE1B);// enable timer interrupts
+	LED1_ON;
+	TCCR1B = 1<<CS11;	// clk div 8, start (tres=1us, tmax=65.536ms)
+}
+
+
+
+ISR(TIMER1_COMPA_vect) 
+{
+	StartLogFlag = 1;
+}
+
+ISR(TIMER1_COMPB_vect) 
+{
+	SendDataFlag = 1;
+	TCCR1B=0;			// Stop Timer/Counter1
+}
+
