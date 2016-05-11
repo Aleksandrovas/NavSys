@@ -140,7 +140,7 @@ void UI_task(void)
 			/* Start Timout Timer and clear Data Buffer */
 			if(temp == StartCode)
 			{	
-				LED2_ON;
+				LED2_ON;				// Received StartCode
 				SendDataFlag = 0;
 				StartLogFlag = 0;
 				Timer1_init();
@@ -150,7 +150,7 @@ void UI_task(void)
 			/* Store Data to Buffer */
 			else if (StartLogFlag)
 			{
-				LED1_ON;
+				LED1_ON;				// Received ToF from Reference Point
 				RefNr = (temp>>12)&0x07;
 				ToF = temp&0x0FFF;
 				indx = RefNr*2;
@@ -255,10 +255,9 @@ void Timer1_init(void)
 	TCNT1=0;			// Reset Timer/Counter1
 	TCCR1A=0;			// Normal mode
 	TIFR1 |= (1<<OCF1A) | (1<<OCF1B);
-	OCR1A = 50000;		// set compare match register to 50ms
-	OCR1B = 63000;		// set compare match register to 60ms
+	OCR1A = 45000;		// set compare match register to 50ms
+	OCR1B = 65000;		// set compare match register to 60ms
     TIMSK1 = (1<<OCIE1A) | (1<<OCIE1B);// enable timer interrupts
-	LED1_ON;
 	TCCR1B = 1<<CS11;	// clk div 8, start (tres=1us, tmax=65.536ms)
 }
 

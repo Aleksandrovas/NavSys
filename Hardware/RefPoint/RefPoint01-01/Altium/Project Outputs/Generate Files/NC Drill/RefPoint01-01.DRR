@@ -1,0 +1,18 @@
+---------------------------------------------------------------------------
+NCDrill File Report For: RefPoint01-01.PcbDoc   2016.05.08  21:56:35
+---------------------------------------------------------------------------
+
+Layer Pair : Top Layer to Bottom Layer
+ASCII Plated RoundHoles File : RefPoint01-01-Plated.TXT
+
+Tool         Hole Size           Hole Type     Hole Count Plated       Tool Travel
+---------------------------------------------------------------------------
+T1        0.5mm (19.685mil)        Round          57               423.10 mm (16.66 Inch)
+T2        0.9mm (35.433mil)        Round          10               73.41 mm (2.89 Inch)
+T3        1mm (39.37mil)           Round          4                9.54 mm (0.38 Inch)
+T4        1.4mm (55.118mil)        Round          2                8.40 mm (0.33 Inch)
+T5        6mm (236.22mil)          Round          1                0.00 mm (0.00 Inch)
+---------------------------------------------------------------------------
+Totals                                            74               514.45 mm (20.25 Inch)
+
+Total Processing Time (hh:mm:ss) : 00:00:00

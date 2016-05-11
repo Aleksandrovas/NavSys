@@ -25,8 +25,6 @@ int main(void)
 	RF_RXmode;
 	RF12_ReadFIFO();
 
-PW0268_ON;
-
 	while(1)
 	{
 		/* Wait for interrupt from RF (received Data) */
@@ -45,14 +43,21 @@ PW0268_ON;
 				/* Start Timout Timer and clear Data Buffer */
 				if(temp == StartCode)
 				{
-				LED1_ON;
+
+/*RF_TXmode;
+_delay_us(400);
+ToF = 256;
+RF12_Send(ToF);
+LED1_ON;
+_delay_us(1000);
+RF_Iddle;*/
 
 					/* Turn ON PW0268 */
-					//PW0268_ON;
-					//_delay_us(300);
+					PW0268_ON;
+					_delay_us(300);
 				
 					/* RF Transmitter/Receiver modes OFF to save power */
-					//RF_Iddle;
+					RF_Iddle;
 
 		    		/* Send start signal to front-end (PW0268) */	   	   		    
 				    DDRA |= (1<<PA0);	// Configure PA0 as Output
@@ -61,7 +66,7 @@ PW0268_ON;
 					PORTA |= (1<<PA0);	// Set PA0
 					DDRA &= ~(1<<PA0);	// Configure PA0 as Input
 			
-					//LED1_ON;			// RF received
+					LED1_ON;			// RF received
 
 					/* Wait for UG signal */
 					TimeOutFlag = 0;
@@ -76,7 +81,7 @@ PW0268_ON;
 					ToF = TCNT1/16;
 								
 					/* Turn OFF PW0268 */
-					//PW0268_OFF;
+					PW0268_OFF;
 
 					/* Check TimeOutFlag */
 					if (!TimeOutFlag)
@@ -92,10 +97,11 @@ PW0268_ON;
 						/* Send ToF to Host */
 						_delay_us(RFTransmit_us*RefPointNr);
 						RF_TXmode;
-						_delay_us(300);
+						_delay_us(400);
+						//ToF = 1234;
 						RF12_Send(ToF);
 						LED1_ON;
-						_delay_us(100);
+						_delay_us(1000);
 						RF_Iddle;
 					}
 		  			LED1_OFF;
@@ -163,22 +169,22 @@ void RF12_init(void)
 	WriteCMD(0xA000|Fcarr);
 
 	/* Data Rate Command: 114.943kbps */
-	WriteCMD(0xC600|BR114_943kbs);
+	WriteCMD(0xC600|BR38_314kbs);
 
 	/* Receiver Control Command */
-	WriteCMD(0x9420);	// VDI, FAST, Bandwidth 400kHz, LNA gain 0dBm, -103dBm
+	WriteCMD(0x9420|Gain_0dB);	// VDI, FAST, Bandwidth 400kHz, LNA gain 0dBm, -103dBm
 
 	/* Data Filter Command */
 	WriteCMD(0xC2AC);	// Auto-lock; Digital filter;
 	
 	/* FIFO and Reset Mode Command */
-	WriteCMD(0xCA73);	// FIFO interrupt level: 7bits; FIFO fill start condition: Sync-word; Enable FIFO fill; dr - set to "1"
+	WriteCMD(0xCAF3);	// FIFO interrupt level: 16bits; FIFO fill start condition: Sync-word; Enable FIFO fill; dr - set to "1"
 	
 	/* AFC Command */
 	WriteCMD(0xC49B);	// AFC setting: Keep offset when VDI hi; select range limit +15/-16; Enable AFC funcition; st,oe - set to "1"
 	
 	/* TX Configuration Control Command */
-	WriteCMD(0x98D0|P_m6dBm);	// 210kHz deviation; MAX OUT
+	WriteCMD(0x98D0|P_0dBm);	// 210kHz deviation; MAX OUT
 
 	/* Power Management Command */
 	RF_Iddle;
@@ -353,7 +359,10 @@ void BlinkNumber(uint8_t RefNr)
 		_delay_ms(250);
 	}
 	if (RefNr==0)
+	{
+		LED1_ON;
 		_delay_ms(1000);
+	}
 	
 	LED1_OFF;
 	LED2_OFF;

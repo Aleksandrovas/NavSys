@@ -7,7 +7,7 @@
 /* Definitions ************************************************************/
 #define StartCode		0x1454
 #define	RFTransmit_us	1000
-#define RefPointNr 		0		// range: 0-7
+#define RefPointNr 		1		// range: 0-7
 
 #define RF_TXmode 		WriteCMD(0x8238)	// Enable transmitter; Enable synthesizer; Enable crystal oscillator
 #define RF_RXmode		WriteCMD(0x82D8)	// Enable receiver; er, ebb, es, ex, dc - set to "1"
@@ -108,5 +108,17 @@ typedef enum
   P_m21dBm	= 0x07,
   P_m24dBm	= 0x08,
 } RF_Pout;
+
+typedef enum 
+{
+  Gain_0dB		= 0x00,
+  Gain_m3dB		= 0x01,
+  Gain_m6dB		= 0x02,
+  Gain_m9dB		= 0x03,
+  Gain_m12dB	= 0x04,
+  Gain_m15dB	= 0x05,
+  Gain_m18dB	= 0x06,
+  Gain_m21dB	= 0x07,
+} LNA_Gain;
 
 #endif

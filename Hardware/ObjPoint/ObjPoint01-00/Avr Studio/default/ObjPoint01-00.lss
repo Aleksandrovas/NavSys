@@ -3,25 +3,25 @@ ObjPoint01-00.elf:     file format elf32-avr
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .text         0000023a  00000000  00000000  00000054  2**1
+  0 .text         00000246  00000000  00000000  00000054  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  1 .debug_aranges 00000020  00000000  00000000  0000028e  2**0
+  1 .debug_aranges 00000020  00000000  00000000  0000029a  2**0
                   CONTENTS, READONLY, DEBUGGING
-  2 .debug_pubnames 00000090  00000000  00000000  000002ae  2**0
+  2 .debug_pubnames 00000090  00000000  00000000  000002ba  2**0
                   CONTENTS, READONLY, DEBUGGING
-  3 .debug_info   000005bc  00000000  00000000  0000033e  2**0
+  3 .debug_info   000005a8  00000000  00000000  0000034a  2**0
                   CONTENTS, READONLY, DEBUGGING
-  4 .debug_abbrev 000001d9  00000000  00000000  000008fa  2**0
+  4 .debug_abbrev 000001d9  00000000  00000000  000008f2  2**0
                   CONTENTS, READONLY, DEBUGGING
-  5 .debug_line   00000515  00000000  00000000  00000ad3  2**0
+  5 .debug_line   00000515  00000000  00000000  00000acb  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_frame  000000a0  00000000  00000000  00000fe8  2**2
+  6 .debug_frame  000000a0  00000000  00000000  00000fe0  2**2
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_str    000002e5  00000000  00000000  00001088  2**0
+  7 .debug_str    000002e5  00000000  00000000  00001080  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_loc    000001f4  00000000  00000000  0000136d  2**0
+  8 .debug_loc    000001f4  00000000  00000000  00001365  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_ranges 00000078  00000000  00000000  00001561  2**0
+  9 .debug_ranges 000000f0  00000000  00000000  00001559  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -51,7 +51,7 @@ Disassembly of section .text:
   26:	cf ed       	ldi	r28, 0xDF	; 223
   28:	cd bf       	out	0x3d, r28	; 61
   2a:	c4 d0       	rcall	.+392    	; 0x1b4 <main>
-  2c:	04 c1       	rjmp	.+520    	; 0x236 <_exit>
+  2c:	0a c1       	rjmp	.+532    	; 0x242 <_exit>
 
 0000002e <__bad_interrupt>:
   2e:	e8 cf       	rjmp	.-48     	; 0x0 <__vectors>
@@ -270,8 +270,8 @@ _delay_loop_2(uint16_t __count)
   c8:	c1 df       	rcall	.-126    	; 0x4c <WriteCMD16b>
 	
 	/* Data Rate Command: BR 114.943Kbps */
-	WriteCMD16b(0xC800|BR114_943kbs);
-  ca:	82 e0       	ldi	r24, 0x02	; 2
+	WriteCMD16b(0xC800|BR38_314kbs);
+  ca:	88 e0       	ldi	r24, 0x08	; 8
   cc:	98 ec       	ldi	r25, 0xC8	; 200
   ce:	be df       	rcall	.-132    	; 0x4c <WriteCMD16b>
 
@@ -547,145 +547,151 @@ void Send_UG(uint16_t n)
 
 int main(void)
 {
- 1b4:	0f 93       	push	r16
- 1b6:	1f 93       	push	r17
- 1b8:	cf 93       	push	r28
- 1ba:	df 93       	push	r29
- 1bc:	88 ee       	ldi	r24, 0xE8	; 232
- 1be:	93 e0       	ldi	r25, 0x03	; 3
- 1c0:	2a ef       	ldi	r18, 0xFA	; 250
- 1c2:	30 e0       	ldi	r19, 0x00	; 0
- 1c4:	f9 01       	movw	r30, r18
- 1c6:	31 97       	sbiw	r30, 0x01	; 1
- 1c8:	f1 f7       	brne	.-4      	; 0x1c6 <main+0x12>
+ 1b4:	ef 92       	push	r14
+ 1b6:	ff 92       	push	r15
+ 1b8:	0f 93       	push	r16
+ 1ba:	1f 93       	push	r17
+ 1bc:	cf 93       	push	r28
+ 1be:	df 93       	push	r29
+ 1c0:	88 ee       	ldi	r24, 0xE8	; 232
+ 1c2:	93 e0       	ldi	r25, 0x03	; 3
+ 1c4:	2a ef       	ldi	r18, 0xFA	; 250
+ 1c6:	30 e0       	ldi	r19, 0x00	; 0
+ 1c8:	f9 01       	movw	r30, r18
+ 1ca:	31 97       	sbiw	r30, 0x01	; 1
+ 1cc:	f1 f7       	brne	.-4      	; 0x1ca <main+0x16>
 		{
 			// wait 1/10 ms
 			_delay_loop_2(((F_CPU) / 4e3) / 10);
 			__ticks --;
- 1ca:	01 97       	sbiw	r24, 0x01	; 1
+ 1ce:	01 97       	sbiw	r24, 0x01	; 1
 		__ticks = 1;
 	else if (__tmp > 65535)
 	{
 		//	__ticks = requested delay in 1/10 ms
 		__ticks = (uint16_t) (__ms * 10.0);
 		while(__ticks)
- 1cc:	d9 f7       	brne	.-10     	; 0x1c4 <main+0x10>
+ 1d0:	d9 f7       	brne	.-10     	; 0x1c8 <main+0x14>
 	/* Wait for Vcc stabilize */
 	_delay_ms(100);
 
 	/* Initialize Peripheral */
 	PORTS_init();
- 1ce:	30 df       	rcall	.-416    	; 0x30 <PORTS_init>
+ 1d2:	2e df       	rcall	.-420    	; 0x30 <PORTS_init>
 	RF02_init();
- 1d0:	5e df       	rcall	.-324    	; 0x8e <RF02_init>
- 1d2:	20 e2       	ldi	r18, 0x20	; 32
- 1d4:	3e e4       	ldi	r19, 0x4E	; 78
- 1d6:	ce ee       	ldi	r28, 0xEE	; 238
- 1d8:	d2 e0       	ldi	r29, 0x02	; 2
+ 1d4:	5c df       	rcall	.-328    	; 0x8e <RF02_init>
+ 1d6:	20 e1       	ldi	r18, 0x10	; 16
+ 1d8:	37 e2       	ldi	r19, 0x27	; 39
+ 1da:	7e ee       	ldi	r23, 0xEE	; 238
+ 1dc:	e7 2e       	mov	r14, r23
+ 1de:	72 e0       	ldi	r23, 0x02	; 2
+ 1e0:	f7 2e       	mov	r15, r23
 		{
 			// wait 1/10 ms
 			_delay_loop_2(((F_CPU) / 4e3) / 10);
 			__ticks --;
- 1da:	0a ef       	ldi	r16, 0xFA	; 250
- 1dc:	10 e0       	ldi	r17, 0x00	; 0
- 1de:	05 c0       	rjmp	.+10     	; 0x1ea <main+0x36>
- 1e0:	c8 01       	movw	r24, r16
- 1e2:	01 97       	sbiw	r24, 0x01	; 1
- 1e4:	f1 f7       	brne	.-4      	; 0x1e2 <main+0x2e>
- 1e6:	21 50       	subi	r18, 0x01	; 1
- 1e8:	30 40       	sbci	r19, 0x00	; 0
+ 1e2:	04 ec       	ldi	r16, 0xC4	; 196
+ 1e4:	19 e0       	ldi	r17, 0x09	; 9
+ 1e6:	ca ef       	ldi	r28, 0xFA	; 250
+ 1e8:	d0 e0       	ldi	r29, 0x00	; 0
+ 1ea:	05 c0       	rjmp	.+10     	; 0x1f6 <main+0x42>
+ 1ec:	ce 01       	movw	r24, r28
+ 1ee:	01 97       	sbiw	r24, 0x01	; 1
+ 1f0:	f1 f7       	brne	.-4      	; 0x1ee <main+0x3a>
+ 1f2:	21 50       	subi	r18, 0x01	; 1
+ 1f4:	30 40       	sbci	r19, 0x00	; 0
 		__ticks = 1;
 	else if (__tmp > 65535)
 	{
 		//	__ticks = requested delay in 1/10 ms
 		__ticks = (uint16_t) (__ms * 10.0);
 		while(__ticks)
- 1ea:	21 15       	cp	r18, r1
- 1ec:	31 05       	cpc	r19, r1
- 1ee:	c1 f7       	brne	.-16     	; 0x1e0 <main+0x2c>
+ 1f6:	21 15       	cp	r18, r1
+ 1f8:	31 05       	cpc	r19, r1
+ 1fa:	c1 f7       	brne	.-16     	; 0x1ec <main+0x38>
 
 	while(1)
 	{
 		_delay_ms(PRF_ms);
 
 		RF_TXmode;
- 1f0:	88 e3       	ldi	r24, 0x38	; 56
- 1f2:	90 ec       	ldi	r25, 0xC0	; 192
- 1f4:	2b df       	rcall	.-426    	; 0x4c <WriteCMD16b>
- 1f6:	ce 01       	movw	r24, r28
- 1f8:	01 97       	sbiw	r24, 0x01	; 1
- 1fa:	f1 f7       	brne	.-4      	; 0x1f8 <main+0x44>
+ 1fc:	88 e3       	ldi	r24, 0x38	; 56
+ 1fe:	90 ec       	ldi	r25, 0xC0	; 192
+ 200:	25 df       	rcall	.-438    	; 0x4c <WriteCMD16b>
+ 202:	c7 01       	movw	r24, r14
+ 204:	01 97       	sbiw	r24, 0x01	; 1
+ 206:	f1 f7       	brne	.-4      	; 0x204 <main+0x50>
 		_delay_us(300);
 
 		LED1_ON;
- 1fc:	d8 98       	cbi	0x1b, 0	; 27
+ 208:	d8 98       	cbi	0x1b, 0	; 27
 		LED2_ON;
- 1fe:	d9 98       	cbi	0x1b, 1	; 27
+ 20a:	d9 98       	cbi	0x1b, 1	; 27
 
 		RF02_Send(StartCode);
- 200:	84 e5       	ldi	r24, 0x54	; 84
- 202:	94 e1       	ldi	r25, 0x14	; 20
- 204:	7a df       	rcall	.-268    	; 0xfa <RF02_Send>
+ 20c:	84 e5       	ldi	r24, 0x54	; 84
+ 20e:	94 e1       	ldi	r25, 0x14	; 20
+ 210:	74 df       	rcall	.-280    	; 0xfa <RF02_Send>
 		Send_UG(20);
- 206:	84 e1       	ldi	r24, 0x14	; 20
- 208:	90 e0       	ldi	r25, 0x00	; 0
- 20a:	ad df       	rcall	.-166    	; 0x166 <Send_UG>
- 20c:	ce 01       	movw	r24, r28
- 20e:	01 97       	sbiw	r24, 0x01	; 1
- 210:	f1 f7       	brne	.-4      	; 0x20e <main+0x5a>
+ 212:	84 e1       	ldi	r24, 0x14	; 20
+ 214:	90 e0       	ldi	r25, 0x00	; 0
+ 216:	a7 df       	rcall	.-178    	; 0x166 <Send_UG>
+ 218:	c8 01       	movw	r24, r16
+ 21a:	01 97       	sbiw	r24, 0x01	; 1
+ 21c:	f1 f7       	brne	.-4      	; 0x21a <main+0x66>
 
-		_delay_us(300);
+		_delay_us(1000);
 		RF_Iddle;
- 212:	80 e2       	ldi	r24, 0x20	; 32
- 214:	90 ec       	ldi	r25, 0xC0	; 192
- 216:	1a df       	rcall	.-460    	; 0x4c <WriteCMD16b>
+ 21e:	80 e2       	ldi	r24, 0x20	; 32
+ 220:	90 ec       	ldi	r25, 0xC0	; 192
+ 222:	14 df       	rcall	.-472    	; 0x4c <WriteCMD16b>
 
 		LED1_OFF;
- 218:	d8 9a       	sbi	0x1b, 0	; 27
+ 224:	d8 9a       	sbi	0x1b, 0	; 27
 		LED2_OFF;
- 21a:	d9 9a       	sbi	0x1b, 1	; 27
- 21c:	20 e2       	ldi	r18, 0x20	; 32
- 21e:	3e e4       	ldi	r19, 0x4E	; 78
- 220:	df cf       	rjmp	.-66     	; 0x1e0 <main+0x2c>
+ 226:	d9 9a       	sbi	0x1b, 1	; 27
+ 228:	20 e1       	ldi	r18, 0x10	; 16
+ 22a:	37 e2       	ldi	r19, 0x27	; 39
+ 22c:	df cf       	rjmp	.-66     	; 0x1ec <main+0x38>
 
-00000222 <GetParity>:
+0000022e <GetParity>:
 	PORTA &= ~(1<<PA5);
 }
 
 
 uint8_t GetParity(uint16_t x) 
 {
- 222:	20 e0       	ldi	r18, 0x00	; 0
- 224:	04 c0       	rjmp	.+8      	; 0x22e <GetParity+0xc>
+ 22e:	20 e0       	ldi	r18, 0x00	; 0
+ 230:	04 c0       	rjmp	.+8      	; 0x23a <GetParity+0xc>
 	uint8_t parity=0;
     
 	while (x > 0) 
 	{
        parity = (parity + (x & 1)) % 2;
- 226:	28 0f       	add	r18, r24
- 228:	21 70       	andi	r18, 0x01	; 1
+ 232:	28 0f       	add	r18, r24
+ 234:	21 70       	andi	r18, 0x01	; 1
        x >>= 1;
- 22a:	96 95       	lsr	r25
- 22c:	87 95       	ror	r24
+ 236:	96 95       	lsr	r25
+ 238:	87 95       	ror	r24
 
 uint8_t GetParity(uint16_t x) 
 {
 	uint8_t parity=0;
     
 	while (x > 0) 
- 22e:	00 97       	sbiw	r24, 0x00	; 0
- 230:	d1 f7       	brne	.-12     	; 0x226 <GetParity+0x4>
+ 23a:	00 97       	sbiw	r24, 0x00	; 0
+ 23c:	d1 f7       	brne	.-12     	; 0x232 <GetParity+0x4>
 	{
        parity = (parity + (x & 1)) % 2;
        x >>= 1;
     }
 	return parity;
 }
- 232:	82 2f       	mov	r24, r18
- 234:	08 95       	ret
+ 23e:	82 2f       	mov	r24, r18
+ 240:	08 95       	ret
 
-00000236 <_exit>:
- 236:	f8 94       	cli
+00000242 <_exit>:
+ 242:	f8 94       	cli
 
-00000238 <__stop_program>:
- 238:	ff cf       	rjmp	.-2      	; 0x238 <__stop_program>
+00000244 <__stop_program>:
+ 244:	ff cf       	rjmp	.-2      	; 0x244 <__stop_program>

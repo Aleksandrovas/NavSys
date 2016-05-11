@@ -28,7 +28,7 @@ int main(void)
 		RF02_Send(StartCode);
 		Send_UG(20);
 
-		_delay_us(300);
+		_delay_us(1000);
 		RF_Iddle;
 
 		LED1_OFF;
@@ -67,7 +67,7 @@ void RF02_init(void)
 	WriteCMD16b(0xD282);
 	
 	/* Data Rate Command: BR 114.943Kbps */
-	WriteCMD16b(0xC800|BR114_943kbs);
+	WriteCMD16b(0xC800|BR38_314kbs);
 
 	/* Low Battery Detector and Tx bit Synchronization Command */
 	WriteCMD16b(0xC2A0);	// ENABLE BIT SYNC ,dwc - set to "1"
