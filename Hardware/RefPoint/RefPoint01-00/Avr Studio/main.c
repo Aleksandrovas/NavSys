@@ -43,15 +43,6 @@ int main(void)
 				/* Start Timout Timer and clear Data Buffer */
 				if(temp == StartCode)
 				{
-
-/*RF_TXmode;
-_delay_us(400);
-ToF = 256;
-RF12_Send(ToF);
-LED1_ON;
-_delay_us(1000);
-RF_Iddle;*/
-
 					/* Turn ON PW0268 */
 					PW0268_ON;
 					_delay_us(300);
@@ -97,11 +88,10 @@ RF_Iddle;*/
 						/* Send ToF to Host */
 						_delay_us(RFTransmit_us*RefPointNr);
 						RF_TXmode;
-						_delay_us(400);
-						//ToF = 1234;
+						_delay_us(300);
 						RF12_Send(ToF);
 						LED1_ON;
-						_delay_us(1000);
+						_delay_us(500);
 						RF_Iddle;
 					}
 		  			LED1_OFF;
@@ -169,7 +159,7 @@ void RF12_init(void)
 	WriteCMD(0xA000|Fcarr);
 
 	/* Data Rate Command: 114.943kbps */
-	WriteCMD(0xC600|BR38_314kbs);
+	WriteCMD(0xC600|BR8_019kbs);
 
 	/* Receiver Control Command */
 	WriteCMD(0x9420|Gain_0dB);	// VDI, FAST, Bandwidth 400kHz, LNA gain 0dBm, -103dBm

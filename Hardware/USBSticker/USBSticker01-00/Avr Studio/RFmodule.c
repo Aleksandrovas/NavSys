@@ -18,7 +18,7 @@ void RF01_init(void)
 	WriteCMD(0xA000|Fcarr);
 	
 	/* Data Rate Command: BR 114.943Kbps */
-	WriteCMD(0xC800|BR38_314kbs);	
+	WriteCMD(0xC800|BR8_019kbs);	
 
 	/* AFC Command: keep offset when VDI hi; select range limit +15/-16; */
 	WriteCMD(0xC69F);

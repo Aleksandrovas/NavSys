@@ -9,19 +9,19 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY, DEBUGGING
   2 .debug_pubnames 00000090  00000000  00000000  000002ba  2**0
                   CONTENTS, READONLY, DEBUGGING
-  3 .debug_info   000005a8  00000000  00000000  0000034a  2**0
+  3 .debug_info   000005ae  00000000  00000000  0000034a  2**0
                   CONTENTS, READONLY, DEBUGGING
-  4 .debug_abbrev 000001d9  00000000  00000000  000008f2  2**0
+  4 .debug_abbrev 000001d9  00000000  00000000  000008f8  2**0
                   CONTENTS, READONLY, DEBUGGING
-  5 .debug_line   00000515  00000000  00000000  00000acb  2**0
+  5 .debug_line   00000515  00000000  00000000  00000ad1  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_frame  000000a0  00000000  00000000  00000fe0  2**2
+  6 .debug_frame  000000a0  00000000  00000000  00000fe8  2**2
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_str    000002e5  00000000  00000000  00001080  2**0
+  7 .debug_str    000002f0  00000000  00000000  00001088  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_loc    000001f4  00000000  00000000  00001365  2**0
+  8 .debug_loc    000001f4  00000000  00000000  00001378  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_ranges 000000f0  00000000  00000000  00001559  2**0
+  9 .debug_ranges 000000f0  00000000  00000000  0000156c  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -270,8 +270,8 @@ _delay_loop_2(uint16_t __count)
   c8:	c1 df       	rcall	.-126    	; 0x4c <WriteCMD16b>
 	
 	/* Data Rate Command: BR 114.943Kbps */
-	WriteCMD16b(0xC800|BR38_314kbs);
-  ca:	88 e0       	ldi	r24, 0x08	; 8
+	WriteCMD16b(0xC800|BR8_019kbs);
+  ca:	8a e2       	ldi	r24, 0x2A	; 42
   cc:	98 ec       	ldi	r25, 0xC8	; 200
   ce:	be df       	rcall	.-132    	; 0x4c <WriteCMD16b>
 
@@ -442,7 +442,7 @@ uint8_t GetParity(uint16_t x)
  14e:	84 ed       	ldi	r24, 0xD4	; 212
  150:	c5 df       	rcall	.-118    	; 0xdc <WriteFSKdata>
 
-	/* Send Data + ObjNr + Parity */
+	/* Send Data + Parity */
 	WriteFSKdata(Data>>8);
  152:	8d 2f       	mov	r24, r29
  154:	c3 df       	rcall	.-122    	; 0xdc <WriteFSKdata>
@@ -590,8 +590,8 @@ int main(void)
 			// wait 1/10 ms
 			_delay_loop_2(((F_CPU) / 4e3) / 10);
 			__ticks --;
- 1e2:	04 ec       	ldi	r16, 0xC4	; 196
- 1e4:	19 e0       	ldi	r17, 0x09	; 9
+ 1e2:	02 ee       	ldi	r16, 0xE2	; 226
+ 1e4:	14 e0       	ldi	r17, 0x04	; 4
  1e6:	ca ef       	ldi	r28, 0xFA	; 250
  1e8:	d0 e0       	ldi	r29, 0x00	; 0
  1ea:	05 c0       	rjmp	.+10     	; 0x1f6 <main+0x42>
@@ -640,7 +640,7 @@ int main(void)
  21a:	01 97       	sbiw	r24, 0x01	; 1
  21c:	f1 f7       	brne	.-4      	; 0x21a <main+0x66>
 
-		_delay_us(1000);
+		_delay_us(500);
 		RF_Iddle;
  21e:	80 e2       	ldi	r24, 0x20	; 32
  220:	90 ec       	ldi	r25, 0xC0	; 192

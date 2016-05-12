@@ -6,8 +6,8 @@
 
 /* Definitions ************************************************************/
 #define StartCode		0x1454
-#define	RFTransmit_us	1000
-#define RefPointNr 		1		// range: 0-7
+#define	RFTransmit_us	7200
+#define RefPointNr 		0		// range: 0-7
 
 #define RF_TXmode 		WriteCMD(0x8238)	// Enable transmitter; Enable synthesizer; Enable crystal oscillator
 #define RF_RXmode		WriteCMD(0x82D8)	// Enable receiver; er, ebb, es, ex, dc - set to "1"
@@ -93,7 +93,8 @@ typedef enum
   BR43_103kbs	= 0x07,
   BR38_314kbs	= 0x08,
   BR34_483kbs	= 0x09,
-  BR31_348kbs	= 0x0A
+  BR31_348kbs	= 0x0A,
+  BR8_019kbs	= 0x2A
 } RF_BaudRate;
 
 typedef enum 

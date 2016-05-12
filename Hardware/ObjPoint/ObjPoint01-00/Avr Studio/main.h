@@ -84,7 +84,8 @@ typedef enum
   BR43_103kbs	= 0x07,
   BR38_314kbs	= 0x08,
   BR34_483kbs	= 0x09,
-  BR31_348kbs	= 0x0A
+  BR31_348kbs	= 0x0A,
+  BR8_019kbs	= 0x2A
 } RF_BaudRate;
 
 
