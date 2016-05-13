@@ -6,7 +6,7 @@
 
 /* Definitions ************************************************************/
 #define StartCode		0x1454
-#define PRF_ms			1000
+#define PRF_ms			100
 
 #define RF_TXmode 		WriteCMD16b(0xC038);	// Enable transmitter; Enable synthesizer; Enable crystal oscillator
 #define RF_Iddle		WriteCMD16b(0xC020);	// TX off
