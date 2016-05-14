@@ -1,9 +1,9 @@
 [Workspace Header]
-Version = 1201
-Pathname = "/d/Projects/NavSys/Software/NAV_VIZ_CVI/Nav_CVI.cws"
-CVI Dir = "/c/program files (x86)/national instruments/cvi2012"
+Version = 1300
+Pathname = "/c/Users/stud_332/Desktop/NAV_VIZ_CVI/Nav_CVI.cws"
+CVI Dir = "/c/program files (x86)/national instruments/cvi2013"
 CVI Shared Dir = "/C/Program Files (x86)/National Instruments/Shared/CVI"
-CVI Pub Local Dir = "/C/ProgramData/National Instruments/CVI2012"
+CVI Pub Local Dir = "/C/ProgramData/National Instruments/CVI2013"
 CVI Pub Global Dir = "/C/ProgramData/National Instruments/CVI"
 IVI Standard Root Dir = "/C/Program Files (x86)/IVI Foundation/IVI"
 IVI Standard Root 64-bit Dir = "/C/Program Files/IVI Foundation/IVI"
@@ -12,55 +12,53 @@ VXIplug&play Framework 64-bit Dir = "/C/Program Files/IVI Foundation/VISA/win64"
 Number of Projects = 1
 Active Project = 1
 Project 0001 = "Nav_CVI.prj"
-Drag Bar Left = 160
+Drag Bar Left = 269
 Window Top = 64
-Window Left = 26
-Window Bottom = 566
-Window Right = 816
+Window Left = 305
+Window Bottom = 925
+Window Right = 1146
 Maximized = True
 Maximized Children = True
 Max32 Number Of Errors = 20
 Track Include File Dependencies = True
 Prompt For Missing Includes = True
 Stop On First Error File = False
-Bring Up Err Win For Warnings = True
-Show Build Dialog = False
+Bring Up Err Win At Start = True
+Bring Up Err Win For Errors = False
 Save Changes Before Running = "Always"
 Save Changes Before Compiling = "Always"
 Hide Windows = False
 Break At First Statement = False
 Sort Type = "File Name"
-Number of Opened Files = 5
+Number of Opened Files = 9
 Window Confinement Region Enabled = True
-MainColumnWidth = 143
+MainColumnWidth = 252
 FileDateColumnWidth = 70
 FileSizeColumnWidth = 70
-StatusColumnWidth = 70
 
 [Project Header 0001]
-Version = 1201
+Version = 1300
 Don't Update DistKit = False
 Platform Code = 4
-Build Configuration = "Release"
+Build Configuration = "Debug"
 Warn User If Debugging Release = 1
 Batch Build Release = False
 Batch Build Debug = False
-Force Rebuild = False
 
 [File 0001]
-Path = "/d/Projects/NavSys/Software/NAV_VIZ_CVI/Nav_CVI.c"
+Path = "/c/Users/stud_332/Desktop/NAV_VIZ_CVI/Nav_CVI.c"
 File Type = "CSource"
-Disk Date = 3545282916
+Disk Date = 3546093720
 In Projects = "1,"
 Window Top = 64
 Window Left = 26
-Window Z-Order = 1
-Source Window State = "1,100,100,100,22,24,24,0,0,138,0,0,0,0,0,36,4,0,22,9,349,683,1,0,"
+Window Z-Order = 2
+Source Window State = "1,33,33,33,10,18,10,0,0,71,0,0,0,0,0,20,118,0,128,4,349,683,1,0,"
 
 [File 0002]
-Path = "/d/Projects/NavSys/Software/NAV_VIZ_CVI/Nav_CVI.uir"
+Path = "/c/Users/stud_332/Desktop/NAV_VIZ_CVI/Nav_CVI.uir"
 File Type = "User Interface Resource"
-Disk Date = 3545056808
+Disk Date = 3546086246
 In Projects = "1,"
 Window Top = 33
 Window Left = 10
@@ -69,46 +67,80 @@ Window Width = 683
 Window Z-Order = 5
 
 [File 0003]
-Path = "/d/Projects/NavSys/Software/NAV_VIZ_CVI/Nav_CVI.h"
+Path = "/c/Users/stud_332/Desktop/NAV_VIZ_CVI/Nav_CVI.h"
 File Type = "Include"
-Disk Date = 3545056808
-In Projects = ""
+Disk Date = 3546086246
+In Projects = "1,"
 Window Top = 95
 Window Left = 42
 Window Z-Order = 4
-Source Window State = "1,0,0,0,0,0,0,0,0,80,0,0,0,0,0,25,0,0,9,0,349,683,1,0,"
+Source Window State = "1,0,0,0,0,0,0,0,0,71,0,0,0,0,0,20,22,0,42,1,349,683,1,0,"
 
 [File 0004]
-Path = "/d/Projects/NavSys/Software/NAV_VIZ_CVI/AtUsbHid.h"
+Path = "/c/Users/stud_332/Desktop/NAV_VIZ_CVI/AtUsbHid.h"
 File Type = "Include"
 Disk Date = 3544443446
 In Projects = "1,"
 Window Top = 188
 Window Left = 90
-Window Z-Order = 3
-Source Window State = "1,51,51,51,26,37,37,0,3,80,0,0,0,0,0,23,0,0,51,26,323,683,1,0,"
+Window Z-Order = 7
+Source Window State = "1,2,4,4,0,19,19,0,0,71,0,0,0,0,0,18,9,0,36,29,323,683,1,0,"
 
 [File 0005]
-Path = "/c/Program Files (x86)/National Instruments/CVI2012/include/userint.h"
+Path = "/c/Program Files (x86)/National Instruments/CVI2013/include/userint.h"
 File Type = "Include"
-Disk Date = 3440476800
+Disk Date = 3455074800
 In Projects = ""
 Window Top = 89
 Window Left = 36
-Window Z-Order = 2
-Source Window State = "1,2161,2161,2161,14,24,24,0,0,91,0,0,0,0,0,23,2282,0,2300,44,331,768,1,0,"
+Window Z-Order = 9
+Source Window State = "1,2161,2161,2161,14,24,24,0,3,80,0,0,0,0,0,19,2152,0,2161,14,331,768,1,0,"
 
 [File 0006]
-Path = "/d/Projects/NavSys/Software/NAV_VIZ_CVI/AtUsbHid.lib"
+Path = "/c/Users/stud_332/Desktop/NAV_VIZ_CVI/USBHID_CVI.h"
+File Type = "Include"
+Disk Date = 3545358984
+In Projects = ""
+Window Top = 31
+Window Left = 6
+Window Z-Order = 8
+Source Window State = "1,3,3,3,8,20,20,0,3,80,0,0,0,0,0,25,0,0,3,8,427,768,1,0,"
+
+[File 0007]
+Path = "/c/Users/stud_332/Desktop/NAV_VIZ_CVI/USB2.h"
+File Type = "Include"
+Disk Date = 3545363704
+In Projects = ""
+Window Top = 60
+Window Left = 21
+Window Z-Order = 6
+Source Window State = "1,0,0,0,23,40,23,0,0,80,0,0,0,0,0,25,0,0,0,65,427,768,1,0,"
+
+[File 0008]
+Path = "/c/Users/stud_332/Desktop/NAV_VIZ_CVI/AtUsbHid.lib"
 File Type = "Library"
 Disk Date = 3544281201
 In Projects = "1,"
 
-[File 0007]
-Path = "/d/Projects/NavSys/Software/NAV_VIZ_CVI/AtUsbHid.dll"
-File Type = "DLL"
-Disk Date = 3283940840
+[File 0009]
+Path = "/c/Users/stud_332/Desktop/NAV_VIZ_CVI/Trilateration.c"
+File Type = "CSource"
+Disk Date = 3546094051
 In Projects = "1,"
+Window Top = 31
+Window Left = 6
+Window Z-Order = 1
+Source Window State = "1,78,132,78,0,25,0,0,0,168,0,1,0,1,0,43,125,0,145,51,427,768,1,0,"
+
+[File 0010]
+Path = "/c/Users/stud_332/Desktop/NAV_VIZ_CVI/Trilateration.h"
+File Type = "Include"
+Disk Date = 3546093695
+In Projects = "1,"
+Window Top = 60
+Window Left = 21
+Window Z-Order = 3
+Source Window State = "1,21,21,21,0,20,20,0,0,80,0,0,0,0,0,25,4,0,47,32,427,768,1,0,"
 
 [Default Build Config 0001 Debug]
 Generate Browse Info = True
@@ -119,6 +151,7 @@ Debugging Level = "Standard"
 Execution Trace = "Disabled"
 Command Line Args = ""
 Working Directory = ""
+Environment Options = ""
 External Process Path = ""
 
 [Default Build Config 0001 Release]
@@ -130,6 +163,7 @@ Debugging Level = "Standard"
 Execution Trace = "Disabled"
 Command Line Args = ""
 Working Directory = ""
+Environment Options = ""
 External Process Path = ""
 
 [Default Build Config 0001 Debug64]
@@ -141,6 +175,7 @@ Debugging Level = "Standard"
 Execution Trace = "Disabled"
 Command Line Args = ""
 Working Directory = ""
+Environment Options = ""
 External Process Path = ""
 
 [Default Build Config 0001 Release64]
@@ -152,7 +187,11 @@ Debugging Level = "Standard"
 Execution Trace = "Disabled"
 Command Line Args = ""
 Working Directory = ""
+Environment Options = ""
 External Process Path = ""
+
+[Build Dependencies 0001]
+Number of Dependencies = 0
 
 [Build Options 0001]
 Generate Browse Info = True
@@ -189,9 +228,19 @@ External Process Path = ""
 [Command Line Args 0001]
 Command Line Args = ""
 Working Directory = ""
+Environment Options = ""
+
+[Watch 1]
+Watch Expression = "laikas"
+
+[Watch 2]
+Watch Expression = "atstumas"
+
+[Watch 3]
+Watch Expression = "laikas"
 
 [Distributions]
 Active Index = 1
-AbsCDSPath 0001 = "/d/Projects/NavSys/Software/NAV_VIZ_CVI/Nav_CVI.cds"
+AbsCDSPath 0001 = "/c/Users/stud_332/Desktop/NAV_VIZ_CVI/Nav_CVI.cds"
 RelCDSPath 0001 = "Nav_CVI.cds"
 

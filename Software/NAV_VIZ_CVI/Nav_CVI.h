@@ -24,6 +24,21 @@
 #define  PANEL_TEXTMSG                    8       /* control type: textMsg, callback function: (none) */
 #define  PANEL_TEXTMSG_NR                 9       /* control type: textMsg, callback function: (none) */
 #define  PANEL_TEXTMSG_ATSTUMAS           10      /* control type: textMsg, callback function: (none) */
+#define  PANEL_TAB                        11      /* control type: tab, callback function: (none) */
+
+     /* tab page panel controls */
+#define  TABPANEL_T_STRIPCHART_TV         2       /* control type: strip, callback function: (none) */
+#define  TABPANEL_T_RINGSLIDE             3       /* control type: slide, callback function: (none) */
+
+     /* tab page panel controls */
+#define  TABPANEL_V_STRIPCHART_T6         2       /* control type: strip, callback function: (none) */
+#define  TABPANEL_V_STRIPCHART_T5         3       /* control type: strip, callback function: (none) */
+#define  TABPANEL_V_STRIPCHART_T4         4       /* control type: strip, callback function: (none) */
+#define  TABPANEL_V_STRIPCHART_T3         5       /* control type: strip, callback function: (none) */
+#define  TABPANEL_V_STRIPCHART_T2         6       /* control type: strip, callback function: (none) */
+#define  TABPANEL_V_STRIPCHART_T1         7       /* control type: strip, callback function: (none) */
+#define  TABPANEL_V_STRIPCHART_T8         8       /* control type: strip, callback function: (none) */
+#define  TABPANEL_V_STRIPCHART_T7         9       /* control type: strip, callback function: (none) */
 
 
      /* Control Arrays: */

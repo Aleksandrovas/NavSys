@@ -1,0 +1,8 @@
+Nav_CVI.obj
+cvistart.lib
+cvi.lib
+AtUsbHid.lib
+kernel32.lib
+user32.lib
+EXE Symbol Module
+Resource Module

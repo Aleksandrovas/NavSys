@@ -28,9 +28,10 @@ typedef char bool;
 #include "Nav_CVI.h"
 #include "toolbox.h"
 #include "AtUsbHid.h"
+#include "USB2.h"
 #include <formatio.h>
 #include <cvirte.h>
-
+#include "Trilateration.h" 
 
 //==============================================================================
 // Constants
@@ -41,8 +42,10 @@ typedef char bool;
 //==============================================================================
 // Static global variables
 
-static int panelHandle = 0;
 
+static int panelHandle = 0;
+static int TV_HANDLE = 0; 
+static int T1_HANDLE = 0; 
 //==============================================================================
 // Static functions
 
@@ -52,7 +55,8 @@ static unsigned char buferis[64]={0};
 static unsigned char DATA_OK=0;
 static unsigned char Connected=false;
 static unsigned char Switch=0; 
-
+static unsigned char full=false; 
+static unsigned char Skiped=false;  
 //==============================================================================
 // Global functions
 //--------------------------------------------------------------
@@ -60,13 +64,15 @@ static unsigned char Switch=0;
 //--------------------------------------------------------------
 unsigned char connect(const UINT VendorID, const UINT ProductID)
 {
-  unsigned char ans=0;
+  unsigned char ans=0,i;
+  
   ans= findHidDevice(VendorID, ProductID);
   if (!ans)
   {
 	    SetCtrlAttribute (panelHandle, PANEL_USB_MSG, ATTR_TEXT_COLOR , VAL_RED);
 		SetCtrlVal(panelHandle, PANEL_USB_MSG, "USB device disconnected");
 		Connected=false; 
+		
   }
   else
   {
@@ -98,7 +104,7 @@ void disconnect()
 //---------------------------------------
 unsigned char test_alive()
 {
-	unsigned char buf[3];
+	unsigned char buf[64];
 	int k=0;
 	buf[0]=254;
 	writeData(buf);
@@ -121,7 +127,8 @@ int main (int argc, char *argv[])
 	/* display the panel and run the user interface */
 	errChk (DisplayPanel (panelHandle));
 	errChk (RunUserInterface ());
-    
+	
+
 	//--------------------------------------------------------------------------
 	connect(VID, PID);
 	//--------------------------------------------------------------------------
@@ -174,7 +181,9 @@ int CVICALLBACK Connect_USB_BUTTON (int panel, int control, int event,
 				SetCtrlAttribute(panelHandle, PANEL_Connect_USB,ATTR_LABEL_TEXT,"Connect_USB"); 
 				disconnect();
 				Connected=false; 
+				full=false;
 			}
+			
 			break;
 	}
 	return 0;
@@ -198,145 +207,139 @@ int CVICALLBACK Disconnect_USB_BUTTON (int panel, int control, int event,
 int CVICALLBACK USB_TIMER (int panel, int control, int event,
 						   void *callbackData, int eventData1, int eventData2)
 {
-	static unsigned char pos0=0;
 	static unsigned char LINE_BUFF[64]; 
-	static int kkk=0,i=0,j=0;
-	static int laikas[8],temp[8],nr[8];
-	static int buferis_before=0x55;
-   	float atstumas=0;
-	buferis[0]=0;
-	buferis[1]=0;
-	kkk=0;
-	buferis_before=0x55; 
+	static unsigned char time_out=0,i=0,j=0;
+	static int ring_POS;
+	time_out=0;
+
 	
 	switch (event)
 	{
 		case EVENT_TIMER_TICK:
+	
+	    		
 			
-	for (i = 0; i < 4; i++) {
-	 laikas[i]=0;
-	 temp[i]=0;
-	 nr[i]=0;
-	}
-	for (i = 0; i < 64; i++) {  
-	buferis[i] = 0; }
+ /* If US is connected start data reading*/	
    if (Connected==true)
    {
-	//read data from USB, with wait_delay timeout in ms
-		while((readData(buferis)==false) && (kkk++<wait_delay))
+	   	GetPanelHandleFromTabPage (panelHandle, PANEL_TAB, 1, &TV_HANDLE);
+		GetPanelHandleFromTabPage (panelHandle, PANEL_TAB, 0, &T1_HANDLE);
+		/*read data from USB, with wait_delay timeout in ms   */
+		while((readData(buferis)==false) && (time_out++<wait_delay))
 		{
 			Sleep(1);
 		}
-	  //no timeout?
-	  for  (int i=0;i<64;i++)
-	  
-	  
-	  {
-	  
-	//   Fmt (LINE_BUFF,"%x \n",buferis[i]); 
-	//	 SetCtrlVal(panelHandle, PANEL_TEXTBOX,LINE_BUFF);	
-	  // buferis[i]=0;
-	  }
-		  if (kkk<wait_delay)
-		  {   // check if first byte is 12
-			//  if (buferis[0]==12)
-		//	 {
-				  
-				  
-				  for (int i=0; i<32; i++)
-				  {
-					  Fmt (LINE_BUFF,"%x:",buferis[i]); 
-		              SetCtrlVal(panelHandle, PANEL_TEXTBOX,LINE_BUFF);
-				  }
-				    Fmt (LINE_BUFF,"\n"); 
-		              SetCtrlVal(panelHandle, PANEL_TEXTBOX,LINE_BUFF);
-				 if (buferis[0]!=buferis_before)
-					 {
-					   if (buferis[1]!=0)
-					   {	 
-				    	nr[0]=(buferis[1]&0xE0)>>5;
-						laikas[0]=((buferis[1]&0x1F)<<8)+buferis[2];
-						//laikas[0]=((laikas[0]&0xff)<<8)+((laikas[0]&0xFF00)>>8);
-						//atstumas=((float)laikas[0]*3.387*10000/61379+12.108); 
-						atstumas=(((float)laikas[0]*8.0*((1/(10000000.0/8.0))))*V_ug);
-						Fmt (LINE_BUFF,"%d",nr[0]);
-						SetCtrlVal(panelHandle, PANEL_TEXTMSG_NR,LINE_BUFF);
-						Fmt (LINE_BUFF,"%f",atstumas);
-						SetCtrlVal(panelHandle, PANEL_TEXTMSG_ATSTUMAS,LINE_BUFF);
-					   }
-					 }
+	     	/*	if data from USB succesfully obtained   */ 
+		  if (time_out<wait_delay)
+		  {   
+			  
+				/*Write Raw data to text box*/
+				 for (int i=0; i<32; i++)
+				 {
+				  Fmt (LINE_BUFF,"%x:",buferis[i]); 
+		             SetCtrlVal(panelHandle, PANEL_TEXTBOX,LINE_BUFF);
+				 }
+				  Fmt (LINE_BUFF,"\n"); 
+		          SetCtrlVal(panelHandle, PANEL_TEXTBOX,LINE_BUFF);  
 					  
-					//read data from the packet
-					//for (int i=0;i<buferis[1];i++)
-					//{
-						 //	atstumas=(buferis[2+i*5+1]*256+buferis[2+i*5+2])*3.387*10000/61379+12.108;
-					 		//	DATA_OK=true;
-							  // if (buferis[2+0*5]==0) {
-							//	nr[0]= buferis[2+0*5+1];
-							//	laikas[0]=buferis[2+0*5+1]*256+buferis[2+0*5+2];
-							//	temp[0]=buferis[2+i*5+3]*256+buferis[2+i*5+4];
-							//   }
-							   /*
-								if (buferis[2+i*5]==1) {
-								nr[1]= buferis[2+i*5];
-								laikas[1]=buferis[2+i*5+1]*256+buferis[2+i*5+2];
-								temp[1]=buferis[2+i*5+3]*256+buferis[2+i*5+4];
-							   }
-							   if (buferis[2+i*5]==2) {
-								nr[2]= buferis[2+i*5];
-								laikas[2]=buferis[2+i*5+1]*256+buferis[2+i*5+2];
-								temp[2]=buferis[2+i*5+3]*256+buferis[2+i*5+4];
-							   }
-							   if (buferis[2+i*5]==3) {
-								nr[3]= buferis[2+i*5];
-								laikas[3]=buferis[2+i*5+1]*256+buferis[2+i*5+2];
-								temp[3]=buferis[2+i*5+3]*256+buferis[2+i*5+4];
-							   }
-							   if (buferis[2+i*5]==4) {
-								nr[4]= buferis[2+i*5];
-								laikas[4]=buferis[2+i*5+1]*256+buferis[2+i*5+2];
-								temp[4]=buferis[2+i*5+3]*256+buferis[2+i*5+4];
-							   }
-							   if (buferis[2+i*5]==5) {
-								nr[5]= buferis[2+i*5];
-								laikas[5]=buferis[2+i*5+1]*256+buferis[2+i*5+2];
-								temp[5]=buferis[2+i*5+3]*256+buferis[2+i*5+4];
-							   }
-							   if (buferis[2+i*5]==6) {
-								nr[6]= buferis[2+i*5];
-								laikas[6]=buferis[2+i*5+1]*256+buferis[2+i*5+2];
-								temp[6]=buferis[2+i*5+3]*256+buferis[2+i*5+4];
-							   }
-							   if (buferis[2+i*5]==7) {
-								nr[7]= buferis[2+i*5];
-								laikas[7]=buferis[2+i*5+1]*256+buferis[2+i*5+2];
-								temp[7]=buferis[2+i*5+3]*256+buferis[2+i*5+4];
-							   }*/	
-							
+				/* Fill data structure with recieved data - first 2 bytes holds data from first reciever, 
+					next two bytes from second and so on till 8 */	
+				for (i=0;i<8;i++)
+				{
+				  T_data[full].point[i].flight_time=((buferis[i*2]&0xFF)<<8)+buferis[((i*2)+1)];
+				  T_data[full].point[i].number=(unsigned char)i+1;
+				}
+				
+				if (full<2)
+				  {																	 
+					  full++;
+					  Skiped=false;
+				  }
+			    else
+				{																				 
+				 for (i=0;i<1;i++)
+					 {
 						
-						   	    
-					//}
-					
-		//	  }
-		buferis_before=buferis[0];	 
-		  }
-		 
-		  else {break;}
-   }
- // print recieved data in text box
-   		  if (DATA_OK==true)
+						for (j=0;j<8;j++)
+						{
+							if  ((abs((T_data[full].point[j].flight_time-T_data[1].point[j].flight_time))>0x1F)&&(Skiped==false)) 
+							{
+								T_data[full].point[j].flight_time=T_data[1].point[j].flight_time;	
+								Skiped=true;
+								full=false;
+								
+							}
+						}
+						
+						if (Skiped==false)
+						{ 
+						T_data[1] =	T_data[full];
+						}
+						
+					 }
+				}
+			  
+				
+		  }			  
+		 /*Quit callback after time out*/
+		  else
 		  {
+			  full=false;
+			  break;
+		  }
+   }
+ /* if data recieved calculate distances from recieved times and draw graphs(for debuging purpose) 		 */
    			for (int i=0;i<8;i++)
 				{
-				   if (laikas[i]>0)
+				   if (T_data[full].point[i].flight_time>0)
 				   {   
-					   SetCtrlVal(panelHandle, PANEL_TEXTBOX,"----------------------------------------\n");
-					   atstumas=((float)laikas[i]*3.387*10000/61379+12.108);
-					   Fmt (LINE_BUFF,"NR: %d L: %d T: %d A: %f \n",nr[i],laikas[i],temp[i],atstumas);  
-					   SetCtrlVal(panelHandle, PANEL_TEXTBOX,LINE_BUFF);
+					   
+						T_data[full].point[i].radius=(((float)T_data[full].point[i].flight_time*8*((1/(10000000.0/8.0))))*V_ug);
+						
+					 /* SetCtrlVal(panelHandle, PANEL_TEXTBOX,"----------------------------------------\n"); 
+					   Fmt (LINE_BUFF,"NR: %d R:%f \n",T_data[full].point[i].number,T_data[full].point[i].radius);  
+					   SetCtrlVal(panelHandle, PANEL_TEXTBOX,LINE_BUFF);	 */
+					   if (i==0)
+					   {
+					   PlotStripChartPoint (TV_HANDLE, TABPANEL_V_STRIPCHART_T1, T_data[full].point[i].radius);
+					   }
+					   if (i==1)
+					   {
+					   PlotStripChartPoint (TV_HANDLE, TABPANEL_V_STRIPCHART_T2, T_data[full].point[i].radius);
+					   }
+					   if (i==2)
+					   {
+					   PlotStripChartPoint (TV_HANDLE, TABPANEL_V_STRIPCHART_T3, T_data[full].point[i].radius);
+					   }
+					   if (i==3)
+					   {
+					   PlotStripChartPoint (TV_HANDLE, TABPANEL_V_STRIPCHART_T4, T_data[full].point[i].radius);
+					   }
+					   if (i==4)
+					   {
+					   PlotStripChartPoint (TV_HANDLE, TABPANEL_V_STRIPCHART_T5, T_data[full].point[i].radius);
+					   }
+					   if (i==5)
+					   {
+					   PlotStripChartPoint (TV_HANDLE, TABPANEL_V_STRIPCHART_T6, T_data[full].point[i].radius);
+					   }
+					   if (i==6)
+					   {
+					   PlotStripChartPoint (TV_HANDLE, TABPANEL_V_STRIPCHART_T7, T_data[full].point[i].radius);
+					   }
+					   if (i==7)
+					   {
+					   PlotStripChartPoint (TV_HANDLE, TABPANEL_V_STRIPCHART_T8, T_data[full].point[i].radius);
+					   }
 				   }	   
-				}
-			DATA_OK=false;	
+			/* Drawing one selected point data on the graph*/	
+			GetCtrlVal(T1_HANDLE, TABPANEL_T_RINGSLIDE,&ring_POS);
+			if (T_data[full].point[ring_POS-1].flight_time>0)
+				   { 
+						PlotStripChartPoint (T1_HANDLE, TABPANEL_T_STRIPCHART_TV, T_data[full].point[(ring_POS-1)].radius);
+						Fmt (LINE_BUFF,"Taskas: %d",T_data[full].point[(ring_POS-1)].number);  
+						SetCtrlAttribute(T1_HANDLE, TABPANEL_T_STRIPCHART_TV, ATTR_LABEL_TEXT, LINE_BUFF);
+				   }
 		  }	
    	     		
 			break;

@@ -1,0 +1,4 @@
+[Trilat]
+Class="Function"
+Prototype="int Trilat(struct Trilateration *T_data);"
+

@@ -1,0 +1,4 @@
+
+CallCC.bat "c:\Users\stud_332\Desktop\NAV_VIZ_CVI\Nav_CVI.c" "Nav_CVI.obj" "Nav_CVI.out" "c:\Users\stud_332\Desktop\NAV_VIZ_CVI" "1.0.0.0" "1.0.0.0" "c:\Users\stud_332\Desktop\NAV_VIZ_CVI\Nav_CVI.c" 
+
+CallLink.bat -cmd:link_options.txt

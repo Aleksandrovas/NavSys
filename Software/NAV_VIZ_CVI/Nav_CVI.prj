@@ -9,7 +9,7 @@ IVI Standard Root Dir = "/C/Program Files (x86)/IVI Foundation/IVI"
 VXIplug&play Framework Dir = "/C/Program Files (x86)/IVI Foundation/VISA/winnt"
 IVI Standard Root 64-bit Dir = "/C/Program Files/IVI Foundation/IVI"
 VXIplug&play Framework 64-bit Dir = "/C/Program Files/IVI Foundation/VISA/win64"
-Number of Files = 5
+Number of Files = 7
 Target Type = "Executable"
 Flags = 16
 Copied From Locked InstrDrv Directory = False
@@ -54,8 +54,21 @@ Folder = "Source Files"
 Folder Id = 1
 
 [File 0003]
-File Type = "Include"
+File Type = "CSource"
 Res Id = 3
+Path Is Rel = True
+Path Rel To = "Project"
+Path Rel Path = "Trilateration.c"
+Path = "/c/Users/stud_332/Desktop/NAV_VIZ_CVI/Trilateration.c"
+Exclude = False
+Compile Into Object File = False
+Project Flags = 0
+Folder = "Source Files"
+Folder Id = 1
+
+[File 0004]
+File Type = "Include"
+Res Id = 4
 Path Is Rel = True
 Path Rel To = "Project"
 Path Rel Path = "AtUsbHid.h"
@@ -65,9 +78,33 @@ Project Flags = 0
 Folder = "Include Files"
 Folder Id = 2
 
-[File 0004]
+[File 0005]
+File Type = "Include"
+Res Id = 5
+Path Is Rel = True
+Path Rel To = "Project"
+Path Rel Path = "Nav_CVI.h"
+Path = "/c/Users/stud_332/Desktop/NAV_VIZ_CVI/Nav_CVI.h"
+Exclude = False
+Project Flags = 0
+Folder = "Include Files"
+Folder Id = 2
+
+[File 0006]
+File Type = "Include"
+Res Id = 6
+Path Is Rel = True
+Path Rel To = "Project"
+Path Rel Path = "Trilateration.h"
+Path = "/c/Users/stud_332/Desktop/NAV_VIZ_CVI/Trilateration.h"
+Exclude = False
+Project Flags = 0
+Folder = "Include Files"
+Folder Id = 2
+
+[File 0007]
 File Type = "Library"
-Res Id = 4
+Res Id = 7
 Path Is Rel = True
 Path Rel To = "Project"
 Path Rel Path = "AtUsbHid.lib"
@@ -76,17 +113,6 @@ Exclude = False
 Project Flags = 0
 Folder = "Library Files"
 Folder Id = 3
-
-[File 0005]
-File Type = "DLL"
-Res Id = 5
-Path Is Rel = True
-Path Rel To = "Project"
-Path Rel Path = "AtUsbHid.dll"
-Path = "/c/Users/stud_332/Desktop/NAV_VIZ_CVI/AtUsbHid.dll"
-Exclude = False
-Project Flags = 0
-Folder = "Not In A Folder"
 
 [Custom Build Configs]
 Num Custom Build Configs = 0
