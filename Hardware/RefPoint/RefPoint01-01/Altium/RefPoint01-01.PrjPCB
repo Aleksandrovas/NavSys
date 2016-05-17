@@ -124,7 +124,7 @@ GenerateClassCluster=0
 DocumentUniqueId=DJNKHGOJ
 
 [Document6]
-DocumentPath=CAMtastic2.Cam
+DocumentPath=CAMtastic1.Cam
 AnnotationEnabled=1
 AnnotateStartValue=1
 AnnotationIndexControlEnabled=0
