@@ -257,10 +257,10 @@ _delay_loop_2(uint16_t __count)
 	_delay_ms(100);
 
 	/* Frequency Setting Command: Fcarrier = 439.00MHz */
-	Fcarr = Fc(432.00);
+	Fcarr = Fc(438.00);
 	WriteCMD16b(0xA000|Fcarr);
-  be:	80 e2       	ldi	r24, 0x20	; 32
-  c0:	93 ea       	ldi	r25, 0xA3	; 163
+  be:	80 e8       	ldi	r24, 0x80	; 128
+  c0:	9c ea       	ldi	r25, 0xAC	; 172
   c2:	c4 df       	rcall	.-120    	; 0x4c <WriteCMD16b>
 	
 	/* PLL Setting Command */
@@ -578,8 +578,8 @@ int main(void)
  1ce:	30 df       	rcall	.-416    	; 0x30 <PORTS_init>
 	RF02_init();
  1d0:	5e df       	rcall	.-324    	; 0x8e <RF02_init>
- 1d2:	28 ee       	ldi	r18, 0xE8	; 232
- 1d4:	33 e0       	ldi	r19, 0x03	; 3
+ 1d2:	20 e1       	ldi	r18, 0x10	; 16
+ 1d4:	37 e2       	ldi	r19, 0x27	; 39
  1d6:	ce ee       	ldi	r28, 0xEE	; 238
  1d8:	d2 e0       	ldi	r29, 0x02	; 2
 		{
@@ -644,8 +644,8 @@ int main(void)
  218:	d8 9a       	sbi	0x1b, 0	; 27
 		LED2_OFF;
  21a:	d9 9a       	sbi	0x1b, 1	; 27
- 21c:	28 ee       	ldi	r18, 0xE8	; 232
- 21e:	33 e0       	ldi	r19, 0x03	; 3
+ 21c:	20 e1       	ldi	r18, 0x10	; 16
+ 21e:	37 e2       	ldi	r19, 0x27	; 39
  220:	df cf       	rjmp	.-66     	; 0x1e0 <main+0x2c>
 
 00000222 <GetParity>:

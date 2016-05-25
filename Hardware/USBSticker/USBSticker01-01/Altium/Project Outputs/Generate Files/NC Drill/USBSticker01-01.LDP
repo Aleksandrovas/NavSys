@@ -1,0 +1,3 @@
+Layer Pairs Export File for PCB: D:\Projects\NavSys\Hardware\USBSticker\USBSticker01-01\Altium\USBSticker01-01.PcbDoc
+LayersSetName=Top_Bot_Plated_Thru_Holes|DrillFile=usbsticker01-01-roundholes-plated.txt|DrillLayers=gtl,gbl
+LayersSetName=Top_Bot_Plated_Slot_Holes|DrillFile=usbsticker01-01-slotholes-plated.txt|DrillLayers=gtl,gbl

@@ -1,6 +1,6 @@
 
 # Project name
-PROJECT = "USBSticker01-00"
+PROJECT = "USBSticker01-01"
 
 # CPU architecture : {avr0|...|avr6}
 # Parts : {at90usb646|at90usb647|at90usb1286|at90usb1287|at90usb162|at90usb82}

@@ -265,10 +265,10 @@ _delay_loop_2(uint16_t __count)
   c4:	d4 df       	rcall	.-88     	; 0x6e <WriteCMD>
 	
 	/* Frequency Setting Command: F carrier = 432.00MHz */
-	Fcarr = Fc(432.00);
+	Fcarr = Fc(438.00);
 	WriteCMD(0xA000|Fcarr);
-  c6:	80 e2       	ldi	r24, 0x20	; 32
-  c8:	93 ea       	ldi	r25, 0xA3	; 163
+  c6:	80 e8       	ldi	r24, 0x80	; 128
+  c8:	9c ea       	ldi	r25, 0xAC	; 172
   ca:	d1 df       	rcall	.-94     	; 0x6e <WriteCMD>
 
 	/* Data Rate Command: 114.943kbps */

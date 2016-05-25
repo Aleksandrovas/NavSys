@@ -154,7 +154,7 @@ void RF12_init(void)
 	WriteCMD(0x80DF);	// 433MHz Band; Enable TX registere; Enable RX FIFO buffer, 16pF
 	
 	/* Frequency Setting Command: F carrier = 432.00MHz */
-	Fcarr = Fc(432.00);
+	Fcarr = Fc(438.00);
 	WriteCMD(0xA000|Fcarr);
 
 	/* Data Rate Command: 114.943kbps */

@@ -3,24 +3,29 @@
 #ifndef __RFMODULE_H
 #define __RFMODULE_H
 
+
 /* Definitions ************************************************************/
 #define StartCode		0x1454
 
+#define RF_TXmode 		WriteCMD(0x8238)	// Enable transmitter; Enable synthesizer; Enable crystal oscillator
+#define RF_RXmode		WriteCMD(0x82D8)	// Enable receiver; er, ebb, es, ex, dc - set to "1"
+#define RF_Iddle		WriteCMD(0x8208)	// RX and TX off
+#define RF_FIFORecog	WriteCMD(0xCAF1);WriteCMD(0xCAF3);	// FIFO int: 16bits, Sync-word; Enable FIFO fill,
+
+
 #define Fc(freq)		(uint16_t)((freq - 430)*400)
 
-#define RF_RXmode 		WriteCMD(0xC0C1)	// VDI always on, LNA gain 0dBm, -103dBm, RX on
-#define RF_Iddle		WriteCMD(0xC0C0)	// RX off
-#define RF_FIFORecog	WriteCMD(0xCEF4);WriteCMD(0xCEF7);	// FIFO int: 8bits, Sync-word Enable FIFO fill,
 
 typedef enum 
 {
-  Bandwidth67kHz 	= 0x06,
-  Bandwidth134kHz 	= 0x05,
-  Bandwidth200kHz 	= 0x04,
-  Bandwidth270kHz 	= 0x03,
-  Bandwidth340kHz 	= 0x02,
-  Bandwidth400kHz 	= 0x01
-} RF_Bandwidth; 
+  FreqDev30kHz 	= 0x00,
+  FreqDev60kHz 	= 0x01,
+  FreqDev90kHz 	= 0x02,
+  FreqDev120kHz = 0x03,
+  FreqDev150kHz = 0x04,
+  FreqDev180kHz = 0x05,
+  FreqDev210kHz = 0x06
+} RF_FreqDeviation;
 
 typedef enum 
 {
@@ -55,10 +60,39 @@ typedef enum
   BR8_019kbs	= 0x2A
 } RF_BaudRate;
 
+typedef enum 
+{
+  P_0dBm	= 0x00,
+  P_m3dBm	= 0x01,
+  P_m6dBm	= 0x02,
+  P_m9dBm	= 0x03,
+  P_m12dBm	= 0x04,
+  P_m15dBm	= 0x05,
+  P_m18dBm	= 0x06,
+  P_m21dBm	= 0x07,
+  P_m24dBm	= 0x08,
+} RF_Pout;
+
+typedef enum 
+{
+  Gain_0dB		= 0x00,
+  Gain_m3dB		= 0x01,
+  Gain_m6dB		= 0x02,
+  Gain_m9dB		= 0x03,
+  Gain_m12dB	= 0x04,
+  Gain_m15dB	= 0x05,
+  Gain_m18dB	= 0x06,
+  Gain_m21dB	= 0x07,
+} LNA_Gain;
+
+
 
 /* Functions prototypes ****************************************************/
-void RF01_init(void);
-uint16_t RF01_ReadFIFO(void);
+void RF12_init(void);
+uint16_t RF12_ReadFIFO(void);
+void RF12_Send(uint16_t Data);
 void WriteCMD(uint16_t CMD);
+void Write_FSK_byte(uint8_t data);
+uint8_t GetParity(uint16_t x);
 
 #endif

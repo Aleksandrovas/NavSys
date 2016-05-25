@@ -60,7 +60,7 @@ void RF02_init(void)
 	_delay_ms(100);
 
 	/* Frequency Setting Command: Fcarrier = 439.00MHz */
-	Fcarr = Fc(432.00);
+	Fcarr = Fc(438.00);
 	WriteCMD16b(0xA000|Fcarr);
 	
 	/* PLL Setting Command */

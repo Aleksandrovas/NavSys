@@ -12,7 +12,7 @@
 #define RF_TXmode 		WriteCMD(0x8238)	// Enable transmitter; Enable synthesizer; Enable crystal oscillator
 #define RF_RXmode		WriteCMD(0x82D8)	// Enable receiver; er, ebb, es, ex, dc - set to "1"
 #define RF_Iddle		WriteCMD(0x8208)	// RX and TX off
-#define RF_FIFORecog	WriteCMD(0xCAF1);WriteCMD(0xCAF3);	// FIFO int: 8bits, Sync-word; Enable FIFO fill,
+#define RF_FIFORecog	WriteCMD(0xCAF1);WriteCMD(0xCAF3);	// FIFO int: 16bits, Sync-word; Enable FIFO fill,
 
 
 #define SDI 			PA6	// SDI 	-> 	RFM12 12

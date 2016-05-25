@@ -75,7 +75,6 @@ void DATA_RECEIVED(void);
 bool USB_Read(U8 *buff,unsigned char len);
 bool USB_Send(U8 *buff,unsigned char len);
 
-uint8_t GetParity(uint16_t x) ;
 void Timer1_init(void);
 volatile uint8_t SendDataFlag=0;
 volatile uint8_t StartLogFlag=0;
@@ -94,11 +93,17 @@ void hid_task_init(void)
 	/* Configure RF nIRQ PIN */
 	DDRB&=~(1<<nIRQ);
 
+	LED1_OFF;
+	LED2_OFF;
+
 	Init_SPI();
-	RF01_init();
+
+	RF12_init();
+
 	RF_FIFORecog;
 	RF_RXmode;
-	RF01_ReadFIFO();
+	RF12_ReadFIFO();
+
 	sei();
 }
 
@@ -130,7 +135,8 @@ void UI_task(void)
 	/* Wait for interrupt from RF (received Data) */
 	if(!nIRQ_PIN)	
 	{
-		temp = RF01_ReadFIFO();
+LED2_ON;
+		temp = RF12_ReadFIFO();
 		parity = temp>>15;
 		temp = temp&0x7FFF;
 
@@ -181,8 +187,8 @@ void DATA_RECEIVED(void)
 	switch(buferis[0])
 	{
 		case 12:
-			LED1_ON;
-			LED2_ON;
+			//LED1_ON;
+			//LED2_ON;
 			break;
 		default:
 			break;
@@ -231,18 +237,6 @@ bool USB_Send(U8 *buff,unsigned char len)
    return true;
 }
 
-
-uint8_t GetParity(uint16_t x) 
-{
-	uint8_t parity=0;
-    
-	while (x > 0) 
-	{
-       parity = (parity + (x & 1)) % 2;
-       x >>= 1;
-    }
-	return parity;
-}
 
 
 /***************************************************************************
