@@ -256,7 +256,7 @@ void Timer1_init(void)
 	TCCR1A=0;			// Normal mode
 	TIFR1 |= (1<<OCF1A) | (1<<OCF1B);
 	OCR1A = 50000;		// set compare match register to 50ms
-	OCR1B = 59000;		// set compare match register to 59ms
+	OCR1B = 60000;		// set compare match register to 59ms
     TIMSK1 = (1<<OCIE1A) | (1<<OCIE1B);// enable timer interrupts
 	TCCR1B = 1<<CS11;	// clk div 8, start (tres=1us, tmax=65.536ms)
 }
@@ -265,19 +265,12 @@ void Timer1_init(void)
 
 ISR(TIMER1_COMPA_vect) 
 {
-	if (!StartLogFlag)
-	{
-		StartLogFlag = 1;
-		TCNT1=0;			// Reset Timer/Counter1
-	}
+	StartLogFlag = 1;
 }
 
 ISR(TIMER1_COMPB_vect) 
 {
-	if (StartLogFlag)
-		{
-		SendDataFlag = 1;
-		TCCR1B=0;			// Stop Timer/Counter1
-		}
+	SendDataFlag = 1;
+	TCCR1B=0;			// Stop Timer/Counter1
 }
 

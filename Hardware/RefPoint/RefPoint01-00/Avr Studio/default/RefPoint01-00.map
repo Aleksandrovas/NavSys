@@ -186,11 +186,11 @@ LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr25\libgcc.a
                 0x00000090                RF12_init
                 0x00000054                PORTS_init
                 0x000000f8                Write_FSK_byte
-                0x00000160                RF12_ReadFIFO
+                0x00000162                RF12_ReadFIFO
                 0x00000118                RF12_Send
                 0x00000030                PrepareRFpacket
-                0x00000190                BlinkNumber
-                0x000001f8                main
+                0x00000192                BlinkNumber
+                0x000001fa                main
                 0x00000048                Timer1_init
                 0x0000006e                WriteCMD
  .text          0x00000354        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr25\libgcc.a(_exit.o)
@@ -317,18 +317,18 @@ LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr25\libgcc.a
  .debug_pubnames
                 0x00000000       0xba main.o
 
-.debug_info     0x00000000      0x873
+.debug_info     0x00000000      0x899
  *(.debug_info)
- .debug_info    0x00000000      0x873 main.o
+ .debug_info    0x00000000      0x899 main.o
  *(.gnu.linkonce.wi.*)
 
 .debug_abbrev   0x00000000      0x2d2
  *(.debug_abbrev)
  .debug_abbrev  0x00000000      0x2d2 main.o
 
-.debug_line     0x00000000      0x73c
+.debug_line     0x00000000      0x72f
  *(.debug_line)
- .debug_line    0x00000000      0x73c main.o
+ .debug_line    0x00000000      0x72f main.o
 
 .debug_frame    0x00000000       0xc0
  *(.debug_frame)
@@ -339,14 +339,14 @@ LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr25\libgcc.a
  .debug_str     0x00000000      0x317 main.o
                                 0x354 (size before relaxing)
 
-.debug_loc      0x00000000      0x39e
+.debug_loc      0x00000000      0x3a3
  *(.debug_loc)
- .debug_loc     0x00000000      0x39e main.o
+ .debug_loc     0x00000000      0x3a3 main.o
 
 .debug_macinfo
  *(.debug_macinfo)
 OUTPUT(RefPoint01-00.elf elf32-avr)
 LOAD linker stubs
 
-.debug_ranges   0x00000000      0x1f8
- .debug_ranges  0x00000000      0x1f8 main.o
+.debug_ranges   0x00000000      0x1b0
+ .debug_ranges  0x00000000      0x1b0 main.o
