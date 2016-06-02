@@ -30,7 +30,7 @@ DItemRevisionGUID=
 ReportSuppressedErrorsInMessages=0
 FSMCodingStyle=eFMSDropDownList_OneProcess
 FSMEncodingStyle=eFMSDropDownList_OneHot
-OutputPath=
+OutputPath=Project Outputs for RefPoint01-01
 LogFolderPath=
 ManagedProjectGUID=
 
@@ -140,50 +140,6 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=
 
-[GeneratedDocument1]
-DocumentPath=Project Outputs\Generate Files\NC Drill\RefPoint01-01-Plated.TXT
-DItemRevisionGUID=
-
-[GeneratedDocument2]
-DocumentPath=Project Outputs\Generate Files\NC Drill\RefPoint01-01.DRR
-DItemRevisionGUID=
-
-[GeneratedDocument3]
-DocumentPath=Project Outputs\Generate Files\Gerber\RefPoint01-01.EXTREP
-DItemRevisionGUID=
-
-[GeneratedDocument4]
-DocumentPath=Project Outputs\Generate Files\Gerber\RefPoint01-01.GBL
-DItemRevisionGUID=
-
-[GeneratedDocument5]
-DocumentPath=Project Outputs\Generate Files\Gerber\RefPoint01-01.GBS
-DItemRevisionGUID=
-
-[GeneratedDocument6]
-DocumentPath=Project Outputs\Generate Files\Gerber\RefPoint01-01.GKO
-DItemRevisionGUID=
-
-[GeneratedDocument7]
-DocumentPath=Project Outputs\Generate Files\Gerber\RefPoint01-01.GTL
-DItemRevisionGUID=
-
-[GeneratedDocument8]
-DocumentPath=Project Outputs\Generate Files\Gerber\RefPoint01-01.GTS
-DItemRevisionGUID=
-
-[GeneratedDocument9]
-DocumentPath=Project Outputs\Generate Files\NC Drill\RefPoint01-01.LDP
-DItemRevisionGUID=
-
-[GeneratedDocument10]
-DocumentPath=Project Outputs\Generate Files\Gerber\RefPoint01-01.REP
-DItemRevisionGUID=
-
-[GeneratedDocument11]
-DocumentPath=Project Outputs\Generate Files\Gerber\RefPoint01-01.RUL
-DItemRevisionGUID=
-
 [Configuration1]
 Name=Default Configuration
 ParameterCount=0
@@ -194,7 +150,7 @@ Variant=[No Variations]
 OutputJobsCount=0
 
 [Generic_EDE]
-OutputDir=
+OutputDir=Project Outputs for RefPoint01-01
 
 [OutputGroup1]
 Name=Netlist Outputs
