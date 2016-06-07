@@ -1,0 +1,13 @@
+Output: NC Drill Files
+Type  : NC Drill
+From  : PCB Document [USBSticker01-02.PcbDoc]
+   Generated File[USBSticker01-02-RoundHoles-Plated.TXT]
+   Generated File[USBSticker01-02-SlotHoles-Plated.TXT]
+   Generated File[USBSticker01-02.LDP]
+   Generated File[USBSticker01-02.DRR]
+
+
+Files Generated   : 4
+Documents Printed : 0
+
+Finished Output Generation At 00:01:13 On 2016.06.08

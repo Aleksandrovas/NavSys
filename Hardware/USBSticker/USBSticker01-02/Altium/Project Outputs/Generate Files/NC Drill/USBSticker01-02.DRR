@@ -1,0 +1,18 @@
+----------------------------------------------------------------------------------------------------------------------------------
+NCDrill File Report For: USBSticker01-02.PcbDoc   2016.06.08  00:01:13
+----------------------------------------------------------------------------------------------------------------------------------
+
+Layer Pair : Top Layer to Bottom Layer
+ASCII Plated RoundHoles File : USBSticker01-02-RoundHoles-Plated.TXT
+ASCII Plated SlotHoles File : USBSticker01-02-SlotHoles-Plated.TXT
+
+Tool       Hole Size               Hole Tolerance               Hole Type       Hole Count   Plated         Tool Travel
+----------------------------------------------------------------------------------------------------------------------------------
+T1      0.5mm (20mil)                                             Round             27        PTH        177.48mm (6.99inch)
+T2      0.7mm (28mil)                                             Slot              2         PTH        27.14mm (1.07inch)
+T3      0.9mm (35mil)                                             Round             8         PTH        26.04mm (1.03inch)
+T4      1.1mm (43mil)                                             Round             2         PTH        4.50mm (0.18inch)
+----------------------------------------------------------------------------------------------------------------------------------
+Totals                                                                              39
+
+Total Processing Time (hh:mm:ss) : 00:00:00
