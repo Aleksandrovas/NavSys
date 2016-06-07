@@ -135,7 +135,6 @@ void UI_task(void)
 	/* Wait for interrupt from RF (received Data) */
 	if(!nIRQ_PIN)	
 	{
-LED2_ON;
 		temp = RF12_ReadFIFO();
 		parity = temp>>15;
 		temp = temp&0x7FFF;
@@ -147,7 +146,6 @@ LED2_ON;
 			if(temp == StartCode)
 			{	
 				LED2_ON;				// Received StartCode
-				SendDataFlag = 0;
 				StartLogFlag = 0;
 				Timer1_init();
 				for (i=0;i<64;i++)
@@ -176,7 +174,6 @@ LED2_ON;
 		if(Is_device_enumerated())  
 			USB_Send(ToFData,64);
 		SendDataFlag = 0;
-		StartLogFlag = 0;
 	}
 
 }
@@ -250,7 +247,7 @@ void Timer1_init(void)
 	TCCR1A=0;			// Normal mode
 	TIFR1 |= (1<<OCF1A) | (1<<OCF1B);
 	OCR1A = 50000;		// set compare match register to 50ms
-	OCR1B = 59000;		// set compare match register to 59ms
+	OCR1B = 64000;		// set compare match register to 64ms
     TIMSK1 = (1<<OCIE1A) | (1<<OCIE1B);// enable timer interrupts
 	TCCR1B = 1<<CS11;	// clk div 8, start (tres=1us, tmax=65.536ms)
 }
@@ -259,19 +256,12 @@ void Timer1_init(void)
 
 ISR(TIMER1_COMPA_vect) 
 {
-	if (!StartLogFlag)
-	{
-		StartLogFlag = 1;
-		TCNT1=0;			// Reset Timer/Counter1
-	}
+	StartLogFlag = 1;
 }
 
 ISR(TIMER1_COMPB_vect) 
-{
-	if (StartLogFlag)
-		{
-		SendDataFlag = 1;
-		TCCR1B=0;			// Stop Timer/Counter1
-		}
+{	
+	SendDataFlag = 1;
+	TCCR1B=0;			// Stop Timer/Counter1
 }
 

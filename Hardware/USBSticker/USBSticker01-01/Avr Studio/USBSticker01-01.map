@@ -243,7 +243,7 @@ LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr35\libgcc.a
 .rela.plt
  *(.rela.plt)
 
-.text           0x00000000     0x1058
+.text           0x00000000     0x1036
  *(.vectors)
  .vectors       0x00000000       0x74 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr35/crtusb162.o
                 0x00000000                __vectors
@@ -375,96 +375,96 @@ LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr35\libgcc.a
                 0x00000296       0x3c default/hid_task.o
                 0x00000296                Timer1_init
  .text.__vector_15
-                0x000002d2       0x2e default/hid_task.o
+                0x000002d2       0x1e default/hid_task.o
                 0x000002d2                __vector_15
  .text.__vector_16
-                0x00000300       0x2a default/hid_task.o
-                0x00000300                __vector_16
+                0x000002f0       0x22 default/hid_task.o
+                0x000002f0                __vector_16
  .text.USB_Send
-                0x0000032a       0x34 default/hid_task.o
-                0x0000032a                USB_Send
- .text.UI_task  0x0000035e       0xb4 default/hid_task.o
-                0x0000035e                UI_task
+                0x00000312       0x34 default/hid_task.o
+                0x00000312                USB_Send
+ .text.UI_task  0x00000346       0xaa default/hid_task.o
+                0x00000346                UI_task
  .text.hid_task
-                0x00000412        0x4 default/hid_task.o
-                0x00000412                hid_task
+                0x000003f0        0x4 default/hid_task.o
+                0x000003f0                hid_task
  .text.hid_task_init
-                0x00000416       0x28 default/hid_task.o
-                0x00000416                hid_task_init
+                0x000003f4       0x28 default/hid_task.o
+                0x000003f4                hid_task_init
  .text.start_boot_if_required
-                0x0000043e       0x36 default/start_boot.o
-                0x0000043e                start_boot_if_required
+                0x0000041c       0x36 default/start_boot.o
+                0x0000041c                start_boot_if_required
  .text.usb_device_task_init
-                0x00000474       0x12 default/usb_device_task.o
-                0x00000474                usb_device_task_init
+                0x00000452       0x12 default/usb_device_task.o
+                0x00000452                usb_device_task_init
  .text.usb_start_device
-                0x00000486       0x4c default/usb_device_task.o
-                0x00000486                usb_start_device
+                0x00000464       0x4c default/usb_device_task.o
+                0x00000464                usb_start_device
  .text.usb_device_task
-                0x000004d2       0x4c default/usb_device_task.o
-                0x000004d2                usb_device_task
+                0x000004b0       0x4c default/usb_device_task.o
+                0x000004b0                usb_device_task
  .text.usb_config_ep
-                0x0000051e       0x30 default/usb_drv.o
-                0x0000051e                usb_config_ep
+                0x000004fc       0x30 default/usb_drv.o
+                0x000004fc                usb_config_ep
  .text.usb_send_packet
-                0x0000054e       0x20 default/usb_drv.o
-                0x0000054e                usb_send_packet
+                0x0000052c       0x20 default/usb_drv.o
+                0x0000052c                usb_send_packet
  .text.usb_init_device
-                0x0000056e       0x1a default/usb_drv.o
-                0x0000056e                usb_init_device
+                0x0000054c       0x1a default/usb_drv.o
+                0x0000054c                usb_init_device
  .text.usb_user_interface_get
-                0x00000588        0x4 default/usb_specific_request.o
-                0x00000588                usb_user_interface_get
+                0x00000566        0x4 default/usb_specific_request.o
+                0x00000566                usb_user_interface_get
  .text.usb_user_interface_reset
-                0x0000058c       0x4c default/usb_specific_request.o
-                0x0000058c                usb_user_interface_reset
+                0x0000056a       0x4c default/usb_specific_request.o
+                0x0000056a                usb_user_interface_reset
  .text.usb_user_get_descriptor
-                0x000005d8       0x44 default/usb_specific_request.o
-                0x000005d8                usb_user_get_descriptor
+                0x000005b6       0x44 default/usb_specific_request.o
+                0x000005b6                usb_user_get_descriptor
  .text.hid_get_report_descriptor
-                0x0000061c       0xdc default/usb_specific_request.o
-                0x0000061c                hid_get_report_descriptor
+                0x000005fa       0xdc default/usb_specific_request.o
+                0x000005fa                hid_get_report_descriptor
  .text.usb_hid_set_report_ouput
-                0x000006f8       0x3c default/usb_specific_request.o
-                0x000006f8                usb_hid_set_report_ouput
+                0x000006d6       0x3c default/usb_specific_request.o
+                0x000006d6                usb_hid_set_report_ouput
  .text.usb_hid_set_idle
-                0x00000734       0x40 default/usb_specific_request.o
-                0x00000734                usb_hid_set_idle
+                0x00000712       0x40 default/usb_specific_request.o
+                0x00000712                usb_hid_set_idle
  .text.usb_hid_get_idle
-                0x00000774       0x72 default/usb_specific_request.o
-                0x00000774                usb_hid_get_idle
+                0x00000752       0x72 default/usb_specific_request.o
+                0x00000752                usb_hid_get_idle
  .text.usb_hid_set_report_feature
-                0x000007e6       0x6a default/usb_specific_request.o
-                0x000007e6                usb_hid_set_report_feature
+                0x000007c4       0x6a default/usb_specific_request.o
+                0x000007c4                usb_hid_set_report_feature
  .text.hid_get_hid_descriptor
-                0x00000850       0xdc default/usb_specific_request.o
-                0x00000850                hid_get_hid_descriptor
+                0x0000082e       0xdc default/usb_specific_request.o
+                0x0000082e                hid_get_hid_descriptor
  .text.usb_user_read_request
-                0x0000092c       0x5e default/usb_specific_request.o
-                0x0000092c                usb_user_read_request
+                0x0000090a       0x5e default/usb_specific_request.o
+                0x0000090a                usb_user_read_request
  .text.usb_user_endpoint_init
-                0x0000098a       0x26 default/usb_specific_request.o
-                0x0000098a                usb_user_endpoint_init
+                0x00000968       0x26 default/usb_specific_request.o
+                0x00000968                usb_user_endpoint_init
  .text.usb_process_request
-                0x000009b0      0x45c default/usb_standard_request.o
-                0x000009b0                usb_process_request
+                0x0000098e      0x45c default/usb_standard_request.o
+                0x0000098e                usb_process_request
  .text.usb_delay_ms
-                0x00000e0c       0x36 default/usb_task.o
-                0x00000e0c                usb_delay_ms
+                0x00000dea       0x36 default/usb_task.o
+                0x00000dea                usb_delay_ms
  .text.__vector_11
-                0x00000e42      0x20a default/usb_task.o
-                0x00000e42                __vector_11
+                0x00000e20      0x20a default/usb_task.o
+                0x00000e20                __vector_11
  .text.usb_task
-                0x0000104c        0x4 default/usb_task.o
-                0x0000104c                usb_task
+                0x0000102a        0x4 default/usb_task.o
+                0x0000102a                usb_task
  .text.usb_task_init
-                0x00001050        0x4 default/usb_task.o
-                0x00001050                usb_task_init
-                0x00001054                . = ALIGN (0x2)
+                0x0000102e        0x4 default/usb_task.o
+                0x0000102e                usb_task_init
+                0x00001032                . = ALIGN (0x2)
  *(.fini9)
- .fini9         0x00001054        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr35\libgcc.a(_exit.o)
-                0x00001054                exit
-                0x00001054                _exit
+ .fini9         0x00001032        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr35\libgcc.a(_exit.o)
+                0x00001032                exit
+                0x00001032                _exit
  *(.fini9)
  *(.fini8)
  *(.fini8)
@@ -483,11 +483,11 @@ LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr35\libgcc.a
  *(.fini1)
  *(.fini1)
  *(.fini0)
- .fini0         0x00001054        0x4 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr35\libgcc.a(_exit.o)
+ .fini0         0x00001032        0x4 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr35\libgcc.a(_exit.o)
  *(.fini0)
-                0x00001058                _etext = .
+                0x00001036                _etext = .
 
-.data           0x00800100        0x2 load address 0x00001058
+.data           0x00800100        0x2 load address 0x00001036
                 0x00800100                PROVIDE (__data_start, .)
  *(.data)
  .data          0x00800100        0x2 default/start_boot.o
@@ -530,8 +530,8 @@ LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr35\libgcc.a
  COMMON         0x00800197        0x2 default/usb_task.o
                 0x00800197                delay_usb
                 0x00800199                PROVIDE (__bss_end, .)
-                0x00001058                __data_load_start = LOADADDR (.data)
-                0x0000105a                __data_load_end = (__data_load_start + SIZEOF (.data))
+                0x00001036                __data_load_start = LOADADDR (.data)
+                0x00001038                __data_load_end = (__data_load_start + SIZEOF (.data))
 
 .noinit         0x00800199        0x4
                 0x00800199                PROVIDE (__noinit_start, .)
@@ -687,7 +687,7 @@ LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr35\libgcc.a
  .debug_abbrev  0x00000981      0x202 default/usb_standard_request.o
  .debug_abbrev  0x00000b83       0xa6 default/usb_task.o
 
-.debug_line     0x00000000     0x1f50
+.debug_line     0x00000000     0x1f20
  *(.debug_line)
  .debug_line    0x00000000      0x155 default/wdt_drv.o
  .debug_line    0x00000155       0xef default/scheduler.o
@@ -695,14 +695,14 @@ LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr35\libgcc.a
  .debug_line    0x0000033b      0x17e default/spi_drv.o
  .debug_line    0x000004b9      0x231 default/RFmodule.o
  .debug_line    0x000006ea      0x1cb default/power_drv.o
- .debug_line    0x000008b5      0x3d1 default/hid_task.o
- .debug_line    0x00000c86       0xe7 default/start_boot.o
- .debug_line    0x00000d6d       0xa0 default/usb_descriptors.o
- .debug_line    0x00000e0d      0x1a2 default/usb_device_task.o
- .debug_line    0x00000faf      0x1c9 default/usb_drv.o
- .debug_line    0x00001178      0x588 default/usb_specific_request.o
- .debug_line    0x00001700      0x5b9 default/usb_standard_request.o
- .debug_line    0x00001cb9      0x297 default/usb_task.o
+ .debug_line    0x000008b5      0x3a1 default/hid_task.o
+ .debug_line    0x00000c56       0xe7 default/start_boot.o
+ .debug_line    0x00000d3d       0xa0 default/usb_descriptors.o
+ .debug_line    0x00000ddd      0x1a2 default/usb_device_task.o
+ .debug_line    0x00000f7f      0x1c9 default/usb_drv.o
+ .debug_line    0x00001148      0x588 default/usb_specific_request.o
+ .debug_line    0x000016d0      0x5b9 default/usb_standard_request.o
+ .debug_line    0x00001c89      0x297 default/usb_task.o
 
 .debug_frame    0x00000000      0x500
  *(.debug_frame)

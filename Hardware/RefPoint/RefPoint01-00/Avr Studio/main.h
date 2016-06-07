@@ -6,8 +6,8 @@
 
 /* Definitions ************************************************************/
 #define StartCode		0x1454
-#define	RFTransmit_us	1000
-#define RefPointNr 		7		// range: 0-7
+#define	RFTransmit_us	800
+#define RefPointNr 		2		// range: 0-7
 
 #define RF_TXmode 		WriteCMD(0x8238)	// Enable transmitter; Enable synthesizer; Enable crystal oscillator
 #define RF_RXmode		WriteCMD(0x82D8)	// Enable receiver; er, ebb, es, ex, dc - set to "1"

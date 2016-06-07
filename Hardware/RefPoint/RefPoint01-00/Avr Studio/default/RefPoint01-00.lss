@@ -372,7 +372,7 @@ void RF12_Send(uint16_t Data)
 	uint8_t parity;
 
 	Data = Data | (RefPointNr<<12);
- 11c:	90 67       	ori	r25, 0x70	; 112
+ 11c:	90 62       	ori	r25, 0x20	; 32
  11e:	9c 01       	movw	r18, r24
  120:	40 e0       	ldi	r20, 0x00	; 0
  122:	04 c0       	rjmp	.+8      	; 0x12c <RF12_Send+0x14>
@@ -709,7 +709,7 @@ void Timer1_init(void)
 	RF12_init();
 	Timer1_init();
 	BlinkNumber(RefPointNr);
- 236:	87 e0       	ldi	r24, 0x07	; 7
+ 236:	82 e0       	ldi	r24, 0x02	; 2
  238:	ac df       	rcall	.-168    	; 0x192 <BlinkNumber>
 
 	RF_FIFORecog;
@@ -745,9 +745,9 @@ void Timer1_init(void)
  258:	c8 2e       	mov	r12, r24
  25a:	89 e0       	ldi	r24, 0x09	; 9
  25c:	d8 2e       	mov	r13, r24
- 25e:	bc e5       	ldi	r27, 0x5C	; 92
+ 25e:	b0 ea       	ldi	r27, 0xA0	; 160
  260:	eb 2e       	mov	r14, r27
- 262:	b4 e4       	ldi	r27, 0x44	; 68
+ 262:	bf e0       	ldi	r27, 0x0F	; 15
  264:	fb 2e       	mov	r15, r27
  266:	bb 24       	eor	r11, r11
  268:	b3 94       	inc	r11
